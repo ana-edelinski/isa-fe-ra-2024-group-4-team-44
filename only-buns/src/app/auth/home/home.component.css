@@ -1,0 +1,30 @@
+.buttons {
+    gap: 10px;
+    margin-top: 20px; 
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 1000px;
+    width: 300px;
+}
+
+.custom-button {
+    background-color: #196fb5; 
+    color: white; 
+    padding: 5px 10px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 14px; 
+    transition: background-color 0.3s; 
+}
+
+.custom-button:hover {
+    background-color: #155a8a;
+}
+
+.divider {
+    border: none;
+    border-top: 3px solid #196fb5; 
+    margin: 20px 0; 
+}
+
