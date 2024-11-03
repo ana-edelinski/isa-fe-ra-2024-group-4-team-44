@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -25,10 +27,11 @@ import { CommonModule } from '@angular/common';
 export class RegistrationComponent {
   registrationForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registrationForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      name: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
@@ -36,7 +39,20 @@ export class RegistrationComponent {
 
   onSubmit() {
     if (this.registrationForm.valid) {
-      // Logika za registraciju
+      const formData = this.registrationForm.value;
+  
+      this.authService.register(formData).subscribe(
+        (response) => {
+          console.log('Registracija uspešna', response);
+          alert('Registracija uspešna! Proverite svoj email za aktivacioni link.');
+          this.router.navigate(['/login']); 
+        },
+        (error) => {
+          console.error('Greška prilikom registracije', error);
+          alert('Došlo je do greške prilikom registracije. Pokušajte ponovo.');
+        }
+      );
     }
+  
   }
 }

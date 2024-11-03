@@ -1,8 +1,9 @@
 <div class="center-container">
-<mat-card>
+  <mat-card>
     <mat-card-title>Registracija</mat-card-title>
     <mat-card-content>
       <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+
         <mat-form-field appearance="fill">
           <mat-label>Korisničko ime</mat-label>
           <input matInput formControlName="username" required>
@@ -10,7 +11,15 @@
             Korisničko ime je obavezno.
           </mat-error>
         </mat-form-field>
-  
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Ime</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched">
+            Ime je obavezno.
+          </mat-error>
+        </mat-form-field>
+
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" required>
@@ -18,7 +27,7 @@
             Unesite validnu email adresu.
           </mat-error>
         </mat-form-field>
-  
+
         <mat-form-field appearance="fill">
           <mat-label>Lozinka</mat-label>
           <input matInput type="password" formControlName="password" required>
@@ -26,7 +35,7 @@
             Lozinka je obavezna.
           </mat-error>
         </mat-form-field>
-  
+
         <mat-form-field appearance="fill">
           <mat-label>Potvrdi lozinku</mat-label>
           <input matInput type="password" formControlName="confirmPassword" required>
@@ -37,7 +46,7 @@
             Lozinke se ne poklapaju.
           </mat-error>
         </mat-form-field>
-  
+
         <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Registruj se</button>
       </form>
     </mat-card-content>
