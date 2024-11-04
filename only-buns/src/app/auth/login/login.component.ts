@@ -28,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +41,6 @@ export class LoginComponent {
     });
   }
 
-  isLoading = false;
 
 onSubmit() {
   if (this.loginForm.valid) {
@@ -48,10 +48,13 @@ onSubmit() {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.isLoading = false;
+        alert("Login successful!");
+        this.authService.loggedIn = true;
         this.router.navigate(['/']);
       },
       error: (err) => {
         this.isLoading = false;
+        alert("Incorrect username or password!");
         console.error('Greška prilikom prijave', err);
       }
     });
