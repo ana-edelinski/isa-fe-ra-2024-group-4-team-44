@@ -1,22 +1,22 @@
 <div class="center-container">
   <mat-card>
-    <mat-card-title>Registracija</mat-card-title>
+    <mat-card-title>Registration</mat-card-title>
     <mat-card-content>
       <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
 
         <mat-form-field appearance="fill">
-          <mat-label>Korisničko ime</mat-label>
+          <mat-label>Username</mat-label>
           <input matInput formControlName="username" required>
           <mat-error *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched">
-            Korisničko ime je obavezno.
+            Username is required.
           </mat-error>
         </mat-form-field>
         
         <mat-form-field appearance="fill">
-          <mat-label>Ime</mat-label>
+          <mat-label>Name</mat-label>
           <input matInput formControlName="name" required>
           <mat-error *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched">
-            Ime je obavezno.
+            Name is required.
           </mat-error>
         </mat-form-field>
 
@@ -24,30 +24,54 @@
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" required>
           <mat-error *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
-            Unesite validnu email adresu.
+            Please enter a valid email address.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Lozinka</mat-label>
+          <mat-label>Password</mat-label>
           <input matInput type="password" formControlName="password" required>
           <mat-error *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched">
-            Lozinka je obavezna.
+            Password is required.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Potvrdi lozinku</mat-label>
+          <mat-label>Confirm Password</mat-label>
           <input matInput type="password" formControlName="confirmPassword" required>
           <mat-error *ngIf="registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched">
-            Lozinke se ne poklapaju.
+            Confirm Password is required.
           </mat-error>
           <mat-error *ngIf="registrationForm.errors && registrationForm.errors['mismatch'] && registrationForm.get('confirmPassword')?.touched">
-            Lozinke se ne poklapaju.
+            Passwords do not match.
           </mat-error>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Registruj se</button>
+        <mat-form-field appearance="fill">
+          <mat-label>Street and Number</mat-label>
+          <input matInput formControlName="street" required>
+          <mat-error *ngIf="registrationForm.get('street')?.invalid && registrationForm.get('street')?.touched">
+            Street and Number is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" required>
+          <mat-error *ngIf="registrationForm.get('city')?.invalid && registrationForm.get('city')?.touched">
+            City is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Postal Code</mat-label>
+          <input matInput formControlName="postalCode" required>
+          <mat-error *ngIf="registrationForm.get('postalCode')?.invalid && registrationForm.get('postalCode')?.touched">
+            Please enter a valid postal code (5 digits).
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
       </form>
     </mat-card-content>
   </mat-card>

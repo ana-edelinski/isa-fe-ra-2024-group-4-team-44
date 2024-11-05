@@ -34,25 +34,36 @@ export class RegistrationComponent {
       name: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-    });
+      street: ['', Validators.required],        
+      city: ['', Validators.required],          
+      postalCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]] 
+    }, { validator: this.passwordMatchValidator }); 
+  }
+
+  ngOnInit(): void {
+    
+  }
+
+  passwordMatchValidator(form: FormGroup) {
+    return form.get('password')?.value === form.get('confirmPassword')?.value
+        ? null : { mismatch: true };
   }
 
   onSubmit() {
     if (this.registrationForm.valid) {
       const formData = this.registrationForm.value;
-  
+
       this.authService.register(formData).subscribe(
         (response) => {
           console.log('Registracija uspešna', response);
-          alert('Registracija uspešna! Proverite svoj email za aktivacioni link.');
+          alert('Registration successful! Please check your email for the activation link.');
           this.router.navigate(['/login']); 
         },
         (error) => {
           console.error('Greška prilikom registracije', error);
-          alert('Došlo je do greške prilikom registracije. Pokušajte ponovo.');
+          alert('An error occurred during registration. Please try again.');
         }
       );
     }
-  
   }
 }
