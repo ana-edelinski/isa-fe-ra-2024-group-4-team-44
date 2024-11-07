@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [RouterModule, CommonModule]
+  imports: [RouterModule, CommonModule, FormsModule,  MatIconModule]
 })
 export class HomeComponent {
   title: string = 'OnlyBuns!';
@@ -25,6 +27,9 @@ export class HomeComponent {
     this.authService.logout();
     this.isLoggedIn = false;
     this.router.navigate(['/']);
+  }
+  profile() {
+    this.router.navigate(['/profile'], { state: { user: this.authService.getUser() } });
   }
 
   isHomePage(): boolean {

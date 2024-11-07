@@ -5,6 +5,7 @@
     justify-content: flex-end;
     margin-left: 1000px;
     width: 300px;
+    align-items: center;
 }
 
 .custom-button {
@@ -27,4 +28,13 @@
     border-top: 3px solid #196fb5; 
     margin: 20px 0; 
 }
+  
+  button {
+    margin-left: 10px;
+  }
+  
+  mat-icon {
+    margin-left: 5px;  
+  }
+  
 

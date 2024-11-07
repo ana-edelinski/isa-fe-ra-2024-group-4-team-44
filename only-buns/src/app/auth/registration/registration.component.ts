@@ -32,6 +32,7 @@ export class RegistrationComponent {
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
+      surname: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       street: ['', Validators.required],        

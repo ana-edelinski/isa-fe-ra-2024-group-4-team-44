@@ -21,6 +21,14 @@
         </mat-form-field>
 
         <mat-form-field appearance="fill">
+          <mat-label>Surname</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="registrationForm.get('surname')?.invalid && registrationForm.get('surname')?.touched">
+            Surname is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" required>
           <mat-error *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">

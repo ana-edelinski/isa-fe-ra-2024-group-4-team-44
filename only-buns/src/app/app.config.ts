@@ -8,6 +8,12 @@ import { RegistrationComponent } from './auth/registration/registration.componen
 import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './auth/home/home.component';
 import { RouterModule } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { UserService } from './profile/profile.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +25,12 @@ export const appConfig: ApplicationConfig = {
     RegistrationComponent, 
     LoginComponent,
     HomeComponent,
-    RouterModule
+    RouterModule,
+    ProfileComponent,
+    MatFormFieldModule,   
+    MatInputModule,       
+    ReactiveFormsModule,
+    MatIconModule,
+    UserService
   ]
 };

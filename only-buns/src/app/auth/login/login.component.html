@@ -6,21 +6,21 @@
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" required>
         <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          Unesite validnu email adresu.
+          Invalid email!
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Lozinka</mat-label>
+        <mat-label>Password</mat-label>
         <input matInput type="password" formControlName="password" required>
         <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-          Lozinka je obavezna.
+          Password is required.
         </mat-error>
       </mat-form-field>
 
       <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
         <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
-        <span *ngIf="!isLoading">Prijavi se</span>
+        <span *ngIf="!isLoading">LogIn</span>
       </button>
     </form>
   </mat-card-content>

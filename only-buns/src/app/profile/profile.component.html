@@ -1,0 +1,64 @@
+<div class="center-container">
+  <!-- Kartica za prikaz korisničkog profila -->
+  <mat-card class="profile-card">
+    <h2>User Profile</h2>
+
+    <div class="profile-info">
+      <mat-form-field appearance="fill">
+        <mat-label>First Name</mat-label>
+        <input matInput [(ngModel)]="user.name" name="name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Last Name</mat-label>
+        <input matInput [(ngModel)]="user.surname" name="surname" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="user.email" name="email" disabled />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Street</mat-label>
+        <input matInput [(ngModel)]="user.street" name="street" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>City</mat-label>
+        <input matInput [(ngModel)]="user.city" name="city" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Postal Code</mat-label>
+        <input matInput [(ngModel)]="user.postalCode" name="postalCode" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" (click)="updateProfile()">Update Profile</button>
+    </div>
+  </mat-card>
+
+  <!-- Kartica za promenu lozinke -->
+  <mat-card class="password-card">
+    <h3>Change Password</h3>
+
+    <form (ngSubmit)="changePassword()">
+      <mat-form-field appearance="fill">
+        <mat-label>Old Password</mat-label>
+        <input matInput type="password" [(ngModel)]="oldPassword" name="oldPassword" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>New Password</mat-label>
+        <input matInput type="password" [(ngModel)]="newPassword" name="newPassword" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm New Password</mat-label>
+        <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+      </mat-form-field>
+
+      <button mat-raised-button color="accent" type="submit">Change Password</button>
+    </form>
+  </mat-card>
+</div>
