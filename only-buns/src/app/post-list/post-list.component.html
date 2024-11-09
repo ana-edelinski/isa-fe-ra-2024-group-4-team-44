@@ -1,0 +1,23 @@
+
+<div class="post-list">
+    <ul>
+      <li *ngFor="let post of posts" class="post-item">
+        <div class="post-header">
+          <span class="username">{{ post.creatorUsername }}</span>
+          <span class="creation-time">{{ post.creationTime }}</span>
+        </div>
+        <div class="post-content">
+          <img [src]="post.imagePath" alt="Post image" class="post-image" />
+          <div class="post-description">
+            <p>{{ post.description }}</p>
+            <div class="post-stats">
+              <span>{{ post.likes.length || 0  }} likes</span>
+              <span>{{ post.comments.length || 0  }} comments</span>
+            </div>
+            <button mat-button >View Details</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  

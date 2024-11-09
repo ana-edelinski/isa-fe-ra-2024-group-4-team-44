@@ -5,6 +5,7 @@ import { HomeComponent } from './auth/home/home.component';
 import { NgModule } from '@angular/core';
 import { ProfileComponent } from './profile/profile.component';
 import { CreatePostComponent } from './create-post/create-post.component';
+import { PostListComponent } from './post-list/post-list.component';
 
 
 export const routes: Routes = [
@@ -12,7 +13,8 @@ export const routes: Routes = [
     { path: 'register', component: RegistrationComponent },
     { path: 'login', component: LoginComponent },
     { path: 'profile', component: ProfileComponent },
-    { path: 'create-post', component: CreatePostComponent}
+    { path: 'create-post', component: CreatePostComponent},
+    { path: 'post-list', component: PostListComponent}
 
     
 ];
