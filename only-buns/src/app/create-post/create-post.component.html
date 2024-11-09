@@ -1,0 +1,41 @@
+<div class="center-container">
+    <mat-card class="post-card">
+      <h2>Create Post</h2>
+  
+      <form [formGroup]="postForm" (ngSubmit)="onPostSubmit()" class="post-creation-form">
+        <mat-form-field appearance="fill" class="post-text">
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Share bunnies with your followers..."
+            rows="10"
+          ></textarea>
+        </mat-form-field>
+  
+        <div class="image-upload">
+          <label for="imageUpload" class="upload-label">Add Image: </label>
+          <input type="file" (change)="onImageSelect($event)" />
+        </div>
+  
+        <div formGroupName="address" class="address-form">
+          <mat-form-field appearance="fill" class="address-input">
+            <mat-label>City</mat-label>
+            <input matInput type="text" formControlName="city" />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="address-input">
+            <mat-label>Street</mat-label>
+            <input matInput type="text" formControlName="street" />
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="address-input">
+            <mat-label>Postal Code</mat-label>
+            <input matInput type="text" formControlName="postalCode" />
+          </mat-form-field>
+        </div>
+  
+        <button mat-raised-button color="primary" type="submit" class="post-button">Post</button>
+      </form>
+    </mat-card>
+  </div>
+  

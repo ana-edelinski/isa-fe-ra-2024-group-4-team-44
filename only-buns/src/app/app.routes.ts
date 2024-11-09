@@ -4,13 +4,15 @@ import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './auth/home/home.component';
 import { NgModule } from '@angular/core';
 import { ProfileComponent } from './profile/profile.component';
+import { CreatePostComponent } from './create-post/create-post.component';
 
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'register', component: RegistrationComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'profile', component: ProfileComponent }
+    { path: 'profile', component: ProfileComponent },
+    { path: 'create-post', component: CreatePostComponent}
 
     
 ];

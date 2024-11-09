@@ -22,7 +22,7 @@
 
         <mat-form-field appearance="fill">
           <mat-label>Surname</mat-label>
-          <input matInput formControlName="name" required>
+          <input matInput formControlName="surname" required>
           <mat-error *ngIf="registrationForm.get('surname')?.invalid && registrationForm.get('surname')?.touched">
             Surname is required.
           </mat-error>
