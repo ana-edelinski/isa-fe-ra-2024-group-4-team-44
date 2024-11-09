@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { Router } from '@angular/router';
 import { Post } from '../model/post.model';
+import { PostService } from '../post.service';
 
 
 @Component({
@@ -27,6 +28,8 @@ import { Post } from '../model/post.model';
   styleUrl: './create-post.component.css'
 })
 export class CreatePostComponent {
+
+  constructor(private postService: PostService) {} 
 
   fb = new FormBuilder()
   selectedFile: File | null = null;
