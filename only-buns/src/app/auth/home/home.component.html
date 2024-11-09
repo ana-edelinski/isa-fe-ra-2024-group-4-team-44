@@ -2,6 +2,7 @@
   <div class="buttons">
     <button *ngIf="!isLoggedIn" mat-button [routerLink]="['login']">Login</button>
     <button *ngIf="!isLoggedIn" mat-button [routerLink]="['register']">Sign Up</button>
+    <button *ngIf="isLoggedIn" mat-button (click)="createPost()">Create Post</button>
     <button *ngIf="isLoggedIn" mat-button (click)="myPosts()">My Posts</button>
     <button *ngIf="isLoggedIn" mat-button (click)="logout()">Logout</button>
     <button *ngIf="isLoggedIn" mat-button (click)="profile()">

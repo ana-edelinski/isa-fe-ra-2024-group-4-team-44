@@ -131,7 +131,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
             if (result) {
               this.resetImagePath()
               console.log('Post created successfully');
-              this.router.navigate(['']);
+              this.router.navigate([''], { state: { user: this.user }});
             } else {
               alert('An error has occurred. Please try again.');
             }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Post } from './model/post.model';
 import { AuthService } from './auth/auth.service';
 import { response } from 'express';
@@ -42,8 +42,15 @@ export class PostService {
   }
 
   getPostById(postId: number): Observable<Post> {
-    return this.http.get<Post>(`${this.apiUrl}/${postId}`);
+    return this.http.get<Post>(`${this.apiUrl}/${postId}`).pipe(
+      map(post => {
+        post.imagePath = post.imagePath.replace(/\\/g, '/');
+        console.log('SLIKAAA:' + post.imagePath); 
+        return post;
+      })
+    );
   }
+  
   
 
 }

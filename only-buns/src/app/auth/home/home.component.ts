@@ -32,6 +32,10 @@ export class HomeComponent {
     this.router.navigate(['/profile'], { state: { user: this.authService.getUser() } });
   }
 
+  createPost() {
+    this.router.navigate(['/create-post'], { state: { user: this.authService.getUser() }})
+  }
+
   isHomePage(): boolean {
     return true; 
   }
