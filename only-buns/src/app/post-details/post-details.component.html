@@ -1,0 +1,14 @@
+<div *ngIf="post">
+    <img [src]="post.imagePath" alt="Post Image">
+    <h1>{{ post.description }}</h1>
+    <p>Creator: {{ post.creatorUsername }}</p>
+    <p>Created on: {{ post.creationTime | date: 'short' }}</p>
+    <p>{{ post.likes.length }} Likes</p>
+    <div>
+      <h2>Comments</h2>
+      <div *ngFor="let comment of post.comments">
+        <p>{{ comment }}</p>
+      </div>
+    </div>
+  </div>
+  

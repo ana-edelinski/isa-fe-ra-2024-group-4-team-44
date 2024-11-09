@@ -1,0 +1,62 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { PostService } from '../post.service';
+import { Post } from '../model/post.model';
+import { User } from '../profile/user.model';
+import { AuthService } from '../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+
+
+@Component({
+  selector: 'app-my-posts',
+  templateUrl: './my-posts.component.html',
+  styleUrl: './my-posts.component.css',
+  standalone: true,
+  imports: [RouterModule, CommonModule, MatIconModule, MatCardModule]
+})
+export class MyPostsComponent implements OnInit, OnDestroy {
+  posts: Post[] = [];
+  user: User = new User();
+  private userSubscription: Subscription = Subscription.EMPTY;
+
+
+  constructor(private postService: PostService, private router: Router, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.userSubscription = this.authService.getUser().subscribe(user => {
+      if (user && user.id) {
+        this.user = user;
+        this.getPosts();
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  getPosts(): void {
+    this.postService.getPostsByUserId().subscribe(
+      (data: Post[]) => {
+        this.posts = data;
+        console.log('Fetched posts:', this.posts);
+      },
+      (error) => {
+        console.error('Error fetching posts:', error);
+      }
+    );
+  }
+
+  viewDetails(postId: number) {
+    this.router.navigate(['/post-details', postId]);
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  
+}
+  
+}

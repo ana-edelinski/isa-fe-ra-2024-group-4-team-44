@@ -1,0 +1,24 @@
+<div class="posts-container">
+    <div *ngFor="let post of posts" class="post-card">
+      <mat-card class="post-card-content">
+        <div class="post-left">
+          <p class="post-description">{{ post.description }}</p>
+          <div class="post-meta">
+            <span class="post-creator">{{ post.creatorUsername }}</span> |
+            <span class="post-time">{{ post.creationTime | date:'short' }}</span>
+          </div>
+          <div class="post-likes">
+            <mat-icon>thumb_up</mat-icon> {{ post.likes.length }} Likes
+          </div>
+          <div class="post-comments">
+            <mat-icon>comment</mat-icon> {{ post.comments.length }} Comments
+          </div>
+          <button mat-button (click)="viewDetails(post.id)">View Details</button>
+        </div>
+        <div class="post-right">
+          <img [src]="post.imagePath" alt="Post Image" class="post-image">
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  
