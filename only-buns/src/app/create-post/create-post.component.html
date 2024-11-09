@@ -2,7 +2,7 @@
     <mat-card class="post-card">
       <h2>Create Post</h2>
   
-      <form [formGroup]="postForm" (ngSubmit)="onPostSubmit()" class="post-creation-form">
+      <form [formGroup]="postForm" (ngSubmit)="uploadImage()" class="post-creation-form">
         <mat-form-field appearance="fill" class="post-text">
           <textarea
             matInput
@@ -13,7 +13,7 @@
         </mat-form-field>
   
         <div class="image-upload">
-          <label for="imageUpload" class="upload-label">Add Image: </label>
+          <label>Add Image: </label>
           <input type="file" (change)="onImageSelect($event)" />
         </div>
   
