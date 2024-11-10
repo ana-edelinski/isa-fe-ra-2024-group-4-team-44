@@ -3,14 +3,23 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { PostListComponent } from '../../post-list/post-list.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule,  MatIconModule]
+  imports: [RouterModule, CommonModule, FormsModule,  MatIconModule,  MatSidenavModule,
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    PostListComponent,
+  ]
 })
 export class HomeComponent {
   title: string = 'OnlyBuns!';
@@ -33,7 +42,7 @@ export class HomeComponent {
   }
 
   createPost() {
-    this.router.navigate(['/create-post'], { state: { user: this.authService.getUser() }})
+    this.router.navigate(['/create-post'], { state: { user: this.authService.getUser() } });
   }
 
   isHomePage(): boolean {
