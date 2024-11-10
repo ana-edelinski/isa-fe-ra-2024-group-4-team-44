@@ -1,0 +1,52 @@
+.center-container {
+    display: flex;
+    justify-content: center; /* Centriranje horizontalno */
+    align-items: flex-start; /* Pozicionira na vrh stranice */
+    height: 40vh; /* Podesite visinu na 100% visine ekrana */
+    margin: 0;
+  }
+  
+  .post-card {
+    width: 60%; /* Postavite širinu kartice na 60% prozora */
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .post-creation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .post-text {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .address-input {
+    width: 100%;
+  }
+  
+  .upload-label {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .image-upload input[type="file"] {
+    margin-top: 8px;
+  }
+  
+  .post-button {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
