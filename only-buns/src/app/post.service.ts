@@ -55,5 +55,10 @@ export class PostService {
     return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`);
   }
   
+  updatePost(postId: number, post: Post, userId: number): Observable<Post> {
+    return this.http.put<Post>(`${this.apiUrl}/${postId}`, post, {
+      params: { userId: userId.toString() }
+    });
+  }
 
 }

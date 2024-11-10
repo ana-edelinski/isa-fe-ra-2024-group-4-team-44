@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '../post.service';
 import { Post } from '../model/post.model';
 import { MatIcon } from '@angular/material/icon';
@@ -18,7 +18,7 @@ export class PostDetailsComponent implements OnInit {
   imageUrl: string = '';
   likesCount: number = 0;
 
-  constructor(private route: ActivatedRoute, private postService: PostService) {}
+  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('id');
@@ -46,4 +46,11 @@ export class PostDetailsComponent implements OnInit {
     );
   }
 
+  onEdit(): void {
+    if (this.post) {
+      this.router.navigate(['/post', this.post.id, 'edit']); 
+    }
+  }
+
+  
 }

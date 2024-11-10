@@ -1,0 +1,39 @@
+<div class="center-container">
+    <mat-card class="post-card">
+      <h2 class="edit-post-title">Edit Post</h2>
+  
+      <form [formGroup]="postForm" (ngSubmit)="saveChanges()" class="post-edit-form">
+        <!-- Image Path Input -->
+        <div class="form-row">
+          <label class="input-label">Image:</label>
+          <mat-form-field appearance="fill" class="image-input">
+            <input
+              matInput
+              type="text"
+              formControlName="imagePath"
+              placeholder="Enter image path..."
+            />
+          </mat-form-field>
+  
+        <!-- Description Input -->
+          <label class="input-label">Description:</label>
+          <mat-form-field appearance="fill" class="description-input">
+            <textarea
+              matInput
+              formControlName="description"
+              placeholder="Enter description..."
+              rows="5"
+            ></textarea>
+          </mat-form-field>
+        </div>
+  
+        <!-- Save Changes Button -->
+        <button mat-raised-button color="primary" type="submit" class="post-button">Save Changes</button>
+      </form>
+    </mat-card>
+  </div>
+  
+  <div *ngIf="!post" class="loading">
+    <p>Loading post details...</p>
+  </div>
+  
