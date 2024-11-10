@@ -9,6 +9,15 @@ export interface Post {
     locationStreet: string;
     locationCity: string;
     locationPostalCode: string;
-    comments: [];
+    comments: Comment[];
     likes: [];
+}
+
+export interface Comment {
+    id: number;
+    text: string;
+    creationTime: string;
+    userId: number;
+    username: string;
+    postId: number;
 }

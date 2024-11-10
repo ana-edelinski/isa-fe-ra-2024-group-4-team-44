@@ -48,4 +48,9 @@ export class HomeComponent {
   isHomePage(): boolean {
     return true; 
   }
+
+  myPosts() {
+    this.router.navigate(['/my-posts'], { state: { user: this.authService.getUser() }});
+  }
+  
 }

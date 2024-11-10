@@ -24,6 +24,10 @@
             <mat-icon>post_add</mat-icon>
             Posts
           </a>
+          <a mat-list-item (click)="myPosts()">
+            <mat-icon>article</mat-icon>
+            My Posts
+          </a>
           <a mat-list-item >
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
@@ -41,7 +45,7 @@
         <button class="buttons" (click)="createPost()">
           Create post
         <mat-icon>add-circle</mat-icon>
-        </button>        
+        </button>  
       </div>
       <hr class="divider">
       <app-post-list></app-post-list>
