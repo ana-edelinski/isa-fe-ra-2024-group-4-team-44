@@ -16,7 +16,6 @@ import { Subscription } from 'rxjs';
   styleUrl: './post-details.component.css'
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
-  //post$: Observable<Post> | null = null;
   post: Post | null = null;
   imageUrl: string = '';
   likesCount: number = 0;

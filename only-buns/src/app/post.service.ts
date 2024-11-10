@@ -32,14 +32,25 @@ export class PostService {
   }   
   
   getPostsByUserId(): Observable<Post[]> {
-    const userId = this.authService.getLoggedInUserId();  
+    const userId = this.authService.getLoggedInUserId();
     console.log(userId);
     if (userId) {
-      return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`);
+      return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`).pipe(
+        map(posts => {
+          posts.forEach(post => {
+            if (post.imagePath) {
+            post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+            post.imagePath = post.imagePath.replace(/\\/g, '/');
+            }
+          });
+          return posts;
+        })
+      );
     } else {
       throw new Error('User not logged in');
     }
   }
+  
 
   getPostById(postId: number): Observable<Post> {
     return this.http.get<Post>(`${this.apiUrl}/${postId}`).pipe(

@@ -21,6 +21,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
+  imageUrl: string = '';
   likesCount: number = 0;
 
 
@@ -35,12 +36,17 @@ export class MyPostsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login']);
       }
     });
+
+
   }
 
   getPosts(): void {
     this.postService.getPostsByUserId().subscribe(
       (data: Post[]) => {
         this.posts = data;
+        this.posts.forEach(post => {
+          post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+        });
         console.log('Fetched posts:', this.posts);
       },
       (error) => {
@@ -48,6 +54,8 @@ export class MyPostsComponent implements OnInit, OnDestroy {
       }
     );
   }
+  
+  
 
   viewDetails(postId: number) {
     this.router.navigate(['/post-details', postId]);
