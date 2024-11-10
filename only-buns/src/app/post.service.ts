@@ -51,6 +51,9 @@ export class PostService {
     );
   }
   
+  getLikesCount(postId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`);
+  }
   
 
 }

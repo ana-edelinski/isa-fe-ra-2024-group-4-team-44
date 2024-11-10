@@ -2,50 +2,48 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../post.service';
-import { Post, Comment } from '../model/post.model';
+import { Post } from '../model/post.model';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-post-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIcon],
   templateUrl: './post-details.component.html',
   styleUrl: './post-details.component.css'
 })
 export class PostDetailsComponent implements OnInit {
+  //post$: Observable<Post> | null = null;
   post: Post | null = null;
+  imageUrl: string = '';
+  likesCount: number = 0;
 
   constructor(private route: ActivatedRoute, private postService: PostService) {}
 
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('id');
     if (postId) {
-      this.postService.getPostById(+postId).subscribe(
+      const id = +postId;
+      this.postService.getPostById(id).subscribe(
         (data: Post) => {
           this.post = data;
-          if (!this.post.comments) {
-            this.post.comments = []; // Osigurajte da postoji niz za komentare
-          }
-          console.log('Post details:', this.post);
-          console.log('Post comments:', this.post.comments);
-          this.post.comments.forEach((comment) => {
-            console.log(comment.text);
-          });
-
-
+          this.imageUrl = `http://localhost:8080${this.post.imagePath}?timestamp=${new Date().getTime()}`;
+          this.loadLikesCount(id);
         },
-        (error) => {
-          console.error('Error fetching post details:', error);
-        }
+        (error) => console.error('Error fetching post details:', error)
       );
     }
   }
 
-  get imageUrl(): string {
-    if (this.post && this.post.imagePath) {
-      console.log('Image URL:', `http://localhost:8080${this.post.imagePath}?timestamp=${new Date().getTime()}`);
-      return `http://localhost:8080${this.post.imagePath}?timestamp=${new Date().getTime()}`;
-    }
-    return '';
+  getImageUrl(post: Post): string {
+    return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+  }
+
+  loadLikesCount(postId: number): void {
+    this.postService.getLikesCount(postId).subscribe(
+      (count) => this.likesCount = count,
+      (error) => console.error('Error fetching likes count:', error)
+    );
   }
 
 }

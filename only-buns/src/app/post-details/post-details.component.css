@@ -47,14 +47,7 @@
     font-weight: 400; 
     line-height: 1;
   }
-  
-  
-  /* Likes section */
-  .text-content p:nth-child(4) {
-    font-weight: bold;
-    color: #e74c3c;
-  }
-  
+    
   /* Edit and Delete button container */
   .buttons {
     margin-top: 1rem;
@@ -97,24 +90,49 @@
     padding: 1.5rem;
     background-color: #ecf0f1;
     border-radius: 0.5rem;
-    width: 500px;
+    max-width: 100%;
   }
-  
+
   .comments h2 {
     font-size: 1.25rem;
     margin-bottom: 1rem;
-    color: #3498db;
+    color: #28705e;
+    font-weight: bolder;
   }
-  
-  .comments div {
+
+  /* Single comment "card" */
+  .comment {
+    background-color: #fff;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
     margin-bottom: 1rem;
   }
-  
-  .comments div p {
-    background-color: #fff;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+
+  /* Author name styling */
+  .comment-author {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Comment text styling */
+  .comment-text {
     color: #000000;
   }
+
+
+
+
+  .like-section {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  .like-section mat-icon {
+    margin-right: 3px; /* Razmak između ikone i broja */
+  }
+
   
+
