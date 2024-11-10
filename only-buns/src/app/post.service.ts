@@ -61,4 +61,9 @@ export class PostService {
     });
   }
 
+  deletePost(postId: number, userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${postId}?userId=${userId}`);
+  }
+  
+
 }
