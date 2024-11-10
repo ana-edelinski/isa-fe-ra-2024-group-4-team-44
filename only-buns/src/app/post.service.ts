@@ -76,5 +76,11 @@ export class PostService {
     return this.http.delete<void>(`${this.apiUrl}/${postId}?userId=${userId}`);
   }
   
+  likeUnlikePost(postId: number, userId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${postId}/like`, null, {
+      params: { userId: userId.toString() }
+    });
+  }
+  
 
 }

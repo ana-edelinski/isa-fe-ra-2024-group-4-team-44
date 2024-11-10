@@ -1,7 +1,7 @@
 /* Overall post container */
 .post-content {
     display: flex;
-    flex-direction: column; /* Stack the sections vertically */
+    flex-direction: column; 
     max-width: 60%;
     margin: 2rem auto;
     padding: 2rem;
@@ -13,10 +13,10 @@
   /* Container for the image and text content */
   .post-main {
     display: flex;
-    flex-direction: row; /* Ensure image and text content are side by side */
-    gap: 2rem; /* Adds space between the image and the text content */
-    align-items: center; /* Vertically center the content */
-    margin-bottom: 2rem; /* Adds space between the main content and the comments */
+    flex-direction: row; 
+    gap: 2rem; 
+    align-items: center; 
+    margin-bottom: 2rem; 
   }
   
   /* Image */
@@ -48,18 +48,16 @@
     line-height: 1;
   }
     
-  /* Edit and Delete button container */
   .buttons {
     margin-top: 1rem;
-    display: flex; /* Arrange buttons horizontally */
-    gap: 1rem; /* Adds space between the buttons */
+    display: flex; 
+    gap: 1rem; 
   }
   
-  /* Button styling */
   .edit-btn,
   .delete-btn {
-    padding: 0.4rem 0.8rem; /* Smaller padding to reduce button size */
-    font-size: 0.9rem; /* Smaller font size */
+    padding: 0.4rem 0.8rem; 
+    font-size: 0.9rem;
     border: none;
     border-radius: 0.25rem;
     cursor: pointer;
@@ -84,7 +82,6 @@
     background-color: #52796F;
   }
   
-  /* Comments section */
   .comments {
     margin-top: 2rem;
     padding: 1.5rem;
@@ -100,7 +97,6 @@
     font-weight: bolder;
   }
 
-  /* Single comment "card" */
   .comment {
     background-color: #fff;
     padding: 0.75rem;
@@ -108,20 +104,15 @@
     margin-bottom: 1rem;
   }
 
-  /* Author name styling */
   .comment-author {
     font-weight: bold;
     color: #2c3e50;
     margin-bottom: 0.5rem;
   }
 
-  /* Comment text styling */
   .comment-text {
     color: #000000;
   }
-
-
-
 
   .like-section {
     display: flex;
@@ -131,7 +122,12 @@
   }
 
   .like-section mat-icon {
-    margin-right: 3px; /* Razmak između ikone i broja */
+    margin-right: 3px; 
+    transition: color 0.3s ease; 
+  }
+  
+  .like-section mat-icon:hover {
+    color: #28705e; 
   }
 
   

@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="like-section">
+    <div class="like-section" (click)="likeUnlikePost(post.id)">
       <mat-icon >favorite</mat-icon>
       <span>{{ likesCount }}</span>
     </div>

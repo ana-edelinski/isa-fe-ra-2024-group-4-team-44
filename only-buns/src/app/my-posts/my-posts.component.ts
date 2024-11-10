@@ -77,5 +77,23 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   getImageUrl(post: Post): string {
     return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
   }
+
+  likeUnlikePost(postId: number): void {
+    const userId = this.authService.getLoggedInUserId();
+    if (userId) {
+      this.postService.likeUnlikePost(postId, userId).subscribe(
+        () => {
+          console.log('Post liked/unliked successfully');
+          this.loadLikesCount(postId); // Ponovo učitaj broj lajkova nakon promene
+        },
+        (error) => {
+          console.error('Error liking/unliking post:', error);
+        }
+      );
+    } else {
+      console.error('User is not logged in');
+    }
+  }
+  
   
 }

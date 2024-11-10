@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="post-footer">
-        <div class="post-likes">
+        <div class="post-likes" (click)="likeUnlikePost(post.id)">
           <mat-icon>favorite</mat-icon> 
           <span>{{ likesCount }}</span>
         </div>

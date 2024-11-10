@@ -72,14 +72,14 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
 
   onDelete(): void {
     if (this.post) {
-      const userId = this.authService.getLoggedInUserId(); // Get the logged-in user's ID
+      const userId = this.authService.getLoggedInUserId(); 
       if (userId) {
         const confirmDelete = window.confirm('Are you sure you want to delete this post?');
         if (confirmDelete) {
           this.postService.deletePost(this.post.id, userId).subscribe(
             () => {
               console.log('Post deleted successfully');
-              this.router.navigate(['/my-posts']); // Redirect to home or another page
+              this.router.navigate(['/my-posts']); 
             },
             (error) => {
               console.error('Error deleting post:', error);
@@ -90,6 +90,23 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       } else {
         alert('You must be logged in to delete a post');
       }
+    }
+  }
+
+  likeUnlikePost(postId: number): void {
+    const userId = this.authService.getLoggedInUserId();
+    if (userId) {
+      this.postService.likeUnlikePost(postId, userId).subscribe(
+        () => {
+          console.log('Post liked/unliked successfully');
+          this.loadLikesCount(postId); 
+        },
+        (error) => {
+          console.error('Error liking/unliking post:', error);
+        }
+      );
+    } else {
+      console.error('User is not logged in');
     }
   }
   
