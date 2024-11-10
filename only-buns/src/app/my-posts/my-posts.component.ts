@@ -21,6 +21,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
+  likesCount: number = 0;
 
 
   constructor(private postService: PostService, private router: Router, private authService: AuthService) {}
@@ -56,7 +57,17 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
-  
-}
+  }
+
+  loadLikesCount(postId: number): void {
+    this.postService.getLikesCount(postId).subscribe(
+      (count) => this.likesCount = count,
+      (error) => console.error('Error fetching likes count:', error)
+    );
+  }
+
+  getImageUrl(post: Post): string {
+    return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+  }
   
 }
