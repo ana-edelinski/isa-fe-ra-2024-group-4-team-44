@@ -8,6 +8,7 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
 import { PostDetailsComponent } from './post-details/post-details.component';
+import { UserInfoComponent } from './user-info/user-info/user-info.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -17,8 +18,8 @@ export const routes: Routes = [
     { path: 'create-post', component: CreatePostComponent},
     { path: 'post-list', component: PostListComponent},
     { path: 'my-posts', component: MyPostsComponent },
-    { path: 'post-details/:id', component: PostDetailsComponent }
-    
+    { path: 'post-details/:id', component: PostDetailsComponent },
+    { path: 'user', component: UserInfoComponent },
 ];
 
 @NgModule({

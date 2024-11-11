@@ -35,7 +35,6 @@ export class ProfileComponent implements OnInit,  OnDestroy{
     if (this.authService.isAuthenticated()) {
       this.getUserProfile();
     } else {
-      console.error('User is not logged in');
       this.router.navigate(['/login']);
     }
   }

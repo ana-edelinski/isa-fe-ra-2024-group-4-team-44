@@ -36,7 +36,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', Validators.required],
     });
   }
@@ -52,7 +52,7 @@ export class LoginComponent {
         },
         error: () => {
           this.isLoading = false;
-          alert("Neisprava email ili lozinka!");
+          alert("Neispravan username ili lozinka!");
         }
       });
     }

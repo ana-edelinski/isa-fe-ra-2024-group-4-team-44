@@ -18,33 +18,33 @@ export class AuthService {
       const token = this.getAuthToken();
       const userId = this.getStoredUserId();
       if (token  && userId) {
-
+          this.fetchUserProfile(userId);
           this.loggedIn = true;
         
       }
     }
   }
 
-  // Registracija korisnika
   register(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, userData);
   }
 
-  // Login funkcionalnost - vama treba samo token, ne ceo korisnički objekat
   login(userDto: any): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, userDto).pipe(
       map(response => {
+        const expirationDate = new Date(new Date().getTime() + response.expiresIn);
         localStorage.setItem('token', response.accessToken);
-        localStorage.setItem('expiresIn', response.expiresIn.toString());
+        localStorage.setItem('expiresIn', expirationDate.toString());
         localStorage.setItem('userId', response.userId.toString());
         this.loggedIn = true;
+        this.fetchUserProfile(response.userId);
         return response;
       })
     );
   }
   
 
-  private getHeaders(): HttpHeaders {
+   getHeaders(): HttpHeaders {
       const token = this.getAuthToken();
       return token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
     }
@@ -54,7 +54,7 @@ export class AuthService {
       if (userId !== null) {
         return this.http.get<User>(`${this.apiUrl}/${userId}/profile`, { headers: this.getHeaders() });
       } else {
-        console.error("User ID not found in local storage");
+       
         return new Observable<User | null>((observer) => {
           observer.next(null); // Vraća null ako nema user ID
           observer.complete();
@@ -64,9 +64,19 @@ export class AuthService {
     
   
 
-  isAuthenticated(): boolean {
-    return this.loggedIn || !!this.getAuthToken();
-  }
+    isAuthenticated(): boolean {
+      const token = this.getAuthToken();
+      const expiresIn = localStorage.getItem('expiresIn');
+      if (token && expiresIn) {
+        const expirationDate = new Date(expiresIn);  
+        if (expirationDate > new Date()) {
+   
+          return true; 
+        }
+      }
+      return false; 
+      
+    }
 
   // Logout korisnika
   logout(): void {
@@ -91,6 +101,21 @@ export class AuthService {
   private getStoredUserId(): number | null {
     const userId = localStorage.getItem('userId');
     return userId ? parseInt(userId, 10) : null;
+  }
+  getLoggedInUserId(): number | null {
+    const user = this.user$.getValue();
+    return user ? (user.id as number | null) : null;
+}
+
+  getProfileByUserId(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${userId}`);
+  }
+
+  private fetchUserProfile(userId: number): void {
+    this.getProfileByUserId(userId).subscribe(
+      (user) => this.user$.next(user),
+      (error) => console.error('Error fetching user profile after login:', error)
+    );
   }
 
 }
