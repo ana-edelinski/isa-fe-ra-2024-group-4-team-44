@@ -1,0 +1,55 @@
+<div class="user-list-container">
+    <div class="sidebar">
+      <!-- Search bar -->
+      <div class="search-container">
+        <h4>SEARCH</h4>
+        <div class="search-bar">
+          <input type="text" placeholder="Search by name" />
+          <input  type="text" placeholder="Search by surname" />
+          <input  type="text" placeholder="Search by email" />
+          <input  type="number" placeholder="Min posts" />
+          <input  type="number" placeholder="Max posts" />
+        </div>
+        <div class="buttons">
+          <button class="btn btn-search" >Search</button> <!--(click)="searchUsers()"-->
+          <button class="btn btn-clear" >Clear</button> <!--(click)="clearSearch()"-->
+        </div>
+      </div>
+    </div>
+  
+    <!-- User list -->
+    <div class="main-content">
+      <h3>Registered Users</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th > <!--(click)="sortBy('email')"-->
+                Email
+                <span>&#9650;</span>    <!--ovde ide sort criteria-->
+                <span >&#9660;</span>
+              </th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Number of Posts</th>
+              <th> <!--(click)="sortBy('followers')"-->
+                Followers
+                <span >&#9650;</span> <!--*ngIf="sortCriteria.followersAsc"-->
+                <span >&#9660;</span> <!--*ngIf="sortCriteria.followersDesc"-->
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users"> <!--*ngFor="let user of sortedUsers"-->
+              <td> {{ user.email }}</td> 
+              <td> {{ user.name }}</td>
+              <td> {{ user.surname }} </td>
+              <td> {{ user.postCount }} </td>
+              <td> {{ user.followingCount }} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

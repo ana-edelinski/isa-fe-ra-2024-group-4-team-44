@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './user.model';
-
+import { UserInfoDTO } from '../model/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,10 @@ export class UserService {
     };
   
     return this.http.put(`${this.baseUrl}/${userId}/changePassword`, passwordData, { responseType: 'text' });
+  }
+
+  getAllUsers(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/registered`);
   }
   
   
