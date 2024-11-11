@@ -4,15 +4,15 @@
       <div class="search-container">
         <h4>SEARCH</h4>
         <div class="search-bar">
-          <input type="text" placeholder="Search by name" />
-          <input  type="text" placeholder="Search by surname" />
-          <input  type="text" placeholder="Search by email" />
-          <input  type="number" placeholder="Min posts" />
-          <input  type="number" placeholder="Max posts" />
+            <input type="text" placeholder="Search by name" [(ngModel)]="searchCriteria.name" />
+            <input type="text" placeholder="Search by surname" [(ngModel)]="searchCriteria.surname" />
+            <input type="text" placeholder="Search by email" [(ngModel)]="searchCriteria.email" />
+            <input type="number" placeholder="Min posts" [(ngModel)]="searchCriteria.minPosts" />
+            <input type="number" placeholder="Max posts" [(ngModel)]="searchCriteria.maxPosts" />
         </div>
         <div class="buttons">
-          <button class="btn btn-search" >Search</button> <!--(click)="searchUsers()"-->
-          <button class="btn btn-clear" >Clear</button> <!--(click)="clearSearch()"-->
+            <button class="btn btn-search" (click)="searchUsers()">Search</button>
+            <button class="btn btn-clear" (click)="clearSearch()">Clear</button>
         </div>
       </div>
     </div>

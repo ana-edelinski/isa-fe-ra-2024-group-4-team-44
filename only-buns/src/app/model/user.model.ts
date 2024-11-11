@@ -3,6 +3,6 @@ export interface UserInfoDTO {
     name: string;
     surname: string;
     email: string;
-    postCount: number;
-    followingCount: number;
+    numberOfPosts: number;
+    numberOfFollowing: number;
   }

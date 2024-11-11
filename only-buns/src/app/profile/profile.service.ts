@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './user.model';
 import { UserInfoDTO } from '../model/user.model';
@@ -32,6 +32,28 @@ export class UserService {
 
   getAllUsers(): Observable<UserInfoDTO[]> {
     return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/registered`);
+  }
+
+  searchUsers(searchCriteria: any): Observable<UserInfoDTO[]> {
+    let params = new HttpParams();
+
+    if (searchCriteria.name) {
+      params = params.set('name', searchCriteria.name);
+    }
+    if (searchCriteria.surname) {
+      params = params.set('surname', searchCriteria.surname);
+    }
+    if (searchCriteria.email) {
+      params = params.set('email', searchCriteria.email);
+    }
+    if (searchCriteria.minPosts !== null) {
+      params = params.set('minPosts', searchCriteria.minPosts);
+    }
+    if (searchCriteria.maxPosts !== null) {
+      params = params.set('maxPosts', searchCriteria.maxPosts);
+    }
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/search`, { params });
   }
   
   
