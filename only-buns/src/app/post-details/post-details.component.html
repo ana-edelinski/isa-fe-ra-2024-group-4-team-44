@@ -24,7 +24,7 @@
     <div class="comments" *ngIf="post.comments && post.comments.length > 0">
       <h2>Comments</h2>
       <div *ngFor="let comment of post.comments" class="comment">
-        <p class="comment-author">{{ comment.username }}</p>
+        <a class="comment-author" (click)="goToProfile(comment.userId)">{{comment.username }}</a>
         <p class="comment-text">{{ comment.text }}</p>
       </div>
     </div>

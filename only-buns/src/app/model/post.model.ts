@@ -11,6 +11,7 @@ export interface Post {
     locationPostalCode: string;
     comments: Comment[];
     likes: [];
+    likeCount: number;
 }
 
 export interface Comment {

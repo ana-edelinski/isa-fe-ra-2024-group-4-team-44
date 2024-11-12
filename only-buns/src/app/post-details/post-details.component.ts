@@ -105,4 +105,8 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     }
   }
   
+  goToProfile(creatorId: number): void {
+
+    this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
+  }
 }

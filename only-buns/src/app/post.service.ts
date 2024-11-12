@@ -25,13 +25,24 @@ export class PostService {
     const formData = new FormData();
     formData.append('file', file, file.name);
 
-    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData, {headers});
+    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData, { headers });
     console.log(response)
     return response;
   }
 
   getAll(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);     
+    return this.http.get<any>(this.apiUrl).pipe(
+      map((posts: any[]) => {
+        posts.forEach((post: { imagePath: string; }) => {
+          if (post.imagePath) {
+          post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+          post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
+          
   }   
   
   getPostsByUserId(): Observable<Post[]> {
