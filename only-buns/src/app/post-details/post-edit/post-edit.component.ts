@@ -26,6 +26,8 @@ import { AuthService } from '../../auth/auth.service';
 export class PostEditComponent implements OnInit, OnDestroy {
   post: Post | null = null;
   postForm: FormGroup;
+  selectedFile: File | null = null;
+  imagePath: string | null = null;
 
   constructor(private route: ActivatedRoute, private postService: PostService, private authService: AuthService, private fb: FormBuilder, private router: Router) {
     this.postForm = this.fb.group({
@@ -66,16 +68,43 @@ export class PostEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  onImageSelect(event: any) {
+    
+    if (event.target.files[0]) {
+      this.selectedFile = event.target.files[0]; 
+    }
+  }
+
+  uploadImage() {
+    if (!this.selectedFile) {
+      alert("A photo is needed.")
+      return;
+    }  
+
+    this.postService.uploadImage(this.selectedFile).subscribe( {
+      next: (result: any) => {
+        this.imagePath = result.imagePath;
+        this.saveChanges()
+      },
+      error: () => {
+        alert('An error has occured uploading the photo.');
+      }
+    })
+  }
+
   saveChanges(): void {
     console.log('User:' + this.user.id);
     if (this.postForm.valid && this.post && this.user.id) {
       const updatedPost = this.postForm.value;
+      updatedPost.imagePath = this.imagePath;
+      console.log(updatedPost.imagePath)  
+
       this.postService
         .updatePost(this.post.id, updatedPost, this.user.id)
         .subscribe(
           (response) => {
             console.log('Post updated successfully:', response);
-            this.router.navigate(['/post-details', this.post?.id]); 
+            this.router.navigate(['/post-details', this.post?.id], { state: { imagePath: this.imagePath } });
           },
           (error) => console.error('Error updating post:', error)
         );

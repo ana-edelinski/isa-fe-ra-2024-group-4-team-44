@@ -17,7 +17,6 @@ import { Subscription } from 'rxjs';
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
   post: Post | null = null;
-  imageUrl: string = '';
   likesCount: number = 0;
 
   constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService) {}
@@ -39,7 +38,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       this.postService.getPostById(id).subscribe(
         (data: Post) => {
           this.post = data;
-          this.imageUrl = `http://localhost:8080${this.post.imagePath}?timestamp=${new Date().getTime()}`;
+          this.post.imagePath = `${this.post.imagePath}?timestamp=${new Date().getTime()}`;
           this.loadLikesCount(id);
         },
         (error) => console.error('Error fetching post details:', error)
@@ -51,10 +50,6 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
-  }
-
-  getImageUrl(post: Post): string {
-    return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
   }
 
   loadLikesCount(postId: number): void {

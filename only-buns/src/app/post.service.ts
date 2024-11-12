@@ -19,10 +19,13 @@ export class PostService {
   }
 
   uploadImage(file: File): Observable<Post> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
     const formData = new FormData();
     formData.append('file', file, file.name);
 
-    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData);
+    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData, {headers});
     console.log(response)
     return response;
   }
@@ -60,15 +63,17 @@ export class PostService {
   getPostById(postId: number): Observable<Post> {
     const token = localStorage.getItem('token');  
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
+    const serverUrl = 'http://localhost:8080'; 
+  
     return this.http.get<Post>(`${this.apiUrl}/${postId}`, { headers }).pipe(
       map(post => {
-        post.imagePath = post.imagePath.replace(/\\/g, '/');
+        post.imagePath = serverUrl + post.imagePath.replace(/\\/g, '/'); 
         console.log('SLIKAAA:' + post.imagePath); 
         return post;
       })
     );
   }
+  
   
   getLikesCount(postId: number): Observable<number> {
     const token = localStorage.getItem('token');  

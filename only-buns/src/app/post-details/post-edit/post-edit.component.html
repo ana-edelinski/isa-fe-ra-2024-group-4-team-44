@@ -2,18 +2,14 @@
     <mat-card class="post-card">
       <h2 class="edit-post-title">Edit Post</h2>
   
-      <form [formGroup]="postForm" (ngSubmit)="saveChanges()" class="post-edit-form">
-        <!-- Image Path Input -->
+      <form [formGroup]="postForm" (ngSubmit)="uploadImage()" class="post-edit-form">
+        <!-- Image Upload Input -->
         <div class="form-row">
           <label class="input-label">Image:</label>
-          <mat-form-field appearance="fill" class="image-input">
-            <input
-              matInput
-              type="text"
-              formControlName="imagePath"
-              placeholder="Enter image path..."
-            />
-          </mat-form-field>
+          <div class="image-upload">
+            <label>Add Image: </label>
+            <input type="file" (change)="onImageSelect($event)" />
+          </div>
   
         <!-- Description Input -->
           <label class="input-label">Description:</label>
