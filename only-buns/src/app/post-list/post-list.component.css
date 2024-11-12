@@ -1,67 +1,133 @@
+/* Glavni kontejner */
 .post-list {
-    padding: 16px;
-  }
-  
-  .post-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    background-color: #f9f9f9;
-  }
-  
-  .post-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-  
-  .username {
-    color: #196fb5;
-  }
-  
-  .creation-time {
-    color: #999;
-  }
-  
-  .post-content {
-    display: flex;
-    align-items: center;
-  }
-  
-  .post-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 16px;
-  }
-  
-  .post-description {
-    flex: 1;
-  }
-  
-  .post-stats {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-    color: #555;
-  }
-  
-  button {
-    margin-top: 8px;
-    width: 170px;
-    background-color: #196fb5;
-    color: white;
-  }
-  
-  .comment-author {
-    font-weight: bold;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Podesava kartice da zauzmu punu sirinu */
+}
+
+/* Kartice postova */
+.post-item {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Zaglavlje posta */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.username {
+  color: #196fb5;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.username:hover {
+  text-decoration: underline;
+}
+
+.creation-time {
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* Sadrzaj posta */
+.post-content {
+  margin-top: 10px;
+}
+
+/* Slika posta */
+.post-image {
+  width: 100%;
+  max-width: 800px; /* Da slika ne prelazi širu veličinu na velikim ekranima */
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* Opis posta */
+.post-description {
+  margin-top: 10px;
+}
+
+/* Statistike posta */
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 8px;
+  padding: 8px 20px;
+  background-color: #196fb5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #155a90;
+}
+
+/* Komentari */
+.comments {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.comment {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.comment-author:hover {
+  text-decoration: underline;
 }
 
 .comment-text {
-    margin-left: 20px; /* Podesite vrednost po potrebi */
+  margin-left: 10px;
+  color: #555;
+  font-size: 0.95em;
+}
+.post-list ul {
+  list-style-type: none; 
+  padding: 0; 
+  margin: 0;
+}
+.button-container {
+  display: flex; 
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%; 
+}
+
+.button-container button {
+  flex: 1 1 30%;
+  max-width: 33.33%; 
+  background-color: #196fb5;
+  color: white;
 }
