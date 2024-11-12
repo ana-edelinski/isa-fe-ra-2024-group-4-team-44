@@ -52,6 +52,7 @@ export class PostEditComponent implements OnInit, OnDestroy {
       this.postService.getPostById(id).subscribe(
         (data: Post) => {
           this.post = data;
+          this.imagePath = this.post?.imagePath;
           this.postForm.patchValue({
             imagePath: this.post?.imagePath,
             description: this.post?.description
@@ -77,27 +78,33 @@ export class PostEditComponent implements OnInit, OnDestroy {
 
   uploadImage() {
     if (!this.selectedFile) {
-      alert("A photo is needed.")
-      return;
-    }  
-
-    this.postService.uploadImage(this.selectedFile).subscribe( {
-      next: (result: any) => {
-        this.imagePath = result.imagePath;
-        this.saveChanges()
-      },
-      error: () => {
-        alert('An error has occured uploading the photo.');
+      this.saveChanges();
+    } else {
+        this.postService.uploadImage(this.selectedFile).subscribe( {
+          next: (result: any) => {
+            this.imagePath = result.imagePath;
+            this.saveChanges()
+          },
+          error: () => {
+            alert('An error has occured uploading the photo.');
+          }
+        })
       }
-    })
+    
   }
 
   saveChanges(): void {
     console.log('User:' + this.user.id);
     if (this.postForm.valid && this.post && this.user.id) {
       const updatedPost = this.postForm.value;
-      updatedPost.imagePath = this.imagePath;
-      console.log(updatedPost.imagePath)  
+      //updatedPost.imagePath = this.imagePath;
+      //console.log(updatedPost.imagePath)  
+
+      if (!this.selectedFile) {
+        updatedPost.imagePath = this.imagePath?.replace('http://localhost:8080', '');  // Uklanjamo localhost:8080
+      } else {
+        updatedPost.imagePath = this.imagePath;  // Ako je slika odabrana, koristi novu
+      }
 
       this.postService
         .updatePost(this.post.id, updatedPost, this.user.id)

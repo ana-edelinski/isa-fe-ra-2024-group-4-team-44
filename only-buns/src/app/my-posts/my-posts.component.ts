@@ -46,6 +46,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
         this.posts = data;
         this.posts.forEach(post => {
           post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+          this.loadLikesCount(post.id);
         });
         console.log('Fetched posts:', this.posts);
       },

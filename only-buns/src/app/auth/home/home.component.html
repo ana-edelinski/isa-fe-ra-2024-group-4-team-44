@@ -5,7 +5,7 @@
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['login']">Login</button>
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['register']">Sign Up</button>
       <button *ngIf="isLoggedIn" mat-button (click)="logout()">Logout</button>
-      <button *ngIf="isLoggedIn" mat-button (click)="profile()">
+      <button *ngIf="isLoggedIn && roleId === 1"  mat-button (click)="profile()">
         Profile
         <mat-icon>account_circle</mat-icon>  
       </button>
@@ -29,12 +29,12 @@
             My Posts
           </a>
 
-          <a mat-list-item (click)="registeredUsers()"> 
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 2" (click)="registeredUsers()"> 
             <mat-icon>group</mat-icon> 
             Registered Users
           </a>
 
-          <a mat-list-item >
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 1">
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
           </a>
