@@ -5,7 +5,7 @@ import { PostService } from '../post.service';
 import { Router } from '@angular/router'; 
 import { AuthService } from '../auth/auth.service';
 import { Post } from '../model/post.model';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-post-list',
@@ -16,7 +16,9 @@ import { Post } from '../model/post.model';
 })
 export class PostListComponent implements OnInit {
 
-  constructor(private postService: PostService, private authService: AuthService, private router: Router) {} 
+  isLoggedIn: boolean = false;
+
+  constructor(private postService: PostService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {} 
   
   posts: Post[] = [];
 
@@ -24,6 +26,7 @@ export class PostListComponent implements OnInit {
   
   ngOnInit(): void {
     this.getPosts();
+    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   getPosts(): void {
@@ -39,6 +42,31 @@ export class PostListComponent implements OnInit {
         console.error('Error fetching posts:', error);
       }
     );
+  }
+
+  likePost(): void {
+    if (this.isLoggedIn) {
+    } else {
+      this.showLoginNotification();
+    }
+  }
+
+  commentOnPost(): void {
+    if (this.isLoggedIn) {
+    } else {
+      this.showLoginNotification();
+    }
+  }
+
+  showLoginNotification(): void {
+    this.snackBar.open('You must be logged in to like or comment.', 'OK', {
+      duration: 3000,
+    });
+  }
+  
+  goToProfile(creatorId: number): void {
+
+    this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
   }
 
 }

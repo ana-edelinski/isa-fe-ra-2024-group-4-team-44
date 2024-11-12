@@ -51,6 +51,8 @@ export class RegistrationComponent {
   }
 
   onSubmit() {
+    console.log(this.registrationForm);
+
     if (this.registrationForm.valid) {
       const formData = this.registrationForm.value;
 

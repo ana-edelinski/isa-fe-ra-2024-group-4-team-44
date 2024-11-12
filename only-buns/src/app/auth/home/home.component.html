@@ -24,6 +24,14 @@
             <mat-icon>post_add</mat-icon>
             Posts
           </a>
+          <a mat-list-item (click)="myPosts()">
+            <mat-icon>article</mat-icon>
+            My Posts
+          </a>
+          <a mat-list-item (click)="registeredUsers()"> 
+            <mat-icon>group</mat-icon> 
+            Registered Users
+          </a>
           <a mat-list-item >
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
@@ -36,12 +44,12 @@
       </mat-sidenav>
     </mat-sidenav-container>
 
-    <div class="main-content" *ngIf="isLoggedIn" >
+    <div class="main-content" >   
       <div height="30px" class="tab-buttons">
-        <button class="buttons" (click)="createPost()">
+        <button class="buttons" (click)="createPost()" *ngIf="isLoggedIn">
           Create post
         <mat-icon>add-circle</mat-icon>
-        </button>        
+        </button>  
       </div>
       <hr class="divider">
       <app-post-list></app-post-list>

@@ -1,0 +1,95 @@
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.post-card {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.post-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-left {
+  flex: 1;
+}
+
+.post-description {
+  font-size: 16px;
+  color: #333;
+}
+
+.post-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.post-right {
+  max-width: 120px;
+  margin-left: 20px;
+}
+
+.post-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  gap: 15px;
+}
+
+.post-comments {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.post-likes {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.mat-icon {
+  margin-right: 5px;
+}
+
+button {
+  background-color: #28705e;
+  font-size: medium;
+  padding: 5px 15px;
+  width: 30%;
+  margin-left: 400px;
+}
+
+button mat-icon {
+  margin-left: 8px;
+}
+
+.post-likes mat-icon {
+  transition: color 0.3s ease; 
+}
+
+.post-likes:hover mat-icon {
+  color: #28705e;
+}
