@@ -19,10 +19,13 @@ export class PostService {
   }
 
   uploadImage(file: File): Observable<Post> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
     const formData = new FormData();
     formData.append('file', file, file.name);
 
-    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData);
+    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData, { headers });
     console.log(response)
     return response;
   }

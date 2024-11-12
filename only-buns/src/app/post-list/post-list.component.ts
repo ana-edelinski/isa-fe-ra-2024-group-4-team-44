@@ -21,6 +21,7 @@ export class PostListComponent implements OnInit {
   constructor(private postService: PostService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {} 
   
   posts: Post[] = [];
+  likesCount: number = 0;
 
   
   
@@ -44,8 +45,22 @@ export class PostListComponent implements OnInit {
     );
   }
 
-  likePost(): void {
+  likePost(postId: number): void {
     if (this.isLoggedIn) {
+      const userId = this.authService.getLoggedInUserId();
+    if (userId) {
+      this.postService.likeUnlikePost(postId, userId).subscribe(
+        () => {
+          console.log('Post liked/unliked successfully');
+          this.ngOnInit()
+        },
+        (error) => {
+          console.error('Error liking/unliking post:', error);
+        }
+      );
+    } else {
+      console.error('User is not logged in');
+    }
     } else {
       this.showLoginNotification();
     }
@@ -63,10 +78,21 @@ export class PostListComponent implements OnInit {
       duration: 3000,
     });
   }
-  
+  showDetails(postId: number): void {
+    this.router.navigate(['/post-details', postId]);
+  }
+
   goToProfile(creatorId: number): void {
 
     this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
   }
+
+  loadLikesCount(postId: number): void {
+    this.postService.getLikesCount(postId).subscribe(
+      (count) => this.likesCount = count,
+      (error) => console.error('Error fetching likes count:', error)
+    );
+  }
+
 
 }
