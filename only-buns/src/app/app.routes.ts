@@ -10,7 +10,7 @@ import { PostDetailsComponent } from './post-details/post-details.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostEditComponent } from './post-details/post-edit/post-edit.component';
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
-
+import { UserInfoComponent } from './user-info/user-info/user-info.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -22,7 +22,8 @@ export const routes: Routes = [
     { path: 'post-details/:id', component: PostDetailsComponent },
     { path: 'post-list', component: PostListComponent},
     { path: 'post/:id/edit', component: PostEditComponent },
-    { path: 'registered-users', component: RegisteredUsersComponent }
+    { path: 'registered-users', component: RegisteredUsersComponent },
+    { path: 'user', component: UserInfoComponent },
 ];
 
 @NgModule({

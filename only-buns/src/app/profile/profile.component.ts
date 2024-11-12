@@ -28,20 +28,17 @@ export class ProfileComponent implements OnInit,  OnDestroy{
 
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
+  loggedInUserId: number  | null = null;
   constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
-    
-    this.userSubscription = this.authService.getUser().subscribe(user => {
-      if (user && user.id) {
-        this.user = user;
-        this.getUserProfile();  
-      } else {
-        this.router.navigate(['/login']);
-      }
-    });
+    if (this.authService.isAuthenticated()) {
+      this.getUserProfile();
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
-
+  
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
@@ -49,19 +46,20 @@ export class ProfileComponent implements OnInit,  OnDestroy{
   }
 
   getUserProfile(): void {
-    if (this.user.id !== undefined && this.user.id !== null) {  
-      this.userService.getUserProfile(this.user.id).subscribe(
-        (data) => {
-          console.log(data);
+    this.userSubscription = this.authService.getUserProfile().subscribe(
+      (data) => {
+        if (data) {
           this.user = data;
-        },
-        (error) => {
-          console.error('Error fetching user profile', error);
+          console.log('User profile fetched successfully', data);
+        } else {
+          console.error('No user profile data available');
         }
-      );
-    } else {
-      console.error('User ID is not available');
-    }
+      },
+      (error) => {
+        console.error('Error fetching user profile', error);
+        this.router.navigate(['/login']);
+      }
+    );
   }
   
   updateProfile(): void {

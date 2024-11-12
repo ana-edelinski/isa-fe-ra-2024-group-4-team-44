@@ -44,9 +44,9 @@
       </mat-sidenav>
     </mat-sidenav-container>
 
-    <div class="main-content" *ngIf="isLoggedIn" >
+    <div class="main-content" >   
       <div height="30px" class="tab-buttons">
-        <button class="buttons" (click)="createPost()">
+        <button class="buttons" (click)="createPost()" *ngIf="isLoggedIn">
           Create post
         <mat-icon>add-circle</mat-icon>
         </button>  
