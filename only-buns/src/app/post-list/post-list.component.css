@@ -58,3 +58,10 @@
     color: white;
   }
   
+  .comment-author {
+    font-weight: bold;
+}
+
+.comment-text {
+    margin-left: 20px; /* Podesite vrednost po potrebi */
+}

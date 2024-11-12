@@ -14,14 +14,23 @@
               <span>{{ post.likeCount}} likes</span>
               <span>{{ post.comments?.length || 0  }} comments</span>
             </div>
-            <button mat-button (click) = "showDetails(post.id)">View Details</button>
           
+            <div class="comments" *ngIf="post.comments && post.comments.length > 0">
+              <h6>Comments</h6>
+              <div *ngFor="let comment of post.comments" class="comment">
+                <a class="comment-author" (click)="goToProfile(comment.userId)">{{comment.username }}</a>
+                <p class="comment-text">{{ comment.text }}</p>
+              </div>
+            </div>
           <div>
           <button mat-button (click)="likePost(post.id)">
             Like
           </button>
           <button mat-button (click)="commentOnPost()">
             Comment
+          </button>
+          <button mat-button (click) = "showDetails(post.id)">
+            View Details
           </button>
           </div>
           </div>
