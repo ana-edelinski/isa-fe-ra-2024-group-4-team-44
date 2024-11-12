@@ -82,10 +82,12 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   likeUnlikePost(postId: number): void {
     const userId = this.authService.getLoggedInUserId();
     if (userId) {
+      console.log(postId)
       this.postService.likeUnlikePost(postId, userId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          this.loadLikesCount(postId); // Ponovo učitaj broj lajkova nakon promene
+          //this.loadLikesCount(postId); // Ponovo učitaj broj lajkova nakon promene
+          this.getPosts()
         },
         (error) => {
           console.error('Error liking/unliking post:', error);

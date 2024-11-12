@@ -16,7 +16,7 @@
       <div class="post-footer">
         <div class="post-likes" (click)="likeUnlikePost(post.id)">
           <mat-icon>favorite</mat-icon> 
-          <span>{{ likesCount }}</span>
+          <span>{{ post.likeCount }}</span>
         </div>
         <div class="post-comments">
           <mat-icon>comment</mat-icon> {{ post.comments.length }} 
