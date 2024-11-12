@@ -18,64 +18,27 @@ export class PostListComponent implements OnInit {
 
   constructor(private postService: PostService, private authService: AuthService, private router: Router) {} 
   
-  //posts: Post[] = [];
+  posts: Post[] = [];
 
-  posts: Post[] = [
-    {
-      id: 1,
-      creatorId: 1,
-      creatorUsername: 'john_doe',
-      description: 'This is a sample post description. It describes the content of the post.',
-      creationTime: new Date('2024-11-09T08:30:00'),
-      imagePath: 'C:\Users\PC\Desktop\a.jpeg',
-      locationStreet: '123 Main St',
-      locationCity: 'New York',
-      locationPostalCode: '10001',
-      comments: [], // Placeholder comments
-      likes: [] // Placeholder likes
-    },
-    {
-      id: 2,
-      creatorId: 2,
-      creatorUsername: 'jane_smith',
-      description: 'Another example post with a description.',
-      creationTime: new Date('2024-11-08T14:00:00'),
-      imagePath: 'C:\Users\PC\Desktop\a.jpeg',
-      locationStreet: '456 Oak St',
-      locationCity: 'San Francisco',
-      locationPostalCode: '94105',
-      comments: [], // Placeholder comments
-      likes: [] // Placeholder likes
-    },
-    {
-      id: 3,
-      creatorId: 3,
-      creatorUsername: 'mark_jones',
-      description: 'A third example post to test.',
-      creationTime: new Date('2024-11-07T19:45:00'),
-      imagePath: 'C:\Users\PC\Desktop\a.jpeg',
-      locationStreet: '789 Pine St',
-      locationCity: 'Los Angeles',
-      locationPostalCode: '90001',
-      comments: [], // Placeholder comments
-      likes: [] // Placeholder likes
-    }
-  ];
+  
   
   ngOnInit(): void {
-    //this.getPosts();
+    this.getPosts();
   }
 
   getPosts(): void {
-    this.postService.getAll().subscribe({
-      next: (result: Post[]) => {
-        this.posts = result;
-        console.log(result)
+    this.postService.getAll().subscribe(
+      (data: Post[]) => {
+        this.posts = data;
+        this.posts.forEach(post => {
+          post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+        });
+        console.log('Fetched posts:', this.posts);
       },
-      error: () => {
-        console.log("There has been an error loading posts.")
+      (error) => {
+        console.error('Error fetching posts:', error);
       }
-    })
+    );
   }
 
 }

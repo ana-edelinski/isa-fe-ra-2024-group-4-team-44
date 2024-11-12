@@ -11,8 +11,8 @@
           <div class="post-description">
             <p>{{ post.description }}</p>
             <div class="post-stats">
-              <span>{{ post.likes.length || 0  }} likes</span>
-              <span>{{ post.comments.length || 0  }} comments</span>
+              <span>{{ post.likes?.length || 0  }} likes</span>
+              <span>{{ post.comments?.length || 0  }} comments</span>
             </div>
             <button mat-button >View Details</button>
           </div>

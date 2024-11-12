@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Post } from './model/post.model';
 import { response } from 'express';
 
@@ -27,6 +27,16 @@ export class PostService {
   }
 
   getAll(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);     
+    return this.http.get<any>(this.apiUrl).pipe(
+      map((posts: any[]) => {
+        posts.forEach((post: { imagePath: string; }) => {
+          if (post.imagePath) {
+          post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+          post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
   }       
 }
