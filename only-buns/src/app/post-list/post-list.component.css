@@ -47,7 +47,7 @@
 
 /* Slika posta */
 .post-image {
-  width: 100%;
+  width: 30%;
   max-width: 800px; /* Da slika ne prelazi širu veličinu na velikim ekranima */
   height: auto;
   border-radius: 8px;
