@@ -55,7 +55,10 @@ export class UserService {
   }
 
   getAllUsers(): Observable<UserInfoDTO[]> {
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/registered`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/registered`, {headers});
   }
 
   searchUsers(searchCriteria: any): Observable<UserInfoDTO[]> {
@@ -77,23 +80,40 @@ export class UserService {
       params = params.set('maxPosts', searchCriteria.maxPosts);
     }
 
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/search`, { params });
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/search`, { 
+      headers: headers,
+      params });
   }
 
   getUsersSortedByFollowingAsc(): Observable<UserInfoDTO[]> {
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/asc`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/asc`, { headers });
   }
 
   getUsersSortedByFollowingDesc(): Observable<UserInfoDTO[]> {
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/desc`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/desc`, { headers });
   }
 
   getUsersSortedByEmailAsc(): Observable<UserInfoDTO[]> {
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/asc`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/asc`, { headers });
   }
 
   getUsersSortedByEmailDesc(): Observable<UserInfoDTO[]> {
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/desc`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/desc`, { headers });
   }
   
   
