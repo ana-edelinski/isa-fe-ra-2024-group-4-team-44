@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { User } from './user.model';
 import { HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
-=======
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { User } from './user.model';
 import { UserInfoDTO } from '../model/user.model';
->>>>>>> e4dc726f7e2bffb2761cc828975473a5f3f52b0c
+
 
 @Injectable({
   providedIn: 'root'
