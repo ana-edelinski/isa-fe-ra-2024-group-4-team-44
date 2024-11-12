@@ -13,7 +13,6 @@ import { PostEditComponent } from './post-details/post-edit/post-edit.component'
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
 
 
-
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'register', component: RegistrationComponent },

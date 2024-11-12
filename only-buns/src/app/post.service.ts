@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { Post } from './model/post.model';
@@ -19,23 +19,42 @@ export class PostService {
   }
 
   uploadImage(file: File): Observable<Post> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
     const formData = new FormData();
     formData.append('file', file, file.name);
 
-    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData);
+    var response = this.http.post<Post>(this.apiUrl+'/uploadImage', formData, { headers });
     console.log(response)
     return response;
   }
 
   getAll(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);     
+    return this.http.get<any>(this.apiUrl).pipe(
+      map((posts: any[]) => {
+        posts.forEach((post: { imagePath: string; }) => {
+          if (post.imagePath) {
+          post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+          post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
+          
   }   
   
   getPostsByUserId(): Observable<Post[]> {
     const userId = this.authService.getLoggedInUserId();
     console.log(userId);
+
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+
     if (userId) {
-      return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`).pipe(
+      return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(
         map(posts => {
           posts.forEach(post => {
             if (post.imagePath) {
@@ -53,7 +72,10 @@ export class PostService {
   
 
   getPostById(postId: number): Observable<Post> {
-    return this.http.get<Post>(`${this.apiUrl}/${postId}`).pipe(
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<Post>(`${this.apiUrl}/${postId}`, { headers }).pipe(
       map(post => {
         post.imagePath = post.imagePath.replace(/\\/g, '/');
         console.log('SLIKAAA:' + post.imagePath); 
@@ -63,21 +85,35 @@ export class PostService {
   }
   
   getLikesCount(postId: number): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`, { headers });
   }
   
   updatePost(postId: number, post: Post, userId: number): Observable<Post> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
     return this.http.put<Post>(`${this.apiUrl}/${postId}`, post, {
+      headers: headers,
       params: { userId: userId.toString() }
     });
-  }
+}
+
 
   deletePost(postId: number, userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${postId}?userId=${userId}`);
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.apiUrl}/${postId}?userId=${userId}`, { headers });
   }
   
   likeUnlikePost(postId: number, userId: number): Observable<void> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
     return this.http.put<void>(`${this.apiUrl}/${postId}/like`, null, {
+      headers: headers,
       params: { userId: userId.toString() }
     });
   }

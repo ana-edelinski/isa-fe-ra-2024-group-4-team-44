@@ -123,7 +123,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
           locationCity: this.postForm.value.address?.city || '',
           locationPostalCode: this.postForm.value.address?.postalCode || '',
           comments: [],
-          likes: []
+          likes: [],
+          likeCount: 0,
         };
 
         this.postService.createPost(newPost).subscribe({
