@@ -1,29 +1,38 @@
 <div *ngIf="post">
-    <div class="post-content">
-      <div class="post-main">
-        <img [src]="imageUrl" alt="Post Image" />
-        <div class="text-content">
-          <p>Creator: {{ post.creatorUsername }}</p>
-          <p>Created on: {{ post.creationTime | date: 'short' }}</p>
-          <h1>{{ post.description }}</h1>
-          <p>{{ post.likes.length }} Likes</p>
-  
-          <!-- Edit and Delete buttons -->
-          <div class="buttons">
-            <button class="edit-btn">Edit</button>
-            <button class="delete-btn">Delete</button>
-          </div>
+  <div class="post-content">
+    <div class="post-main">
+      <img [src]="imageUrl" alt="Post Image" />
+      <div class="text-content">
+        <p>Creator: {{ post.creatorUsername }}</p>
+        <p>Created on: {{ post.creationTime | date: 'short' }}</p>
+        <h1>{{ post.description }}</h1>
+
+        <!-- Edit and Delete buttons -->
+        <div class="buttons">
+          <button class="edit-btn" (click)="onEdit()">Edit</button>
+          <button class="delete-btn" (click)="onDelete()">Delete</button>
         </div>
       </div>
-  
-      <div class="comments">
-        <h2>Comments</h2>
-        <div *ngFor="let comment of post.comments">
-          <p>{{ comment.text }}</p>
-        </div>
+    </div>
+
+    <div class="like-section" (click)="likeUnlikePost(post.id)">
+      <mat-icon >favorite</mat-icon>
+      <span>{{ likesCount }}</span>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments" *ngIf="post.comments && post.comments.length > 0">
+      <h2>Comments</h2>
+      <div *ngFor="let comment of post.comments" class="comment">
+        <p class="comment-author">{{ comment.username }}</p>
+        <p class="comment-text">{{ comment.text }}</p>
       </div>
-            
-            
+    </div>
+
+    
+    <!-- If no comments -->
+    <div class="no-comments" *ngIf="post.comments && post.comments.length === 0">
+      <p>No comments yet.</p>
     </div>
   </div>
-  
+</div>

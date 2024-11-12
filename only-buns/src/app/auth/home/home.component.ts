@@ -52,5 +52,9 @@ export class HomeComponent {
   myPosts() {
     this.router.navigate(['/my-posts'], { state: { user: this.authService.getUser() }});
   }
+
+  registeredUsers() {
+    this.router.navigate(['/registered-users'], { state: { user: this.authService.getUser() }});
+  }
   
 }

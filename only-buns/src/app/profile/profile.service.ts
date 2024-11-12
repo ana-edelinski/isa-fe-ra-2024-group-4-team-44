@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
+<<<<<<< HEAD
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { User } from './user.model';
 import { HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+=======
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from './user.model';
+import { UserInfoDTO } from '../model/user.model';
+>>>>>>> e4dc726f7e2bffb2761cc828975473a5f3f52b0c
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +57,48 @@ export class UserService {
           return throwError(() => error);
         })
       );
+  }
+
+  getAllUsers(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/registered`);
+  }
+
+  searchUsers(searchCriteria: any): Observable<UserInfoDTO[]> {
+    let params = new HttpParams();
+
+    if (searchCriteria.name) {
+      params = params.set('name', searchCriteria.name);
+    }
+    if (searchCriteria.surname) {
+      params = params.set('surname', searchCriteria.surname);
+    }
+    if (searchCriteria.email) {
+      params = params.set('email', searchCriteria.email);
+    }
+    if (searchCriteria.minPosts !== null) {
+      params = params.set('minPosts', searchCriteria.minPosts);
+    }
+    if (searchCriteria.maxPosts !== null) {
+      params = params.set('maxPosts', searchCriteria.maxPosts);
+    }
+
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/search`, { params });
+  }
+
+  getUsersSortedByFollowingAsc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/asc`);
+  }
+
+  getUsersSortedByFollowingDesc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/desc`);
+  }
+
+  getUsersSortedByEmailAsc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/asc`);
+  }
+
+  getUsersSortedByEmailDesc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/desc`);
   }
   
   

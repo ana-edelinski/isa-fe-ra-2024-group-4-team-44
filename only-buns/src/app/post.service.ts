@@ -32,14 +32,25 @@ export class PostService {
   }   
   
   getPostsByUserId(): Observable<Post[]> {
-    const userId = this.authService.getLoggedInUserId();  
+    const userId = this.authService.getLoggedInUserId();
     console.log(userId);
     if (userId) {
-      return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`);
+      return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`).pipe(
+        map(posts => {
+          posts.forEach(post => {
+            if (post.imagePath) {
+            post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+            post.imagePath = post.imagePath.replace(/\\/g, '/');
+            }
+          });
+          return posts;
+        })
+      );
     } else {
       throw new Error('User not logged in');
     }
   }
+  
 
   getPostById(postId: number): Observable<Post> {
     return this.http.get<Post>(`${this.apiUrl}/${postId}`).pipe(
@@ -51,6 +62,25 @@ export class PostService {
     );
   }
   
+  getLikesCount(postId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`);
+  }
+  
+  updatePost(postId: number, post: Post, userId: number): Observable<Post> {
+    return this.http.put<Post>(`${this.apiUrl}/${postId}`, post, {
+      params: { userId: userId.toString() }
+    });
+  }
+
+  deletePost(postId: number, userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${postId}?userId=${userId}`);
+  }
+  
+  likeUnlikePost(postId: number, userId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${postId}/like`, null, {
+      params: { userId: userId.toString() }
+    });
+  }
   
 
 }
