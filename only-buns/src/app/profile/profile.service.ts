@@ -115,6 +115,14 @@ export class UserService {
 
     return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/desc`, { headers });
   }
+
+  // getRole(userId: number): Observable<number> {
+  //   return this.http.get<number>(`${this.baseUrl}/role/` + userId);
+  // }
+
+  async getRole(userId: number): Promise<number> {
+    return await this.http.get<number>(`${this.baseUrl}/role/` + userId).toPromise() || -1;
+  }
   
   
 }

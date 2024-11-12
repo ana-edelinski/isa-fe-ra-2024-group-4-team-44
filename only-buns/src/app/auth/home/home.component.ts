@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
@@ -8,6 +8,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PostListComponent } from '../../post-list/post-list.component';
+import { UserService } from '../../profile/profile.service';
+import { User } from '../../profile/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -24,13 +27,47 @@ import { PostListComponent } from '../../post-list/post-list.component';
 export class HomeComponent {
   title: string = 'OnlyBuns!';
   isLoggedIn: boolean = false;
+  roleId: number = 1;
+  user: User = new User();
+  private userSubscription: Subscription = Subscription.EMPTY;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private userService: UserService) {
     this.isLoggedIn = this.authService.isAuthenticated();
+    
   }
   ngOnInit() {
     this.isLoggedIn = this.authService.isAuthenticated(); 
+    this.userSubscription = this.authService.getUser().subscribe(user => {
+      if (user && user.id) {
+        this.user = user; 
+        this.setRoleId(user.id);
+      } else {
+        this.router.navigate(['']);
+      }
+      
+    });
+
+    
+
   }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  async setRoleId(userId: number): Promise<void> {
+    try {
+      this.roleId = await this.userService.getRole(userId);  
+      console.log("Role ID set to: ", this.roleId);
+    } catch (error) {
+      this.roleId = -1;
+      console.error("Error while setting role ID:", error);
+    }
+  }
+
+ 
 
   logout() {
     this.authService.logout();
@@ -38,11 +75,11 @@ export class HomeComponent {
     this.router.navigate(['/']);
   }
   profile() {
-    this.router.navigate(['/profile'], { state: { user: this.authService.getUser() } });
+    this.router.navigate(['/profile'], { state: { user: this.user } });
   }
 
   createPost() {
-    this.router.navigate(['/create-post'], { state: { user: this.authService.getUser() } });
+    this.router.navigate(['/create-post'], { state: { user: this.user } });
   }
 
   isHomePage(): boolean {
@@ -50,11 +87,11 @@ export class HomeComponent {
   }
 
   myPosts() {
-    this.router.navigate(['/my-posts'], { state: { user: this.authService.getUser() }});
+    this.router.navigate(['/my-posts'], { state: { user: this.user }});
   }
 
   registeredUsers() {
-    this.router.navigate(['/registered-users'], { state: { user: this.authService.getUser() }});
+    this.router.navigate(['/registered-users'], { state: { user: this.user }});
   }
   
 }
