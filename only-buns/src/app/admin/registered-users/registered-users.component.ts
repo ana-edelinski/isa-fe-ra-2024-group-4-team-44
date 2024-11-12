@@ -13,12 +13,21 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegisteredUsersComponent implements OnInit {
   users: UserInfoDTO[] = [];
+  filteredUsers: UserInfoDTO[] = [];
+
   searchCriteria = {
     name: '',
     surname: '',
     email: '',
     minPosts: null,
     maxPosts: null
+  };
+
+  sortCriteria = {
+    emailAsc: true,
+    emailDesc: false,
+    followingAsc: false,
+    followingDesc: false
   };
 
   constructor(private userService: UserService) {}
@@ -31,6 +40,7 @@ export class RegisteredUsersComponent implements OnInit {
     this.userService.getAllUsers().subscribe(
       (data) => {
         this.users = data;
+        this.filteredUsers = data;
         console.log(data);
       },
       (error) => {
@@ -44,6 +54,7 @@ export class RegisteredUsersComponent implements OnInit {
       (data) => {
         console.log('Search results:', data);
         this.users = data;
+        this.filteredUsers = data;
         console.log('Updated users:', this.users);
       },
       (error) => {
@@ -60,9 +71,41 @@ export class RegisteredUsersComponent implements OnInit {
       minPosts: null,
       maxPosts: null
     };
-    this.fetchUsers();  // Reset to original list
+    this.fetchUsers();  
   }
 
+  sortBy(key: string): void {
+    if (key === 'email') {
+      if (this.sortCriteria.emailAsc) {
+        this.userService.getUsersSortedByEmailDesc().subscribe(data => {
+          this.filteredUsers = data;
+          this.sortCriteria.emailAsc = false;
+          this.sortCriteria.emailDesc = true;
+          console.log(data);
+        });
+      } else {
+        this.userService.getUsersSortedByEmailAsc().subscribe(data => {
+          this.filteredUsers = data;
+          this.sortCriteria.emailAsc = true;
+          this.sortCriteria.emailDesc = false;
+        });
+      }
+    } else if (key === 'following') {
+      if (this.sortCriteria.followingAsc) {
+        this.userService.getUsersSortedByFollowingDesc().subscribe(data => {
+          this.filteredUsers = data;
+          this.sortCriteria.followingAsc = false;
+          this.sortCriteria.followingDesc = true;
+        });
+      } else {
+        this.userService.getUsersSortedByFollowingAsc().subscribe(data => {
+          this.filteredUsers = data;
+          this.sortCriteria.followingAsc = true;
+          this.sortCriteria.followingDesc = false;
+        });
+      }
+    }
+  }
 
 }
 

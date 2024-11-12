@@ -55,6 +55,22 @@ export class UserService {
 
     return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/search`, { params });
   }
+
+  getUsersSortedByFollowingAsc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/asc`);
+  }
+
+  getUsersSortedByFollowingDesc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/desc`);
+  }
+
+  getUsersSortedByEmailAsc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/asc`);
+  }
+
+  getUsersSortedByEmailDesc(): Observable<UserInfoDTO[]> {
+    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/desc`);
+  }
   
   
 }
