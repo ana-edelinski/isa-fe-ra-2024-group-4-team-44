@@ -54,6 +54,12 @@ export class UserService {
       );
   }
 
+  changeLastActivity(userId: number, date: Date): Observable<any> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put(`${this.baseUrl}/${userId}/changeLastActivity`, date , { headers })
+  }
+
   getAllUsers(): Observable<UserInfoDTO[]> {
     const token = localStorage.getItem('token');  
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
