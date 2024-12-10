@@ -8,6 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PostListComponent } from '../../post-list/post-list.component';
+import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
 import { Subscription } from 'rxjs';
@@ -22,6 +23,7 @@ import { Subscription } from 'rxjs';
     MatButtonModule,
     MatIconModule,
     PostListComponent,
+    MyPostsComponent,
   ]
 })
 export class HomeComponent {
@@ -29,6 +31,7 @@ export class HomeComponent {
   isLoggedIn: boolean = false;
   roleId: number = 1;
   user: User = new User();
+  currentView: string = 'posts';
   private userSubscription: Subscription = Subscription.EMPTY;
 
   constructor(private authService: AuthService, private router: Router, private userService: UserService) {
@@ -87,8 +90,13 @@ export class HomeComponent {
   }
 
   myPosts() {
-    this.router.navigate(['/my-posts'], { state: { user: this.user }});
+    this.currentView = 'my-posts'; 
   }
+
+  showPosts() {
+    this.currentView = 'posts'; 
+  }
+
 
   registeredUsers() {
     this.router.navigate(['/registered-users'], { state: { user: this.user }});
