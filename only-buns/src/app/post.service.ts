@@ -15,7 +15,12 @@ export class PostService {
   constructor(private http: HttpClient, private authService: AuthService) {} 
   
   createPost(post: Post): Observable<Post> {    
-    return this.http.post<Post>(this.apiUrl, post)
+    const userId = this.authService.getLoggedInUserId();
+    console.log(userId);
+
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Post>(this.apiUrl, post, { headers })
   }
 
   uploadImage(file: File): Observable<Post> {
