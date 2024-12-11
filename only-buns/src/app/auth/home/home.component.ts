@@ -90,12 +90,13 @@ export class HomeComponent {
   }
 
   myPosts() {
-    this.currentView = 'my-posts'; 
+    this.router.navigate(['my-posts'], { relativeTo: this.router.routerState.root });
   }
-
+  
   showPosts() {
-    this.currentView = 'posts'; 
+    this.router.navigate(['posts'], { relativeTo: this.router.routerState.root });
   }
+  
 
 
   registeredUsers() {

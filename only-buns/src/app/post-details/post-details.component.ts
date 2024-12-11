@@ -5,6 +5,8 @@ import { PostService } from '../post.service';
 import { Post } from '../model/post.model';
 import { User } from '../profile/user.model';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { PostEditComponent } from './post-edit/post-edit.component';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
 
@@ -19,7 +21,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   post: Post | null = null;
   likesCount: number = 0;
 
-  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService) {}
+  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService, private dialog: MatDialog) {}
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
 
@@ -61,7 +63,20 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
 
   onEdit(): void {
     if (this.post) {
-      this.router.navigate(['/post', this.post.id, 'edit']); 
+      //this.router.navigate(['/post', this.post.id, 'edit']); 
+      const dialogRef = this.dialog.open(PostEditComponent, {
+        width: '50vw',
+        height: '60vh',
+        maxWidth: 'none',
+        maxHeight: 'none',
+        data: { post: this.post } 
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result && result.updatedPost) {
+          this.post = result.updatedPost;
+        }
+      });
     }
   }
 

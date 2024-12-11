@@ -14,7 +14,16 @@ import { RegisteredUsersComponent } from './admin/registered-users/registered-us
 
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
+    {
+        path: '',
+        component: HomeComponent,
+        children: [
+            { path: '', redirectTo: 'posts', pathMatch: 'full' }, // Default prikaz
+            { path: 'posts', component: PostListComponent }, // Posts list
+            { path: 'my-posts', component: MyPostsComponent }, // My posts
+            { path: 'post-details/:id', component: PostDetailsComponent }, // Post details
+        ]
+    },
     { path: 'register', component: RegistrationComponent },
     { path: 'login', component: LoginComponent },
     { path: 'profile', component: ProfileComponent },

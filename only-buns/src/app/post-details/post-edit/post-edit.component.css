@@ -3,15 +3,15 @@
         justify-content: center;
         align-items: flex-start;
         height: 40vh;
-        margin: 0;
+        background-color: #fff;
     }
     
     .post-card {
-        width: 60%;
-        padding: 20px;
+        width: 100%;
+        height: 100%;
         box-sizing: border-box;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px; */
         background-color: #fff;
         text-align: center;
     }
@@ -28,15 +28,16 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
-        gap: 15px;
+        background-color: #fff;
     }
     
     .form-row {
         display: flex;
         align-items: center;
         justify-content: center; 
-        width: 90%;
+        width: 100%;
         flex-direction: column;
+        background-color: #fff;
     }
     
     .input-label {
@@ -45,6 +46,7 @@
         color: #28705e;
         width: 100%;
         text-align: center;
+        background-color: #fff;
     }
     
     .image-input input {
@@ -66,4 +68,3 @@
     .post-button:hover {
         background-color: #52796F;
     }
-    

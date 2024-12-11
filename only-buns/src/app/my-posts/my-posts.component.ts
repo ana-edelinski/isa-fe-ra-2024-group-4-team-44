@@ -59,8 +59,9 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   
 
   viewDetails(postId: number) {
-    this.router.navigate(['/post-details', postId]);
+    this.router.navigate(['post-details', postId], { relativeTo: this.router.routerState.root });
   }
+  
 
   ngOnDestroy(): void {
     if (this.userSubscription) {
