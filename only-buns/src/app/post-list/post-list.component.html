@@ -4,7 +4,7 @@
       <li *ngFor="let post of posts" class="post-item">
         <div class="post-header">
           <a class="username" (click)="goToProfile(post.creatorId)">{{ post.creatorUsername }}</a>
-          <span class="creation-time">{{ post.creationTime }}</span>
+          <span class="creation-time">{{ post.creationTime | date:'dd.MM.yyyy. HH:mm' }}</span>
         </div>
         <div class="post-content">
           <img [src]="post.imagePath" alt="Post image" class="post-image" />

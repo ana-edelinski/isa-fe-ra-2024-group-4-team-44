@@ -1,4 +1,5 @@
 <div class="center-container">
+    
     <mat-card class="post-card">
       <h2>Create Post</h2>
   
@@ -33,8 +34,12 @@
             <input matInput type="text" formControlName="postalCode" />
           </mat-form-field>
         </div>
+        <div>
+          <button mat-raised-button color="primary" (click)="dialogRef.close()" class="close-button">Close</button>
+          <button mat-raised-button color="primary" type="submit" class="post-button">Post</button>
+        </div>
   
-        <button mat-raised-button color="primary" type="submit" class="post-button">Post</button>
+        
       </form>
     </mat-card>
   </div>

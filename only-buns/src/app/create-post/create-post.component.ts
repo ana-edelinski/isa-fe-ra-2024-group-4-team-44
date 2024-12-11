@@ -14,6 +14,7 @@ import { PostService } from '../post.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../profile/user.model';
 import { Subscription } from 'rxjs';
+import { MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -32,7 +33,7 @@ import { Subscription } from 'rxjs';
 })
 export class CreatePostComponent implements OnInit, OnDestroy {
 
-  constructor(private postService: PostService, private authService: AuthService, private router: Router) {} 
+  constructor(private postService: PostService, private authService: AuthService, private router: Router, public dialogRef: MatDialogRef<CreatePostComponent>) {}
 
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
@@ -132,6 +133,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
             if (result) {
               this.resetImagePath()
               console.log('Post created successfully');
+              this.dialogRef.close(newPost); 
               this.router.navigate([''], { state: { user: this.user} });
             } else {
               alert('An error has occurred. Please try again.');

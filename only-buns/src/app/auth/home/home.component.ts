@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
@@ -7,11 +7,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 import { PostListComponent } from '../../post-list/post-list.component';
 import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
 import { Subscription } from 'rxjs';
+import { CreatePostComponent } from '../../create-post/create-post.component';
 
 @Component({
   selector: 'app-home',
@@ -33,8 +35,9 @@ export class HomeComponent {
   user: User = new User();
   currentView: string = 'posts';
   private userSubscription: Subscription = Subscription.EMPTY;
+  @ViewChild(PostListComponent) postListComp!: PostListComponent;
 
-  constructor(private authService: AuthService, private router: Router, private userService: UserService) {
+  constructor(private authService: AuthService, private router: Router, private userService: UserService, private dialog: MatDialog) {
     this.isLoggedIn = this.authService.isAuthenticated();
     
   }
@@ -83,6 +86,19 @@ export class HomeComponent {
 
   createPost() {
     this.router.navigate(['/create-post'], { state: { user: this.user } });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CreatePostComponent, {
+      width: '80%', 
+      maxWidth: 'none',
+      height: '90%',
+    });
+  
+    dialogRef.afterClosed().subscribe(newPost => {
+      this.postListComp.posts.push(newPost);
+      
+    });
   }
 
   isHomePage(): boolean {
