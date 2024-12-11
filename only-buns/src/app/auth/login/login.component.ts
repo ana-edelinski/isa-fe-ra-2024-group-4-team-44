@@ -29,6 +29,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
+  errorMessage: string | null = null; 
 
   constructor(
     private fb: FormBuilder,
@@ -50,9 +51,18 @@ export class LoginComponent {
           this.authService.loggedIn = true;
           this.router.navigate(['/']);
         },
-        error: () => {
+        error: (err) => {
           this.isLoading = false;
-          alert("Neispravan username ili lozinka!");
+          //alert("Neispravan username ili lozinka!");
+          if (err.status === 429) {
+           
+            this.errorMessage = 'Too many failed attempts. Please try again later.';
+
+          } else {
+            
+            this.errorMessage = 'Invalid username or password!';
+
+          }
         }
       });
     }
