@@ -34,7 +34,7 @@
             Registered Users
           </a>
 
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1">
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 1" (click)="trends()">
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
           </a>
@@ -59,6 +59,9 @@
       </ng-container>
       <ng-container *ngIf="currentView === 'my-posts'">
         <app-my-posts></app-my-posts>
+      </ng-container>
+      <ng-container *ngIf="currentView === 'trends'">
+        <app-trends></app-trends>
       </ng-container>
     </div>
   </div>

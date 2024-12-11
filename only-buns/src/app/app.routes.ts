@@ -11,6 +11,7 @@ import { PostDetailsComponent } from './post-details/post-details.component';
 import { UserInfoComponent } from './user-info/user-info/user-info.component';
 import { PostEditComponent } from './post-details/post-edit/post-edit.component';
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
+import { TrendsComponent } from './trends/trends.component';
 
 
 export const routes: Routes = [
@@ -24,7 +25,8 @@ export const routes: Routes = [
     { path: 'post-details/:id', component: PostDetailsComponent },
     { path: 'user', component: UserInfoComponent },
     { path: 'post/:id/edit', component: PostEditComponent },
-    { path: 'registered-users', component: RegisteredUsersComponent }
+    { path: 'registered-users', component: RegisteredUsersComponent },
+    { path: 'trends', component: TrendsComponent },
 
 ];
 

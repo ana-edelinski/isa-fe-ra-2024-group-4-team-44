@@ -12,6 +12,7 @@ import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
 import { Subscription } from 'rxjs';
+import { TrendsComponent } from '../../trends/trends.component';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     PostListComponent,
     MyPostsComponent,
+    TrendsComponent
   ]
 })
 export class HomeComponent {
@@ -100,6 +102,11 @@ export class HomeComponent {
 
   registeredUsers() {
     this.router.navigate(['/registered-users'], { state: { user: this.user }});
+  }
+
+  trends()
+  {
+    this.currentView = 'trends'; 
   }
   
 }

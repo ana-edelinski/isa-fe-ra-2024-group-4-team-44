@@ -10,6 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MyPostsComponent } from '../my-posts/my-posts.component';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +22,9 @@ import { Router } from '@angular/router';
     MatFormFieldModule, 
     MatButtonModule, 
     MatIconModule, 
-    MatCardModule,],
+    MatCardModule,
+    CommonModule,
+    MyPostsComponent,],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -29,6 +33,13 @@ export class ProfileComponent implements OnInit,  OnDestroy{
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
   loggedInUserId: number  | null = null;
+  
+    followers: number = 150;  
+    following: number = 120;
+    showDetails: boolean = false;
+    currentView: string = 'posts';
+
+
   constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
@@ -94,6 +105,11 @@ export class ProfileComponent implements OnInit,  OnDestroy{
     }
   }
   
-  
-  
+    toggleDetails() {
+    this.showDetails = !this.showDetails;
+  }
+
+  myPosts() {
+    this.currentView = 'my-posts'; 
+  }
 }
