@@ -97,10 +97,8 @@ export class HomeComponent {
     this.router.navigate(['posts'], { relativeTo: this.router.routerState.root });
   }
   
-
-
   registeredUsers() {
-    this.router.navigate(['/registered-users'], { state: { user: this.user }});
+    this.router.navigate(['registered-users'], { relativeTo: this.router.routerState.root });
   }
   
 }

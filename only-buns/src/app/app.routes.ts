@@ -22,6 +22,7 @@ export const routes: Routes = [
             { path: 'posts', component: PostListComponent }, // Posts list
             { path: 'my-posts', component: MyPostsComponent }, // My posts
             { path: 'post-details/:id', component: PostDetailsComponent }, // Post details
+            { path: 'registered-users', component: RegisteredUsersComponent },
         ]
     },
     { path: 'register', component: RegistrationComponent },
