@@ -65,18 +65,17 @@ export class AuthService {
   
 
     isAuthenticated(): boolean {
-      const token = this.getAuthToken();
-      const expiresIn = localStorage.getItem('expiresIn');
-      if (token && expiresIn) {
-        const expirationDate = new Date(expiresIn);  
-        if (expirationDate > new Date()) {
-   
-          return true; 
+      if (typeof window !== 'undefined' && localStorage) {
+        const token = this.getAuthToken();
+        const expiresIn = localStorage.getItem('expiresIn');
+        if (token && expiresIn) {
+          const expirationDate = new Date(expiresIn);
+          return expirationDate > new Date();
         }
       }
-      return false; 
-      
+      return false;
     }
+    
 
   // Logout korisnika
   logout(): void {
@@ -95,7 +94,10 @@ export class AuthService {
   }
 
   private getAuthToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   private getStoredUserId(): number | null {

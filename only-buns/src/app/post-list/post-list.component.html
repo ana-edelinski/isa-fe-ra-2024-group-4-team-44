@@ -12,7 +12,7 @@
             <p>{{ post.description }}</p>
             <div class="post-stats">
               <span>{{ post.likeCount}} likes</span>
-              <span>{{ post.comments?.length || 0  }} comments</span>
+              <span>{{ post.comments.length || 0  }} comments</span>
             </div>
           
             <div class="comments" *ngIf="post.comments && post.comments.length > 0">
