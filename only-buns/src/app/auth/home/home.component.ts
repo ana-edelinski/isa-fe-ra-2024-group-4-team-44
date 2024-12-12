@@ -77,6 +77,11 @@ export class HomeComponent {
     this.router.navigate(['/profile'], { state: { user: this.user } });
   }
 
+  isPostsTabActive(): boolean {
+    const allowedRoutes = ['/posts', '/my-posts'];
+    return allowedRoutes.some(route => this.router.url.includes(route));
+  }  
+
   createPost() {
     this.router.navigate(['/create-post'], { state: { user: this.user } });
   }

@@ -124,6 +124,27 @@ export class PostService {
       params: { userId: userId.toString() }
     });
   }
-  
 
+  getPostsBySpecificUser(userId: number): Observable<Post[]> {
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      throw new Error('Authorization token is missing');
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(
+      map(posts => {
+        posts.forEach(post => {
+          if (post.imagePath) {
+            post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+            post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
+  }
+  
 }
