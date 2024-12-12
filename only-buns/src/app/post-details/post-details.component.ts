@@ -66,9 +66,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       //this.router.navigate(['/post', this.post.id, 'edit']); 
       const dialogRef = this.dialog.open(PostEditComponent, {
         width: '50vw',
-        height: '60vh',
-        maxWidth: 'none',
-        maxHeight: 'none',
+        height: '55vh',
         data: { post: this.post } 
       });
 
