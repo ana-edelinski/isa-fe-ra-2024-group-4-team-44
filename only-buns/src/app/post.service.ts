@@ -134,7 +134,7 @@ export class PostService {
   
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(
+    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(  //sa ovom metodom admin ne moze da vidi postove
       map(posts => {
         posts.forEach(post => {
           if (post.imagePath) {
