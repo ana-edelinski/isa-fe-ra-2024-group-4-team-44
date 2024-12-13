@@ -120,5 +120,30 @@ export class AuthService {
     );
   }
 
+  isFollowingUser(targetUserId: number): Observable<boolean> {
+    const currentUserId = this.getStoredUserId(); 
+    if (!currentUserId) {
+      throw new Error('User is not logged in');
+    }
+  
+    return this.http.get<boolean>(`${this.apiUrl}/${currentUserId}/isFollowing/${targetUserId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+  
+
+  followUser(followingId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/follow/${followingId}`, null, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  unfollowUser(followingId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/unfollow/${followingId}`, null, {
+      headers: this.getHeaders(),
+    });
+  }
+  
+
 }
 

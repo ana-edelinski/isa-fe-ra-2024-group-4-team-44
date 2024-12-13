@@ -18,7 +18,9 @@
       </div>
   
       <div class="buttons">
-        <button class="follow-button">Follow</button>
+        <button class="follow-button" (click)="toggleFollow()">
+          {{ isFollowing ? 'Following' : 'Follow' }}
+        </button>
         <button class="message-button">Message</button>
       </div>
     </div>

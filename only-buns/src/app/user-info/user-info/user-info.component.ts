@@ -20,6 +20,7 @@ export class UserInfoComponent implements OnInit {
   user: User = { name: '', surname: '', email: '', username: '' };
   posts: Post[] = [];
   likesCount: number = 0;
+  isFollowing: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class UserInfoComponent implements OnInit {
       if (userId) {
         this.fetchUserProfile(userId);
         this.fetchUserPosts(userId); 
+        this.checkFollowingStatus(userId);
       }
     });
   }
@@ -79,7 +81,7 @@ export class UserInfoComponent implements OnInit {
       this.postService.likeUnlikePost(postId, userId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          this.fetchUserPosts(userId); // Osvesti postove nakon promene
+          this.fetchUserPosts(userId);
         },
         (error) => {
           console.error('Error liking/unliking post:', error);
@@ -93,6 +95,48 @@ export class UserInfoComponent implements OnInit {
   viewDetails(postId: number): void {
     this.router.navigate(['post-details', postId]);
   }
+
+  checkFollowingStatus(userId: number): void {
+    this.authService.isFollowingUser(userId).subscribe(
+      (isFollowing) => {
+        this.isFollowing = isFollowing; 
+      },
+      (error) => {
+        console.error('Error checking follow status:', error);
+      }
+    );
+  }
   
+
+  toggleFollow(): void {
+    const followingId = this.route.snapshot.queryParamMap.get('userId');
+    if (followingId) {
+      if (this.isFollowing) {
+        this.authService.unfollowUser(+followingId).subscribe(
+          (response) => {
+            console.log(response.message);
+            this.isFollowing = false; 
+          },
+          (error) => {
+            console.error('Error unfollowing user:', error);
+            alert(error.error?.error || 'Failed to unfollow the user.');
+          }
+        );
+      } else {
+        this.authService.followUser(+followingId).subscribe(
+          (response) => {
+            console.log(response.message);
+            this.isFollowing = true; 
+          },
+          (error) => {
+            console.error('Error following user:', error);
+            alert(error.error?.error || 'Failed to follow the user.');
+          }
+        );
+      }
+    } else {
+      console.error('Following ID not found');
+    }
+  }
   
 }
