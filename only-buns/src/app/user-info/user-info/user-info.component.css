@@ -207,3 +207,8 @@
     color: #777;
     margin-top: 20px;
   }
+
+  .profile-tag p {
+    color: #777;
+    font-style: italic;
+  }

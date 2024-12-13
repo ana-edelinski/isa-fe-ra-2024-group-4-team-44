@@ -22,6 +22,7 @@ export class UserInfoComponent implements OnInit {
   posts: Post[] = [];
   likesCount: number = 0;
   isFollowing: boolean = false;
+  isMyProfile: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,8 +38,14 @@ export class UserInfoComponent implements OnInit {
         this.fetchUserProfile(userId);
         this.fetchUserPosts(userId); 
         this.checkFollowingStatus(userId);
+        this.checkIfMyProfile(userId);
       }
     });
+  }
+
+  checkIfMyProfile(userId: number): void {
+    const loggedInUserId = this.authService.getLoggedInUserId();
+    this.isMyProfile = loggedInUserId === userId;
   }
   
   fetchUserProfile(userId: number): void {

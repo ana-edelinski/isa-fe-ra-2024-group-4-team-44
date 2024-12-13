@@ -17,12 +17,18 @@
         </p>
       </div>
   
-      <div class="buttons">
+      <!-- Prikaz dugmadi samo ako nije korisnikov profil -->
+      <div class="buttons" *ngIf="!isMyProfile">
         <button class="follow-button" (click)="toggleFollow()">
-          {{ isFollowing ? 'Following' : 'Follow' }}
+            {{ isFollowing ? 'Following' : 'Follow' }}
         </button>
         <button class="message-button">Message</button>
-      </div>
+    </div>
+
+    <!-- Oznaka za sopstveni profil -->
+    <div class="profile-tag" *ngIf="isMyProfile">
+        <p>This is how your profile looks like to others.</p>
+    </div>
     </div>
   </div>
   
