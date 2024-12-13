@@ -83,8 +83,14 @@
   }
   
   .follow-button {
-    background-color: #0073b1;
+    background-color: #28705e;
     color: white;
+  }
+
+  .follow-button:hover {
+    background-color: #1e5947; 
+    color: white; 
+    transition: background-color 0.3s ease; 
   }
   
   .message-button {
@@ -168,6 +174,12 @@
     font-size: medium;    
     padding: 5px 15px;
   }
+
+  .post-footer button:hover {
+    background-color: #1e5947;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
   
   .post-comments {
     display: flex;
@@ -183,6 +195,11 @@
   
   .mat-icon {
     margin-right: 5px;
+  }
+
+  .mat-icon:hover {
+    color: #1e5947;
+    transition: background-color 0.3s ease;
   }
 
   .no-posts {

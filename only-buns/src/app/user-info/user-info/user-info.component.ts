@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { Router, RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-info',
@@ -112,25 +113,33 @@ export class UserInfoComponent implements OnInit {
     const followingId = this.route.snapshot.queryParamMap.get('userId');
     if (followingId) {
       if (this.isFollowing) {
-        this.authService.unfollowUser(+followingId).subscribe(
-          (response) => {
-            console.log(response.message);
-            this.isFollowing = false; 
-          },
-          (error) => {
-            console.error('Error unfollowing user:', error);
-            alert(error.error?.error || 'Failed to unfollow the user.');
+        Swal.fire({
+          title: `Do you really want to unfollow ${this.user.username}?`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#28705e',
+          cancelButtonColor: '#808080',
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.authService.unfollowUser(+followingId).subscribe(
+              (response) => {
+                this.isFollowing = false;
+              },
+              (error) => {
+                console.error('Error unfollowing user:', error);
+              }
+            );
           }
-        );
+        });
       } else {
         this.authService.followUser(+followingId).subscribe(
           (response) => {
-            console.log(response.message);
-            this.isFollowing = true; 
+            this.isFollowing = true;
           },
           (error) => {
             console.error('Error following user:', error);
-            alert(error.error?.error || 'Failed to follow the user.');
           }
         );
       }
@@ -138,5 +147,6 @@ export class UserInfoComponent implements OnInit {
       console.error('Following ID not found');
     }
   }
+  
   
 }
