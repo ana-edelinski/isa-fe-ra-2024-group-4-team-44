@@ -23,6 +23,8 @@ export class UserInfoComponent implements OnInit {
   likesCount: number = 0;
   isFollowing: boolean = false;
   isMyProfile: boolean = false;
+  followingCount: number = 0; 
+  followersCount: number = 0; 
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +41,8 @@ export class UserInfoComponent implements OnInit {
         this.fetchUserPosts(userId); 
         this.checkFollowingStatus(userId);
         this.checkIfMyProfile(userId);
+        this.fetchFollowers(userId); 
+        this.fetchFollowing(userId);
       }
     });
   }
@@ -133,6 +137,7 @@ export class UserInfoComponent implements OnInit {
             this.authService.unfollowUser(+followingId).subscribe(
               (response) => {
                 this.isFollowing = false;
+                this.fetchFollowers(+followingId);
               },
               (error) => {
                 console.error('Error unfollowing user:', error);
@@ -144,6 +149,7 @@ export class UserInfoComponent implements OnInit {
         this.authService.followUser(+followingId).subscribe(
           (response) => {
             this.isFollowing = true;
+            this.fetchFollowers(+followingId);
           },
           (error) => {
             console.error('Error following user:', error);
@@ -154,6 +160,29 @@ export class UserInfoComponent implements OnInit {
       console.error('Following ID not found');
     }
   }
+
+  fetchFollowers(userId: number): void {
+    this.authService.getFollowers(userId).subscribe(
+      (followers) => {
+        this.followersCount = followers.length; 
+      },
+      (error) => {
+        console.error('Error fetching followers:', error);
+      }
+    );
+  }
+  
+  fetchFollowing(userId: number): void {
+    this.authService.getFollowing(userId).subscribe(
+      (following) => {
+        this.followingCount = following.length; 
+      },
+      (error) => {
+        console.error('Error fetching following:', error);
+      }
+    );
+  }
+  
   
   
 }

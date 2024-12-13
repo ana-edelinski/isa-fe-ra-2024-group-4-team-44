@@ -16,6 +16,11 @@
           🏠 {{user.street }}, {{ user.city }}{{ user.postalCode ? ', ' + user.postalCode : '' }}
         </p>
       </div>
+
+      <div class="follow-info">
+        <p>Following: <strong>{{ followingCount }}</strong></p>
+        <p>Followers: <strong>{{ followersCount }}</strong></p>
+      </div>
   
       <!-- Prikaz dugmadi samo ako nije korisnikov profil -->
       <div class="buttons" *ngIf="!isMyProfile">

@@ -212,3 +212,22 @@
     color: #777;
     font-style: italic;
   }
+
+  .follow-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .follow-info p {
+    margin: 0;
+  }
+  
+  .follow-info strong {
+    font-weight: bold;
+    color: #333;
+  }
+  

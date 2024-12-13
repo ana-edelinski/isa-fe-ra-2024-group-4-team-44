@@ -143,6 +143,19 @@ export class AuthService {
       headers: this.getHeaders(),
     });
   }
+
+  getFollowers(userId: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/${userId}/followers`, {
+      headers: this.getHeaders(),
+    });
+  }
+  
+  getFollowing(userId: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/${userId}/following`, {
+      headers: this.getHeaders(),
+    });
+  }
+  
   
 
 }
