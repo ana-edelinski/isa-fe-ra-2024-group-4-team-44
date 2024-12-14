@@ -91,12 +91,12 @@ export class UserInfoComponent implements OnInit {
   }
 
   likeUnlikePost(postId: number): void {
-    const userId = this.authService.getLoggedInUserId();
-    if (userId) {
-      this.postService.likeUnlikePost(postId, userId).subscribe(
+    const loggedInUserId = this.authService.getLoggedInUserId(); 
+    if (loggedInUserId) {
+      this.postService.likeUnlikePost(postId, loggedInUserId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          this.fetchUserPosts(userId);
+          this.fetchUserPosts(this.user.id as number); 
         },
         (error) => {
           console.error('Error liking/unliking post:', error);
@@ -106,6 +106,7 @@ export class UserInfoComponent implements OnInit {
       console.error('User is not logged in');
     }
   }
+  
   
   viewDetails(postId: number): void {
     this.router.navigate(['post-details', postId]);
