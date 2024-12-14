@@ -91,11 +91,8 @@ export class PostService {
   }
   
   
-  getLikesCount(postId: number): Observable<number> {
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
-    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`, { headers });
+  getLikesCount(postId: number): Observable<number> {    
+    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`);
   }
   
   updatePost(postId: number, post: Post, userId: number): Observable<Post> {
@@ -127,14 +124,10 @@ export class PostService {
 
   getPostsBySpecificUser(userId: number): Observable<Post[]> {
     const token = localStorage.getItem('token');
+    
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
   
-    if (!token) {
-      throw new Error('Authorization token is missing');
-    }
-  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(  //sa ovom metodom admin ne moze da vidi postove
+    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(
       map(posts => {
         posts.forEach(post => {
           if (post.imagePath) {
@@ -146,5 +139,6 @@ export class PostService {
       })
     );
   }
+  
   
 }

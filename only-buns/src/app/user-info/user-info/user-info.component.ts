@@ -31,7 +31,7 @@ export class UserInfoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private authService : AuthService,
+    public authService : AuthService,
     private postService: PostService,
     private router: Router,
   ) {}
@@ -41,11 +41,14 @@ export class UserInfoComponent implements OnInit {
       const userId = +params['userId'];
       if (userId) {
         this.fetchUserProfile(userId);
-        this.fetchUserPosts(userId); 
-        this.checkFollowingStatus(userId);
-        this.checkIfMyProfile(userId);
-        this.fetchFollowers(userId); 
-        this.fetchFollowing(userId);
+        this.fetchUserPosts(userId);
+  
+        if (this.authService.isAuthenticated()) {
+          this.checkFollowingStatus(userId);
+          this.checkIfMyProfile(userId);
+          this.fetchFollowers(userId);
+          this.fetchFollowing(userId);
+        }
       }
     });
   }
@@ -91,22 +94,25 @@ export class UserInfoComponent implements OnInit {
   }
 
   likeUnlikePost(postId: number): void {
-    const loggedInUserId = this.authService.getLoggedInUserId(); 
+    if (!this.authService.isAuthenticated()) {
+      console.warn('User is not logged in. Liking/unliking is disabled.');
+      this.router.navigate(['/login']);
+      return;
+    }
+  
+    const loggedInUserId = this.authService.getLoggedInUserId();
     if (loggedInUserId) {
       this.postService.likeUnlikePost(postId, loggedInUserId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          this.fetchUserPosts(this.user.id as number); 
+          this.fetchUserPosts(this.user.id as number);
         },
         (error) => {
           console.error('Error liking/unliking post:', error);
         }
       );
-    } else {
-      console.error('User is not logged in');
     }
   }
-  
   
   viewDetails(postId: number): void {
     this.router.navigate(['post-details', postId]);
@@ -124,6 +130,11 @@ export class UserInfoComponent implements OnInit {
   }
 
   toggleFollow(): void {
+    if (!this.authService.isAuthenticated()) {
+      console.warn('User is not logged in. Follow/unfollow is disabled.');
+      return;
+    }
+
     const followingId = this.route.snapshot.queryParamMap.get('userId');
     if (followingId) {
       if (this.isFollowing) {
