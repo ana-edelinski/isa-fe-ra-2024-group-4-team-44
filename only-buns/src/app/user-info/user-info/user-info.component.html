@@ -18,9 +18,37 @@
       </div>
 
       <div class="follow-info">
-        <p>Following: <strong>{{ followingCount }}</strong></p>
-        <p>Followers: <strong>{{ followersCount }}</strong></p>
+        <p>
+          <span (click)="showModal('following')" class="clickable-text">
+            Following: <strong>{{ followingCount }}</strong>
+          </span>
+        </p>
+        <p>
+          <span (click)="showModal('followers')" class="clickable-text">
+            Followers: <strong>{{ followersCount }}</strong>
+          </span>
+        </p>
       </div>
+      
+      
+      <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>{{ modalTitle }}</h2>
+            <button class="close-button" (click)="closeModal()">×</button>
+          </div>
+          <div class="modal-body">
+            <div *ngFor="let user of modalUsers" class="user-row">
+              <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="Avatar" class="user-avatar">
+              <div class="user-info">
+                <p class="username" (click)="navigateToProfile(user.id)">{{ user.username }}</p>
+                <p class="name">{{ user.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
   
       <!-- Prikaz dugmadi samo ako nije korisnikov profil -->
       <div class="buttons" *ngIf="!isMyProfile">

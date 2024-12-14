@@ -25,6 +25,9 @@ export class UserInfoComponent implements OnInit {
   isMyProfile: boolean = false;
   followingCount: number = 0; 
   followersCount: number = 0; 
+  isModalOpen: boolean = false;
+  modalTitle: string = '';
+  modalUsers: User[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -118,7 +121,6 @@ export class UserInfoComponent implements OnInit {
       }
     );
   }
-  
 
   toggleFollow(): void {
     const followingId = this.route.snapshot.queryParamMap.get('userId');
@@ -183,6 +185,45 @@ export class UserInfoComponent implements OnInit {
     );
   }
   
+  showModal(type: 'followers' | 'following'): void {
+    this.isModalOpen = true;
+    if (type === 'followers') {
+      this.modalTitle = 'Followers';
+      this.authService.getFollowers(this.user.id as number).subscribe(
+        (followers) => {
+          this.modalUsers = followers;
+        },
+        (error) => {
+          console.error('Error fetching followers:', error);
+        }
+      );
+    } else if (type === 'following') {
+      this.modalTitle = 'Following';
+      this.authService.getFollowing(this.user.id as number).subscribe(
+        (following) => {
+          this.modalUsers = following;
+        },
+        (error) => {
+          console.error('Error fetching following:', error);
+        }
+      );
+    }
+  }
+
+  navigateToProfile(userId: number | undefined): void {
+    console.log('Navigating to profile with ID:', userId);
+    if (userId !== undefined) {
+      this.closeModal(); 
+      this.router.navigate(['/user'], { queryParams: { userId: userId } });
+    } else {
+      console.error('User ID is undefined.');
+    }
+  }
+  
+  
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
   
   
 }
