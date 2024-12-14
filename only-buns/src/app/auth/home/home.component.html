@@ -1,6 +1,6 @@
 <div class="content">
   <div class="header">
-    <p class="title">OnlyBuns</p>
+    <p class="title" [routerLink]="['/']" style="cursor: pointer;">OnlyBuns</p>
     <div class="buttons">
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['login']">Login</button>
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['register']">Sign Up</button>
