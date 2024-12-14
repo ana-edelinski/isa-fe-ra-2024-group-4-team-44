@@ -90,11 +90,6 @@ export class PostService {
     );
   }
   
-  
-  getLikesCount(postId: number): Observable<number> {    
-    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`);
-  }
-  
   updatePost(postId: number, post: Post, userId: number): Observable<Post> {
     const token = localStorage.getItem('token');  
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

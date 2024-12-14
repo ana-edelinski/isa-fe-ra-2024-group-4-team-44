@@ -87,12 +87,4 @@ export class PostListComponent implements OnInit {
     this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
   }
 
-  loadLikesCount(postId: number): void {
-    this.postService.getLikesCount(postId).subscribe(
-      (count) => this.likesCount = count,
-      (error) => console.error('Error fetching likes count:', error)
-    );
-  }
-
-
 }

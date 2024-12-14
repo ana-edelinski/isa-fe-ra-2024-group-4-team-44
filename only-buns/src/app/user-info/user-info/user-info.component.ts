@@ -76,7 +76,6 @@ export class UserInfoComponent implements OnInit {
         this.posts = data;
         this.posts.forEach(post => {
           post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-          this.loadLikesCount(post.id);
         });
         console.log('Fetched posts:', this.posts);
       },
@@ -85,13 +84,6 @@ export class UserInfoComponent implements OnInit {
       }
     );
   }  
-
-  loadLikesCount(postId: number): void {
-    this.postService.getLikesCount(postId).subscribe(
-      (count) => this.likesCount = count,
-      (error) => console.error('Error fetching likes count:', error)
-    );
-  }
 
   likeUnlikePost(postId: number): void {
     if (!this.authService.isAuthenticated()) {
