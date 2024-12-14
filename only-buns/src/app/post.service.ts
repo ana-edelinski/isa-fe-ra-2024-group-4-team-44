@@ -49,6 +49,20 @@ export class PostService {
     );
           
   }   
+
+  getPostsFromFollowing(userId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.apiUrl}/following/${userId}`, { headers: this.authService.getHeaders() }).pipe(
+      map((posts: Post[]) => {
+        posts.forEach((post: Post) => {
+          if (post.imagePath) {
+            post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+            post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
+  }  
   
   getPostsByUserId(): Observable<Post[]> {
     const userId = this.authService.getLoggedInUserId();
