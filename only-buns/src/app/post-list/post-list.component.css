@@ -131,3 +131,10 @@ button:hover {
   background-color: #196fb5;
   color: white;
 }
+
+.no-posts-message {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}

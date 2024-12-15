@@ -1,41 +1,44 @@
-
 <div class="post-list">
-    <ul>
-      <li *ngFor="let post of posts" class="post-item">
-        <div class="post-header">
-          <a class="username" (click)="goToProfile(post.creatorId)">{{ post.creatorUsername }}</a>
-          <span class="creation-time">{{ post.creationTime }}</span>
-        </div>
-        <div class="post-content">
-          <img [src]="post.imagePath" alt="Post image" class="post-image" />
-          <div class="post-description">
-            <p>{{ post.description }}</p>
-            <div class="post-stats">
-              <span>{{ post.likeCount}} likes</span>
-              <span>{{ post.comments.length || 0  }} comments</span>
+  <ul *ngIf="posts && posts.length > 0; else noPostsMessage">
+    <li *ngFor="let post of posts" class="post-item">
+      <div class="post-header">
+        <a class="username" (click)="goToProfile(post.creatorId)">{{ post.creatorUsername }}</a>
+        <span class="creation-time">{{ post.creationTime }}</span>
+      </div>
+      <div class="post-content">
+        <img [src]="post.imagePath" alt="Post image" class="post-image" />
+        <div class="post-description">
+          <p>{{ post.description }}</p>
+          <div class="post-stats">
+            <span>{{ post.likeCount }} likes</span>
+            <span>{{ post.comments.length || 0 }} comments</span>
+          </div>
+
+          <div class="comments" *ngIf="post.comments && post.comments.length > 0">
+            <h6>Comments</h6>
+            <div *ngFor="let comment of post.comments" class="comment">
+              <a class="comment-author" (click)="goToProfile(comment.userId)">{{ comment.username }}</a>
+              <p class="comment-text">{{ comment.text }}</p>
             </div>
-          
-            <div class="comments" *ngIf="post.comments && post.comments.length > 0">
-              <h6>Comments</h6>
-              <div *ngFor="let comment of post.comments" class="comment">
-                <a class="comment-author" (click)="goToProfile(comment.userId)">{{comment.username }}</a>
-                <p class="comment-text">{{ comment.text }}</p>
-              </div>
-            </div>
+          </div>
           <div class="button-container">
-          <button mat-button (click)="likePost(post.id)">
-            Like
-          </button>
-          <button mat-button (click)="commentOnPost()">
-            Comment
-          </button>
-          <button mat-button (click) = "showDetails(post.id)">
-            View Details
-          </button>
-          </div>
+            <button mat-button (click)="likePost(post.id)">
+              Like
+            </button>
+            <button mat-button (click)="commentOnPost()">
+              Comment
+            </button>
+            <button mat-button (click)="showDetails(post.id)">
+              View Details
+            </button>
           </div>
         </div>
-      </li>
-    </ul>
-  </div>
-  
+      </div>
+    </li>
+  </ul>
+  <ng-template #noPostsMessage>
+    <div class="no-posts-message">
+      <p>You are not following anyone yet. Start exploring and follow people to see their posts!</p>
+    </div>
+  </ng-template>
+</div>
