@@ -40,12 +40,20 @@ export class ProfileComponent implements OnInit,  OnDestroy{
     myPostsClick: boolean = false;
     currentView: string = 'posts';
 
+    followersList: User[] = [];
+    followingList: User[] = [];
+    
+    showFollowers: boolean = false;
+    showFollowing: boolean = false;
+
+
 
   constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
       this.getUserProfile();
+      this.getFollowersAndFollowing();
     } else {
       this.router.navigate(['/login']);
     }
@@ -57,6 +65,38 @@ export class ProfileComponent implements OnInit,  OnDestroy{
     }
   }
 
+
+
+toggleFollowers(): void {
+  this.showFollowers = !this.showFollowers;
+}
+
+toggleFollowing(): void {
+  this.showFollowing = !this.showFollowing;
+}
+
+  getFollowersAndFollowing(): void {
+    const userId = this.authService.getLoggedInUserId();
+    if (userId) {
+      this.authService.getFollowers(userId).subscribe(
+        (followers) => {
+          this.followersList = followers;
+          console.log('Followers:', followers);
+        },
+        (error) => console.error('Error fetching followers', error)
+      );
+  
+      this.authService.getFollowing(userId).subscribe(
+        (following) => {
+          this.followingList = following;
+          console.log('Following:', following);
+        },
+        (error) => console.error('Error fetching following', error)
+      );
+    } else {
+      console.error('User ID is not available');
+    }
+  }
   getUserProfile(): void {
     this.userSubscription = this.authService.getUserProfile().subscribe(
       (data) => {

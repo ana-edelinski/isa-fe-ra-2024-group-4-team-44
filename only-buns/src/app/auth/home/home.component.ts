@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { TrendsComponent } from '../../trends/trends.component';
 import { PostListComponent } from '../../post-list/post-list.component';
 import { MyPostsComponent } from '../../my-posts/my-posts.component';
+import { ProfileComponent } from '../../profile/profile.component';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,8 @@ import { MyPostsComponent } from '../../my-posts/my-posts.component';
     MatIconModule,
     PostListComponent,
     MyPostsComponent,
-    TrendsComponent
+    TrendsComponent,
+    ProfileComponent
   ]
 })
 export class HomeComponent {

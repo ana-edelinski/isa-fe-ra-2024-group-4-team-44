@@ -1,30 +1,32 @@
 <div class="profile-container">
-<!-- Sekcija za korisničko ime, followers i following -->
-<div class="profile-header">
-  <h2>{{ user.username }}</h2>
-  <div class="followers-following">
-    <strong>Followers:</strong> {{ followers }} 
-    <strong>Following:</strong> {{ following }}
+  <!-- Sekcija za korisničko ime, followers i following -->
+  <div class="profile-header">
+    <h3>{{ user.username }}</h3>
+
+    <div class="followers-following-container">
+      <p class="clickable" (click)="toggleFollowers()">Followers: {{ followersList.length }}</p>
+      <p class="clickable" (click)="toggleFollowing()">Following: {{ followingList.length }}</p>
+    </div>
+
+    </div>
+
+    <hr class="divider">
   </div>
-  <hr class="divider">
-</div>
 
-<!-- Deo za dugmadi sa leve strane -->
-<div class="sidebar">
-<!-- Dugme za "View Details" sa ikonom -->
-  <button mat-raised-button color="accent" (click)="toggleDetails()">
-    <mat-icon>visibility</mat-icon>
-    View Details
-  </button>
+  <!-- Deo za dugmadi sa leve strane -->
+  <div class="sidebar">
+    <!-- Dugme za "View Details" sa ikonom -->
+    <button mat-raised-button color="primary" (click)="toggleDetails()">
+      <mat-icon>visibility</mat-icon>
+      View Details
+    </button>
 
-  <!-- Dugme za "My Posts" sa ikonom -->
-  <button mat-raised-button color="primary" (click)="myPosts()">
-    <mat-icon>article</mat-icon>
-    My Posts
-  </button>
-
-</div>
-
+    <!-- Dugme za "My Posts" sa ikonom -->
+    <button mat-raised-button color="primary" (click)="myPosts()">
+      <mat-icon>article</mat-icon>
+      My Posts
+    </button>
+  </div>
 
   <!-- Desni deo za detalje i objave -->
   <div class="profile-content">
@@ -80,11 +82,46 @@
       </form>
     </mat-card>
 
-
     <ng-container *ngIf="currentView === 'my-posts' && myPostsClick">
       <app-my-posts></app-my-posts>
     </ng-container>
 
-  </div>
-</div>
+    <!-- <div>
+    <ul *ngIf="showFollowers">
+      <p>Followers</p>
+      <li *ngFor="let follower of followersList">
+        {{ follower.name }} {{ follower.surname }}
+      </li>
+    </ul>
+    </div>
+    <div>
+    <ul *ngIf="showFollowing">
+      <p>Following</p>
+      <li *ngFor="let followee of followingList">
+        {{ followee.name }} {{ followee.surname }}
+      </li>
+    </ul>
+    </div> -->
+    <div class="followers-following">
+      <div>
+        <ul *ngIf="showFollowers">
+          <p>Followers</p>
+          <li *ngFor="let follower of followersList">
+            {{ follower.name }} {{ follower.surname }}
+          </li>
+        </ul>
+      </div>
+      
+      <div>
+        <ul *ngIf="showFollowing">
+          <p>Following</p>
+          <li *ngFor="let followee of followingList">
+            {{ followee.name }} {{ followee.surname }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    
 
+  
+</div>
