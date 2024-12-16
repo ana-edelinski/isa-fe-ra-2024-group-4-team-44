@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit,  OnDestroy{
     followers: number = 150;  
     following: number = 120;
     showDetails: boolean = false;
+    myPostsClick: boolean = false;
     currentView: string = 'posts';
 
 
@@ -105,11 +106,13 @@ export class ProfileComponent implements OnInit,  OnDestroy{
     }
   }
   
-    toggleDetails() {
+  toggleDetails() {
     this.showDetails = !this.showDetails;
+    this.myPostsClick === false;
   }
 
   myPosts() {
+    this.myPostsClick =!this.myPostsClick;
     this.currentView = 'my-posts'; 
   }
 }
