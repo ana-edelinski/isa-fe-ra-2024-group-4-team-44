@@ -49,6 +49,20 @@ export class PostService {
     );
           
   }   
+
+  getPostsFromFollowing(userId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.apiUrl}/following/${userId}`, { headers: this.authService.getHeaders() }).pipe(
+      map((posts: Post[]) => {
+        posts.forEach((post: Post) => {
+          if (post.imagePath) {
+            post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+            post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
+  }  
   
   getPostsByUserId(): Observable<Post[]> {
     const userId = this.authService.getLoggedInUserId();
@@ -90,14 +104,6 @@ export class PostService {
     );
   }
   
-  
-  getLikesCount(postId: number): Observable<number> {
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
-    return this.http.get<number>(`${this.apiUrl}/${postId}/likes/count`, { headers });
-  }
-  
   updatePost(postId: number, post: Post, userId: number): Observable<Post> {
     const token = localStorage.getItem('token');  
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -124,6 +130,24 @@ export class PostService {
       params: { userId: userId.toString() }
     });
   }
-  
 
+  getPostsBySpecificUser(userId: number): Observable<Post[]> {
+    const token = localStorage.getItem('token');
+    
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+  
+    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { headers }).pipe(
+      map(posts => {
+        posts.forEach(post => {
+          if (post.imagePath) {
+            post.imagePath = post.imagePath.replace('src\\main\\resources\\static', '');
+            post.imagePath = post.imagePath.replace(/\\/g, '/');
+          }
+        });
+        return posts;
+      })
+    );
+  }
+  
+  
 }

@@ -9,4 +9,5 @@ export class User {
     street?: string;
     city?: string;
     postalCode?: string;
+    avatar?: string;
   }

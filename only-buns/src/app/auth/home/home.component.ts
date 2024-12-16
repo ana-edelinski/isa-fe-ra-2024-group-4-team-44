@@ -7,8 +7,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PostListComponent } from '../../post-list/post-list.component';
-import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
 import { Subscription } from 'rxjs';
@@ -22,8 +20,6 @@ import { Subscription } from 'rxjs';
     MatListModule,
     MatButtonModule,
     MatIconModule,
-    PostListComponent,
-    MyPostsComponent,
   ]
 })
 export class HomeComponent {
@@ -80,6 +76,11 @@ export class HomeComponent {
   profile() {
     this.router.navigate(['/profile'], { state: { user: this.user } });
   }
+
+  isPostsTabActive(): boolean {
+    const allowedRoutes = ['/posts', '/my-posts'];
+    return allowedRoutes.some(route => this.router.url.includes(route));
+  }  
 
   createPost() {
     this.router.navigate(['/create-post'], { state: { user: this.user } });

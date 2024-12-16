@@ -46,7 +46,6 @@ export class MyPostsComponent implements OnInit, OnDestroy {
         this.posts = data;
         this.posts.forEach(post => {
           post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-          this.loadLikesCount(post.id);
         });
         console.log('Fetched posts:', this.posts);
       },
@@ -69,13 +68,6 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadLikesCount(postId: number): void {
-    this.postService.getLikesCount(postId).subscribe(
-      (count) => this.likesCount = count,
-      (error) => console.error('Error fetching likes count:', error)
-    );
-  }
-
   getImageUrl(post: Post): string {
     return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
   }
@@ -87,7 +79,6 @@ export class MyPostsComponent implements OnInit, OnDestroy {
       this.postService.likeUnlikePost(postId, userId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          //this.loadLikesCount(postId); // Ponovo učitaj broj lajkova nakon promene
           this.getPosts()
         },
         (error) => {

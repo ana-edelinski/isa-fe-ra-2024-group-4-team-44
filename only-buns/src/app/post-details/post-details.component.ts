@@ -41,7 +41,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         (data: Post) => {
           this.post = data;
           this.post.imagePath = `${this.post.imagePath}?timestamp=${new Date().getTime()}`;
-          this.loadLikesCount(id);
+          this.likesCount = data.likeCount;
         },
         (error) => console.error('Error fetching post details:', error)
       );
@@ -52,13 +52,6 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
-  }
-
-  loadLikesCount(postId: number): void {
-    this.postService.getLikesCount(postId).subscribe(
-      (count) => this.likesCount = count,
-      (error) => console.error('Error fetching likes count:', error)
-    );
   }
 
   onEdit(): void {
@@ -102,12 +95,20 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   likeUnlikePost(postId: number): void {
-    const userId = this.authService.getLoggedInUserId();
-    if (userId) {
-      this.postService.likeUnlikePost(postId, userId).subscribe(
+    const loggedInUserId = this.authService.getLoggedInUserId();
+    if (loggedInUserId) {
+      this.postService.likeUnlikePost(postId, loggedInUserId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          this.loadLikesCount(postId); 
+          if (this.post) {
+            this.postService.getPostById(postId).subscribe(
+              (updatedPost) => {
+                this.post!.likeCount = updatedPost.likeCount; // Ažuriraj post.likeCount
+                this.likesCount = updatedPost.likeCount; // Ažuriraj lokalni likesCount
+              },
+              (error) => console.error('Error fetching updated post:', error)
+            );
+          }
         },
         (error) => {
           console.error('Error liking/unliking post:', error);
