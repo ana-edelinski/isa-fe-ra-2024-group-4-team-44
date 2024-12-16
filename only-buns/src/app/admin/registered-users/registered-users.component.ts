@@ -44,16 +44,27 @@ export class RegisteredUsersComponent implements OnInit {
     );
   }
   
-  searchUsers(): void {
-    this.userService.searchUsers(this.searchCriteria, this.currentPage, this.pageSize, this.sortField, this.sortDirection).subscribe(
+  searchUsers(resetPage: boolean = false): void {
+    if (resetPage) {
+      this.currentPage = 0; 
+    }
+  
+    this.userService.searchUsers(
+      this.searchCriteria,
+      this.currentPage,
+      this.pageSize,
+      this.sortField,
+      this.sortDirection
+    ).subscribe(
       (data) => {
         this.users = data.content;
         this.totalPages = data.totalPages;
-        console.log('Sorted Search results:', data);
+        console.log('Filtered Search results:', data);
       },
       (error) => console.error('Error searching users:', error)
     );
   }
+  
 
   changePage(newPage: number): void {
     if (newPage >= 0 && newPage < this.totalPages) {
