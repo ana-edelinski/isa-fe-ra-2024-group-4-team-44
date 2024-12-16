@@ -55,7 +55,7 @@ export class TrendsComponent implements OnInit {
         this.top5PostsLast7Days = data;
         this.top5PostsLast7Days.forEach(post => {
           post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-          this.loadLikesCount(post.id);
+          //this.loadLikesCount(post.id);
         });
       });
     }
@@ -65,7 +65,7 @@ export class TrendsComponent implements OnInit {
         this.top10PostsAllTime = data;
         this.top10PostsAllTime .forEach(post => {
           post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-          this.loadLikesCount(post.id);
+          //this.loadLikesCount(post.id);
         });
       });
     }
@@ -84,14 +84,15 @@ export class TrendsComponent implements OnInit {
       return this.sectionsState[section];
     }
     
-    loadLikesCount(postId: number): void {
-        this.postService.getLikesCount(postId).subscribe(
-          (count) => this.likesCount = count,
-          (error) => console.error('Error fetching likes count:', error)
-        );
-      }
+    // loadLikesCount(postId: number): void {
+    //     this.postService.getLikesCount(postId).subscribe(
+    //       (count) => this.likesCount = count,
+    //       (error) => console.error('Error fetching likes count:', error)
+    //     );
+    //   }
     
       getImageUrl(post: Post): string {
         return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
       }
+
 }

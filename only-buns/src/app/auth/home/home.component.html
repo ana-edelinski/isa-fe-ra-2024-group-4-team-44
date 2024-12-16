@@ -1,6 +1,6 @@
 <div class="content">
   <div class="header">
-    <p class="title">OnlyBuns</p>
+    <p class="title" [routerLink]="['/']" style="cursor: pointer;">OnlyBuns</p>
     <div class="buttons">
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['login']">Login</button>
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['register']">Sign Up</button>
@@ -47,7 +47,7 @@
     </mat-sidenav-container>
 
     <div class="main-content" >   
-      <div height="30px" class="tab-buttons">
+      <div height="30px" class="tab-buttons" *ngIf="isPostsTabActive()">
         <button  class="buttons" (click)="createPost()" *ngIf="isLoggedIn && roleId === 1">
           Create post
         <mat-icon>add-circle</mat-icon>
@@ -63,6 +63,9 @@
       <ng-container *ngIf="currentView === 'trends'">
         <app-trends></app-trends>
       </ng-container>
+
+      <router-outlet></router-outlet>
+
     </div>
   </div>
 </div>

@@ -8,7 +8,7 @@
         <h1>{{ post.description }}</h1>
 
         <!-- Edit and Delete buttons -->
-        <div class="buttons">
+        <div class="buttons" *ngIf="user && post && user.id === post.creatorId">
           <button class="edit-btn" (click)="onEdit()">Edit</button>
           <button class="delete-btn" (click)="onDelete()">Delete</button>
         </div>
@@ -17,7 +17,7 @@
 
     <div class="like-section" (click)="likeUnlikePost(post.id)">
       <mat-icon >favorite</mat-icon>
-      <span>{{ likesCount }}</span>
+      <span>{{ post.likeCount }}</span>
     </div>
 
     <!-- Comments Section -->

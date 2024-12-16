@@ -7,12 +7,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { PostListComponent } from '../../post-list/post-list.component';
-import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
 import { Subscription } from 'rxjs';
 import { TrendsComponent } from '../../trends/trends.component';
+import { PostListComponent } from '../../post-list/post-list.component';
+import { MyPostsComponent } from '../../my-posts/my-posts.component';
 
 @Component({
   selector: 'app-home',
@@ -83,6 +83,11 @@ export class HomeComponent {
     this.router.navigate(['/profile'], { state: { user: this.user } });
   }
 
+  isPostsTabActive(): boolean {
+    const allowedRoutes = ['/posts', '/my-posts'];
+    return allowedRoutes.some(route => this.router.url.includes(route));
+  }  
+
   createPost() {
     this.router.navigate(['/create-post'], { state: { user: this.user } });
   }
@@ -92,16 +97,15 @@ export class HomeComponent {
   }
 
   myPosts() {
-    this.currentView = 'my-posts'; 
+    this.router.navigate(['my-posts'], { relativeTo: this.router.routerState.root });
   }
-
+  
   showPosts() {
-    this.currentView = 'posts'; 
+    this.router.navigate(['posts'], { relativeTo: this.router.routerState.root });
   }
-
-
+  
   registeredUsers() {
-    this.router.navigate(['/registered-users'], { state: { user: this.user }});
+    this.router.navigate(['registered-users'], { relativeTo: this.router.routerState.root });
   }
 
   trends()
