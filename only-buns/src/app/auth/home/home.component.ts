@@ -96,7 +96,9 @@ export class HomeComponent {
     });
   
     dialogRef.afterClosed().subscribe(newPost => {
-      this.postListComp.posts.push(newPost);
+      if (newPost) {
+        this.postListComp.posts.push(newPost);
+      }
       
     });
   }

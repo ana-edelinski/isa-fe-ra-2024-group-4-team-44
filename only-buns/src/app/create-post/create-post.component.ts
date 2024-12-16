@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import Swal from 'sweetalert2';
 
 import { Router } from '@angular/router';
 import { Post } from '../model/post.model';
@@ -92,7 +93,12 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   uploadImage() {
     if (!this.selectedFile) {
-      alert("A photo is needed.")
+      Swal.fire({
+        icon: 'warning',        
+        title: 'Photo missing',
+        text: 'Please, add photo to proceed.',
+        confirmButtonText: 'OK'
+      });
       return;
     }  
 
@@ -147,6 +153,12 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         console.log("Error uploading photo")
       }   
     } else {
+      Swal.fire({
+        icon: 'warning',        
+        title: 'Empty fileds',
+        text: 'Some fields are still empty, please fill them in to proceed.',
+        confirmButtonText: 'OK'
+      });
       console.log("Form not valid")
     }
   }
