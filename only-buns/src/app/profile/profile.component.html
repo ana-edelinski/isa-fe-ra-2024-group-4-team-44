@@ -1,14 +1,49 @@
 <div class="profile-container">
   <!-- Sekcija za korisničko ime, followers i following -->
+  <!-- <app-user-info [user]="user"></app-user-info>-->
+
   <div class="profile-header">
-    <h3>{{ user.username }}</h3>
+    <!-- <h3>{{ user.username }}</h3>
 
     <div class="followers-following-container">
       <p class="clickable" (click)="toggleFollowers()">Followers: {{ followersList.length }}</p>
       <p class="clickable" (click)="toggleFollowing()">Following: {{ followingList.length }}</p>
     </div>
 
+    </div> -->
+    <div class="user-card-header">
+      <img src="assets/background.jpg" alt="Background" class="background" />
     </div>
+    <div class="user-info">
+      <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="{{ user.name }}" class="avatar" />
+      <div class="name-container">
+        <h2 class="user-name">{{ user.name }} {{ user.surname }}</h2>
+        <span class="username">{{ '@' + user.username }}</span>
+      </div>      
+      <p class="email">📧 {{ user.email }}</p>
+  
+      <div *ngIf="user.street || user.city || user.postalCode" class="address">
+        <p>
+          🏠 {{user.street }}, {{ user.city }}{{ user.postalCode ? ', ' + user.postalCode : '' }}
+        </p>
+      </div>
+
+      <div class="follow-info">
+        <p>
+          <span  (click)="toggleFollowing()"class="clickable-text">
+            Following: <strong>{{ followingList.length  }}</strong>
+          </span>
+        </p>
+        <p>
+          <span (click)="toggleFollowers()" class="clickable-text">
+            Followers: <strong>{{ followersList.length }}</strong>
+          </span>
+        </p>
+      </div>
+    </div>
+
+
+</div>
 
     <hr class="divider">
   </div>
@@ -16,20 +51,22 @@
   <!-- Deo za dugmadi sa leve strane -->
   <div class="sidebar">
     <!-- Dugme za "View Details" sa ikonom -->
-    <button mat-raised-button color="primary" (click)="toggleDetails()">
+    <button mat-raised-button class="follow-button" (click)="toggleDetails()">
       <mat-icon>visibility</mat-icon>
       View Details
     </button>
 
     <!-- Dugme za "My Posts" sa ikonom -->
-    <button mat-raised-button color="primary" (click)="myPosts()">
+    <button mat-raised-button class="follow-button" (click)="myPosts()">
       <mat-icon>article</mat-icon>
       My Posts
     </button>
   </div>
 
   <!-- Desni deo za detalje i objave -->
+
   <div class="profile-content">
+    <div class="form-container">
     <!-- Kartica sa informacijama o korisniku i promenom lozinke -->
     <mat-card class="profile-card" *ngIf="showDetails">
       <h3>User Profile</h3>
@@ -58,7 +95,8 @@
           <mat-label>Postal Code</mat-label>
           <input matInput [(ngModel)]="user.postalCode" name="postalCode" />
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" (click)="updateProfile()">Update Profile</button>
+        <button mat-raised-button class="follow-button" type="submit" (click)="updateProfile()">Update Profile</button>
+        
       </div>
     </mat-card>
 
@@ -78,30 +116,15 @@
           <mat-label>Confirm New Password</mat-label>
           <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
         </mat-form-field>
-        <button mat-raised-button color="accent" type="submit">Change Password</button>
+        <button mat-raised-button type="submit" class="follow-button" (click)="changePassword()">Change Password</button>
       </form>
     </mat-card>
+    </div>
 
     <ng-container *ngIf="currentView === 'my-posts' && myPostsClick">
       <app-my-posts></app-my-posts>
     </ng-container>
 
-    <!-- <div>
-    <ul *ngIf="showFollowers">
-      <p>Followers</p>
-      <li *ngFor="let follower of followersList">
-        {{ follower.name }} {{ follower.surname }}
-      </li>
-    </ul>
-    </div>
-    <div>
-    <ul *ngIf="showFollowing">
-      <p>Following</p>
-      <li *ngFor="let followee of followingList">
-        {{ followee.name }} {{ followee.surname }}
-      </li>
-    </ul>
-    </div> -->
     <div class="followers-following">
       <div>
         <ul *ngIf="showFollowers">
@@ -124,4 +147,5 @@
     
 
   
+
 </div>

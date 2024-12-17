@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../../profile/user.model';
 import { Post } from '../../model/post.model';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +18,7 @@ import Swal from 'sweetalert2';
   styleUrl: './user-info.component.css'
 })
 export class UserInfoComponent implements OnInit {
+  //@Input() user!: User;
   user: User = { name: '', surname: '', email: '', username: '' };
   posts: Post[] = [];
   likesCount: number = 0;

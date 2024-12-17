@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MyPostsComponent } from '../my-posts/my-posts.component';
+import { UserInfoComponent } from '../user-info/user-info/user-info.component';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +25,8 @@ import { MyPostsComponent } from '../my-posts/my-posts.component';
     MatIconModule, 
     MatCardModule,
     CommonModule,
-    MyPostsComponent,],
+    MyPostsComponent,
+    UserInfoComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -69,10 +71,16 @@ export class ProfileComponent implements OnInit,  OnDestroy{
 
 toggleFollowers(): void {
   this.showFollowers = !this.showFollowers;
+  this.showFollowing = false;
+  this.showDetails = false;
+  this.myPostsClick = false;
 }
 
 toggleFollowing(): void {
   this.showFollowing = !this.showFollowing;
+  this.showFollowers = false;
+  this.showDetails = false;
+  this.myPostsClick = false;
 }
 
   getFollowersAndFollowing(): void {
@@ -148,11 +156,17 @@ toggleFollowing(): void {
   
   toggleDetails() {
     this.showDetails = !this.showDetails;
-    this.myPostsClick === false;
+    this.myPostsClick = false;
+    this.showFollowers =false;
+    this.showFollowing = false;
+
   }
 
   myPosts() {
     this.myPostsClick =!this.myPostsClick;
     this.currentView = 'my-posts'; 
+    this.showDetails = false;
+    this.showFollowers =false;
+    this.showFollowing = false;
   }
 }
