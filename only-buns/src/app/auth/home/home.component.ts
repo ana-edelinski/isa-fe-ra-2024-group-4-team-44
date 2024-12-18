@@ -86,7 +86,7 @@ export class HomeComponent {
   }
 
   isPostsTabActive(): boolean {
-    const allowedRoutes = ['/posts', '/my-posts'];
+    const allowedRoutes = ['/posts', '/my-posts', '/trends'];
     return allowedRoutes.some(route => this.router.url.includes(route));
   }  
 
@@ -112,7 +112,9 @@ export class HomeComponent {
 
   trends()
   {
-    this.currentView = 'trends'; 
+    // this.currentView = 'trends'; 
+    this.router.navigate(['trends'], { relativeTo: this.router.routerState.root });
+    //this.router.navigate(['/trends']);
   }
   
 }

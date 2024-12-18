@@ -25,6 +25,7 @@ export const routes: Routes = [
             { path: 'post-details/:id', component: PostDetailsComponent }, // Post details
             { path: 'registered-users', component: RegisteredUsersComponent },
             { path: 'user', component: UserInfoComponent },
+            { path: 'trends', component: TrendsComponent },
         ]
     },
     { path: 'register', component: RegistrationComponent },
@@ -37,7 +38,7 @@ export const routes: Routes = [
     { path: 'user', component: UserInfoComponent },
     { path: 'post/:id/edit', component: PostEditComponent },
     { path: 'registered-users', component: RegisteredUsersComponent },
-    { path: 'trends', component: TrendsComponent },
+    
 
 ];
 
