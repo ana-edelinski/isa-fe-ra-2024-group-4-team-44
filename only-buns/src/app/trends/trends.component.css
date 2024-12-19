@@ -1,0 +1,309 @@
+.trends {
+    margin: 20px;
+  }
+  
+  h4 {
+    text-align: center;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 5px 0;
+  }
+  /* Glavni kontejner */
+.post-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Podesava kartice da zauzmu punu sirinu */
+}
+
+/* Kartice postova */
+.post-item {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Zaglavlje posta */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.username {
+  color: #196fb5;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.username:hover {
+  text-decoration: underline;
+}
+
+.creation-time {
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* Sadrzaj posta */
+.post-content {
+  margin-top: 10px;
+}
+
+/* Slika posta */
+.post-image {
+  width: 30%;
+  max-width: 800px; /* Da slika ne prelazi širu veličinu na velikim ekranima */
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* Opis posta */
+.post-description {
+  margin-top: 10px;
+}
+
+/* Statistike posta */
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 8px;
+  padding: 8px 20px;
+  background-color: #196fb5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #155a90;
+}
+
+/* Komentari */
+.comments {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.comment {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.comment-author:hover {
+  text-decoration: underline;
+}
+
+.comment-text {
+  margin-left: 10px;
+  color: #555;
+  font-size: 0.95em;
+}
+.post-list ul {
+  list-style-type: none; 
+  padding: 0; 
+  margin: 0;
+}
+.button-container {
+  display: flex; 
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%; 
+}
+
+.button-container button {
+  flex: 1 1 30%;
+  max-width: 33.33%; 
+  color: white;
+}
+
+  /* General styles */
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.post-card-content {
+  padding: 15px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.post-left {
+  flex: 1;
+}
+
+.post-description {
+  font-size: 16px;
+  color: #333;
+}
+
+.post-meta {
+  font-size: 14px;
+  color: #888;
+}
+
+.post-right {
+  margin-left: 10px;
+}
+
+.post-image {
+  max-width: 150px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.post-likes, .post-comments {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.post-likes mat-icon, .post-comments mat-icon {
+  margin-right: 5px;
+}
+
+button {
+
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.top-5-posts-container {
+  margin-top: 20px;
+}
+
+.top-5-posts-container button {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.top-5-posts-container button mat-icon {
+  margin-right: 5px;
+}
+
+.post-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.post-header .username {
+  font-weight: bold;
+  color: #333;
+}
+
+.creation-time {
+  font-size: 14px;
+  color: #777;
+}
+
+.post-content {
+  display: flex;
+  margin-top: 10px;
+}
+
+.post-content .post-image {
+  max-width: 120px;
+  height: auto;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.post-description {
+  font-size: 14px;
+  color: #333;
+}
+
+.post-stats {
+  font-size: 12px;
+  color: #555;
+}
+
+.comments {
+  margin-top: 15px;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  font-weight: bold;
+}
+
+.comment-text {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #555;
+}

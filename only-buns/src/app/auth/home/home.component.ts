@@ -10,6 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
 import { Subscription } from 'rxjs';
+import { TrendsComponent } from '../../trends/trends.component';
+import { PostListComponent } from '../../post-list/post-list.component';
+import { MyPostsComponent } from '../../my-posts/my-posts.component';
+import { ProfileComponent } from '../../profile/profile.component';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +24,10 @@ import { Subscription } from 'rxjs';
     MatListModule,
     MatButtonModule,
     MatIconModule,
+    PostListComponent,
+    MyPostsComponent,
+    TrendsComponent,
+    ProfileComponent
   ]
 })
 export class HomeComponent {
@@ -78,7 +86,7 @@ export class HomeComponent {
   }
 
   isPostsTabActive(): boolean {
-    const allowedRoutes = ['/posts', '/my-posts'];
+    const allowedRoutes = ['/posts', '/my-posts', '/trends'];
     return allowedRoutes.some(route => this.router.url.includes(route));
   }  
 
@@ -100,6 +108,13 @@ export class HomeComponent {
   
   registeredUsers() {
     this.router.navigate(['registered-users'], { relativeTo: this.router.routerState.root });
+  }
+
+  trends()
+  {
+    // this.currentView = 'trends'; 
+    this.router.navigate(['trends'], { relativeTo: this.router.routerState.root });
+    //this.router.navigate(['/trends']);
   }
   
 }
