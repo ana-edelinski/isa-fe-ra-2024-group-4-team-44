@@ -15,7 +15,6 @@ import { PostListComponent } from '../../post-list/post-list.component';
 import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { ProfileComponent } from '../../profile/profile.component';
 import { PostsOnMapComponent } from '../../posts-on-map/posts-on-map.component';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @Component({
   selector: 'app-home',
@@ -30,8 +29,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     MyPostsComponent,
     TrendsComponent,
     ProfileComponent,
-    PostsOnMapComponent,
-    LeafletModule
+    PostsOnMapComponent
     
   ]
 })
