@@ -9,6 +9,8 @@ export interface Post {
     locationStreet: string;
     locationCity: string;
     locationPostalCode: string;
+    locationLatitude: number ;
+    locationLongitude: number ;
     comments: Comment[];
     likes: [];
     likeCount: number;

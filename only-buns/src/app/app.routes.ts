@@ -12,6 +12,7 @@ import { UserInfoComponent } from './user-info/user-info/user-info.component';
 import { PostEditComponent } from './post-details/post-edit/post-edit.component';
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
 import { TrendsComponent } from './trends/trends.component';
+import { PostsOnMapComponent } from './posts-on-map/posts-on-map.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,8 @@ export const routes: Routes = [
             { path: 'registered-users', component: RegisteredUsersComponent },
             { path: 'user', component: UserInfoComponent },
             { path: 'trends', component: TrendsComponent },
+            { path: 'maps', component: PostsOnMapComponent },
+
         ]
     },
     { path: 'register', component: RegistrationComponent },
@@ -43,6 +46,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
+    
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
   })

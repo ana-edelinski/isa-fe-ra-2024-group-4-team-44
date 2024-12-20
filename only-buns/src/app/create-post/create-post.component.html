@@ -32,6 +32,16 @@
             <mat-label>Postal Code</mat-label>
             <input matInput type="text" formControlName="postalCode" />
           </mat-form-field>
+
+          <mat-form-field appearance="fill" class="address-input">
+            <mat-label>Latitude</mat-label>
+            <input matInput type="text" formControlName="locationLatitude" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="address-input">
+            <mat-label>Longitude</mat-label>
+            <input matInput type="text" formControlName="locationLongitude" />
+          </mat-form-field>
         </div>
   
         <button mat-raised-button color="primary" type="submit" class="post-button">Post</button>

@@ -79,6 +79,22 @@
           </mat-error>
         </mat-form-field>
 
+        <mat-form-field appearance="fill">
+          <mat-label>Longitude</mat-label>
+          <input matInput formControlName="longitude" required>
+          <mat-error *ngIf="registrationForm.get('longitude')?.invalid && registrationForm.get('longitude')?.touched">
+            Longitude is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Latitude</mat-label>
+          <input matInput formControlName="latitude" required>
+          <mat-error *ngIf="registrationForm.get('latitude')?.invalid && registrationForm.get('latitude')?.touched">
+            Latitude is required.
+          </mat-error>
+        </mat-form-field>
+
         <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
       </form>
     </mat-card-content>

@@ -38,7 +38,7 @@
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
           </a>
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1" >
+          <a mat-list-item *ngIf="isLoggedIn && roleId===1 && isBrowse"  (click)="maps()">
             <mat-icon>map</mat-icon> <!-- Ikona za Posts on Map -->
             Posts on Map
           </a>

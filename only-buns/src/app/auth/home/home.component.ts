@@ -14,6 +14,8 @@ import { TrendsComponent } from '../../trends/trends.component';
 import { PostListComponent } from '../../post-list/post-list.component';
 import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { ProfileComponent } from '../../profile/profile.component';
+import { PostsOnMapComponent } from '../../posts-on-map/posts-on-map.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +29,10 @@ import { ProfileComponent } from '../../profile/profile.component';
     PostListComponent,
     MyPostsComponent,
     TrendsComponent,
-    ProfileComponent
+    ProfileComponent,
+    PostsOnMapComponent,
+    LeafletModule
+    
   ]
 })
 export class HomeComponent {
@@ -37,13 +42,15 @@ export class HomeComponent {
   user: User = new User();
   currentView: string = 'posts';
   private userSubscription: Subscription = Subscription.EMPTY;
-
+  isBrowse =false;
   constructor(private authService: AuthService, private router: Router, private userService: UserService) {
     this.isLoggedIn = this.authService.isAuthenticated();
     
   }
   ngOnInit() {
-    this.isLoggedIn = this.authService.isAuthenticated(); 
+    this.isLoggedIn = this.authService.isAuthenticated();
+    this.isBrowse = typeof window !== 'undefined'; 
+    if (this.isBrowse=typeof window !== 'undefined') {
     this.userSubscription = this.authService.getUser().subscribe(user => {
       if (user && user.id) {
         this.user = user; 
@@ -54,7 +61,7 @@ export class HomeComponent {
       
     });
 
-    
+  }
 
   }
 
@@ -86,7 +93,7 @@ export class HomeComponent {
   }
 
   isPostsTabActive(): boolean {
-    const allowedRoutes = ['/posts', '/my-posts', '/trends'];
+    const allowedRoutes = ['/posts', '/my-posts', '/trends', '/maps'];
     return allowedRoutes.some(route => this.router.url.includes(route));
   }  
 
@@ -112,9 +119,20 @@ export class HomeComponent {
 
   trends()
   {
-    // this.currentView = 'trends'; 
     this.router.navigate(['trends'], { relativeTo: this.router.routerState.root });
-    //this.router.navigate(['/trends']);
   }
+
+  // maps()
+  // {
+  //   this.router.navigate(['maps'], { relativeTo: this.router.routerState.root });
+  // }
+  maps() {
+    if (this.isLoggedIn && this.roleId === 1 && this.isBrowse) {
+      this.router.navigate(['maps'], { relativeTo: this.router.routerState.root });
+    } else {
+      console.warn('Access to maps is restricted.');
+    }
+  }
+  
   
 }

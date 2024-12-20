@@ -48,7 +48,10 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     address: this.fb.group({
       city: ['', Validators.required],
       street: ['', Validators.required],
-      postalCode: ['', Validators.required]
+      postalCode: ['', Validators.required],
+      locationLatitude: ['', Validators.required],
+      locationLongitude: ['', Validators.required]
+
     })
   });
 
@@ -56,6 +59,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.resetImagePath();
     this.postForm.reset()
     this.userSubscription = this.authService.getUser().subscribe(user => {
+      console.log("User from AuthService:", user);
       if (user && user.id) {
         this.user = user; 
       } else {
@@ -111,6 +115,10 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   onPostSubmit() {
     if (this.postForm.valid) {
       console.log(this.imagePath)
+      console.log("Form data:", this.postForm.value);  // Logovanje vrednosti forme
+      console.log("Image Path:", this.imagePath);  // Logovanje putanje slike
+      console.log("User ID:", this.user.id);  // Logovanje korisničkog ID-a
+  
       if(this.imagePath !== null && this.user.id != null){
         const newPost: Post = {
           id: 100,
@@ -122,11 +130,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
           locationStreet: this.postForm.value.address?.street || '',
           locationCity: this.postForm.value.address?.city || '',
           locationPostalCode: this.postForm.value.address?.postalCode || '',
+          locationLatitude: parseFloat(this.postForm.value.address?.locationLatitude || '0'), 
+          locationLongitude: parseFloat(this.postForm.value.address?.locationLongitude || '0'), 
           comments: [],
           likes: [],
           likeCount: 0,
         };
-
+        console.log("New Post to create:", newPost); 
         this.postService.createPost(newPost).subscribe({
           next: (result: Post) => {
             if (result) {
@@ -137,7 +147,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
               alert('An error has occurred. Please try again.');
             }
           },
-          error: () => {
+          error: (err) => {
+            console.log("Error creating post:", err);
             alert('An error has occurred. Please try again.');
           }
         });

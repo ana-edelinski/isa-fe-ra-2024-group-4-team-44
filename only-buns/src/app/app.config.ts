@@ -31,6 +31,6 @@ export const appConfig: ApplicationConfig = {
     MatInputModule,       
     ReactiveFormsModule,
     MatIconModule,
-    UserService
+    UserService,
   ]
 };
