@@ -4,11 +4,12 @@ import { UserInfoDTO } from '../../model/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-registered-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIcon],
   templateUrl: './registered-users.component.html',
   styleUrl: './registered-users.component.css'
 })
@@ -20,6 +21,7 @@ export class RegisteredUsersComponent implements OnInit {
   sortField: string = 'id';
   sortDirection: string = 'asc';
   selectedSort: string = 'email'; // Default sort option
+  isSearchVisible: boolean = false;
 
   searchCriteria = {
     name: '',
@@ -34,6 +36,10 @@ export class RegisteredUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUsers();
+  }
+
+  toggleSearch(): void {
+    this.isSearchVisible = !this.isSearchVisible;
   }
 
   fetchUsers(): void {

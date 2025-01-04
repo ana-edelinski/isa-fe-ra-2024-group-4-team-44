@@ -1,26 +1,33 @@
 <div class="user-list-container">
   <div class="sidebar">
+    <!-- Search Icon -->
+    <div class="search-icon-container">
+      <mat-icon (click)="toggleSearch()" class="search-icon">search</mat-icon>
+    </div>
+
     <!-- Search bar -->
-    <div class="search-container">
+    <div class="search-container" *ngIf="isSearchVisible">
       <h4>SEARCH</h4>
       <div class="search-bar">
-          <input type="text" placeholder="Search by name" [(ngModel)]="searchCriteria.name" />
-          <input type="text" placeholder="Search by surname" [(ngModel)]="searchCriteria.surname" />
-          <input type="text" placeholder="Search by email" [(ngModel)]="searchCriteria.email" />
-          <input type="number" placeholder="Min posts" [(ngModel)]="searchCriteria.minPosts" />
-          <input type="number" placeholder="Max posts" [(ngModel)]="searchCriteria.maxPosts" />
+        <input type="text" placeholder="Search by name" [(ngModel)]="searchCriteria.name" />
+        <input type="text" placeholder="Search by surname" [(ngModel)]="searchCriteria.surname" />
+        <input type="text" placeholder="Search by email" [(ngModel)]="searchCriteria.email" />
+        <input type="number" placeholder="Min posts" [(ngModel)]="searchCriteria.minPosts" />
+        <input type="number" placeholder="Max posts" [(ngModel)]="searchCriteria.maxPosts" />
       </div>
       <div class="buttons">
         <button class="btn btn-search" (click)="searchUsers(true)">Search</button>
         <button class="btn btn-clear" (click)="clearSearch()">Clear</button>
       </div>
     </div>
+
+    <!-- Sorting controls -->
     <div class="sorting-container">
       <select [(ngModel)]="selectedSort" (change)="onSortChange()">
         <option value="email">Sort by Email</option>
         <option value="following">Sort by Following</option>
       </select>
-    </div>    
+    </div>
   </div>
 
   <!-- User list -->
