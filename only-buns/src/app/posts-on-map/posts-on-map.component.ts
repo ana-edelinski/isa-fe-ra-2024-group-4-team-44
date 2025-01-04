@@ -4,6 +4,7 @@ import { User } from '../profile/user.model';
 import { Post } from '../model/post.model';
 import { AuthService } from '../auth/auth.service';
 import { PostService } from '../post.service';
+import { MapsService } from './maps.service';
 
 
 @Component({
@@ -18,8 +19,13 @@ export class PostsOnMapComponent implements AfterViewInit {
   private L: any;
   private user: User | undefined;
   private posts: Post[] = [];
+  private locationMessages: any[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private authService: AuthService, private postService: PostService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, 
+  private authService: AuthService, 
+  private postService: PostService,
+  private locationMessageService: MapsService ) 
+  {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -57,6 +63,7 @@ export class PostsOnMapComponent implements AfterViewInit {
 
         this.loadUser();
         this.loadPosts();
+        this.loadLocationMessages();
       });
     }
   }
@@ -97,6 +104,42 @@ export class PostsOnMapComponent implements AfterViewInit {
       },
       (error: any) => {
         console.error('Error fetching posts:', error);
+      }
+    );
+  }
+
+  loadLocationMessages(): void {
+    this.locationMessageService.getAllLocationMessages().subscribe(
+      (data: any[]) => {
+        this.locationMessages = data;
+        this.locationMessages.forEach(location => {
+          // const marker = this.L.marker([location.latitude, location.longitude], {
+          //   icon: this.L.icon({
+          //     iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/message-icon.png', 
+          //     iconSize: [30, 45], 
+          //     iconAnchor: [15, 45], 
+          //     popupAnchor: [0, -45], 
+          //     shadowSize: [50, 50], 
+          //   })
+                          // Ikona za message location
+        const messageLocationIcon = this.L.icon({
+          iconUrl: 'https://example.com/message-icon.png', // Zamenite sa linkom za ikonu poruke
+          iconSize: [30, 45], // Velicina ikone
+          iconAnchor: [15, 45], // Tačka u kojoj je ikona postavljena
+          popupAnchor: [0, -45], // Pozicija popup-a u odnosu na ikonu
+          shadowSize: [50, 50], // Velicina senke ikone
+        });
+
+        // Dodavanje markera za message location
+        const marker = this.L.marker([location.latitude, location.longitude], {
+          icon: messageLocationIcon, 
+
+          }).addTo(this.map);
+          marker.bindPopup(`<b>${location.name}</b><br>${location.street}, ${location.city}, ${location.postalCode}`);
+        });
+      },
+      (error: any) => {
+        console.error('Error fetching location messages:', error);
       }
     );
   }
