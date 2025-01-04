@@ -20,7 +20,7 @@ export class RegisteredUsersComponent implements OnInit {
   pageSize = 5;
   sortField: string = 'id';
   sortDirection: string = 'asc';
-  selectedSort: string = 'email'; // Default sort option
+  selectedSort: string = 'default'; 
   isSearchVisible: boolean = false;
 
   searchCriteria = {
@@ -88,17 +88,15 @@ export class RegisteredUsersComponent implements OnInit {
   }
 
   onSortChange(): void {
-    this.sortBy(this.selectedSort);
-  }
-
-  sortBy(key: string): void {
-    if (this.sortField === key) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortField = key;
-      this.sortDirection = 'asc';
-    }  
+    const [field, direction] = this.selectedSort.includes('-')
+      ? this.selectedSort.split('-')
+      : [this.selectedSort, 'asc']; 
+  
+    this.sortField = field;
+    this.sortDirection = direction;
+  
     this.searchUsers();
+
   }
 
   goToProfile(userId: number): void {
