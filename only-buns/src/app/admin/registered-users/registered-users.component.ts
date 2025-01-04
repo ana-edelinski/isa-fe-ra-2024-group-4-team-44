@@ -19,6 +19,7 @@ export class RegisteredUsersComponent implements OnInit {
   pageSize = 5;
   sortField: string = 'id';
   sortDirection: string = 'asc';
+  selectedSort: string = 'email'; // Default sort option
 
   searchCriteria = {
     name: '',
@@ -78,6 +79,10 @@ export class RegisteredUsersComponent implements OnInit {
     this.searchCriteria = { name: '', surname: '', email: '', minPosts: null, maxPosts: null };
     this.currentPage = 0;
     this.fetchUsers();
+  }
+
+  onSortChange(): void {
+    this.sortBy(this.selectedSort);
   }
 
   sortBy(key: string): void {

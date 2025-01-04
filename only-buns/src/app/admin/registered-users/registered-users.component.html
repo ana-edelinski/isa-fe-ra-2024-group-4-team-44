@@ -15,46 +15,32 @@
         <button class="btn btn-clear" (click)="clearSearch()">Clear</button>
       </div>
     </div>
+    <div class="sorting-container">
+      <select [(ngModel)]="selectedSort" (change)="onSortChange()">
+        <option value="email">Sort by Email</option>
+        <option value="following">Sort by Following</option>
+      </select>
+    </div>    
   </div>
 
   <!-- User list -->
   <div class="main-content">
     <h3>Registered Users</h3>
-    <div class="table-container">
-      <table *ngIf="users && users.length > 0">
-        <thead>
-          <tr>
-            <th (click)="sortBy('email')"> 
-              Email
-              <span *ngIf="sortField === 'email' && sortDirection === 'asc'">&#9650;</span>
-              <span *ngIf="sortField === 'email' && sortDirection === 'desc'">&#9660;</span>
-            </th>
-            <th>Username</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Number of Posts</th>
-            <th (click)="sortBy('following')">
-              Following
-              <span *ngIf="sortField === 'following' && sortDirection === 'asc'">&#9650;</span>
-              <span *ngIf="sortField === 'following' && sortDirection === 'desc'">&#9660;</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users"> 
-            <td> {{ user.email }}</td> 
-            <td>
-              <a (click)="goToProfile(user.id)" class="username-link">{{ user.username }}</a>
-            </td>
-            <td> {{ user.name }}</td>
-            <td> {{ user.surname }} </td>
-            <td> {{ user.numberOfPosts }} </td>
-            <td> {{ user.numberOfFollowing }} </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-container">
+      <div *ngFor="let user of users" class="user-card">
+        <div class="card-header">
+          <h4>{{ user.username }}</h4>
+          <a (click)="goToProfile(user.id)" class="username-link">View Profile</a>
+        </div>
+        <div class="card-body">
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Name:</strong> {{ user.name }} {{ user.surname }}</p>
+          <p><strong>Posts:</strong> {{ user.numberOfPosts }}</p>
+          <p><strong>Following:</strong> {{ user.numberOfFollowing }}</p>
+        </div>
+      </div>
     </div>
-    
+  
     <div class="pagination" style="margin-top: 15px; text-align: center;">
       <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0">
         Previous
@@ -65,4 +51,4 @@
       </button>
     </div>
   </div>
-</div>
+  

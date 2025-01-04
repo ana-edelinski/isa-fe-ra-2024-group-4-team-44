@@ -30,31 +30,55 @@
     gap: 10px;
   }
   
-  .table-container {
-    overflow-x: auto;
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
   }
   
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
+  .user-card {
+    width: 300px;
     border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    background-color: #fff;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .card-header h4 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #28705e;
+  }
+  
+  .card-body p {
+    margin: 5px 0;
+  }
+  
+  .user-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .username-link {
+    color: #28705e;
+    text-decoration: underline;
     cursor: pointer;
   }
   
-  th {
-    background-color: #28705e;
-    color: white;
+  .username-link:hover {
+    text-decoration: none;
   }
   
-  th span {
-    font-size: 10px;
-    margin-left: 5px;
-  }
 
   h3 {
     font-weight: bold;
@@ -90,14 +114,29 @@
     background-color: #0c231d;
     cursor: not-allowed;
   }
+
   
-  .username-link {
+  .sorting-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .sorting-container select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
     color: #28705e;
-    text-decoration: underline;
+    font-size: 1em;
     cursor: pointer;
   }
   
-  .username-link:hover {
-    text-decoration: none;
+  .sorting-container select:hover {
+    border-color: #28705e;
   }
+  
+  
   
