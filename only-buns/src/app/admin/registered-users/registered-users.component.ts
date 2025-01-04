@@ -3,6 +3,7 @@ import { UserService } from '../../profile/profile.service';
 import { UserInfoDTO } from '../../model/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registered-users',
@@ -28,7 +29,7 @@ export class RegisteredUsersComponent implements OnInit {
   };
 
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchUsers();
@@ -87,6 +88,10 @@ export class RegisteredUsersComponent implements OnInit {
       this.sortDirection = 'asc';
     }  
     this.searchUsers();
+  }
+
+  goToProfile(userId: number): void {
+    this.router.navigate(['/user'], { queryParams: { userId: userId } });
   }
 
 }

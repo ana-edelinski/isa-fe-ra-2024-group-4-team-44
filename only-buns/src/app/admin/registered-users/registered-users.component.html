@@ -29,6 +29,7 @@
               <span *ngIf="sortField === 'email' && sortDirection === 'asc'">&#9650;</span>
               <span *ngIf="sortField === 'email' && sortDirection === 'desc'">&#9660;</span>
             </th>
+            <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Number of Posts</th>
@@ -42,6 +43,9 @@
         <tbody>
           <tr *ngFor="let user of users"> 
             <td> {{ user.email }}</td> 
+            <td>
+              <a (click)="goToProfile(user.id)" class="username-link">{{ user.username }}</a>
+            </td>
             <td> {{ user.name }}</td>
             <td> {{ user.surname }} </td>
             <td> {{ user.numberOfPosts }} </td>

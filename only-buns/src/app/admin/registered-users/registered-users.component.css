@@ -91,3 +91,13 @@
     cursor: not-allowed;
   }
   
+  .username-link {
+    color: #28705e;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .username-link:hover {
+    text-decoration: none;
+  }
+  

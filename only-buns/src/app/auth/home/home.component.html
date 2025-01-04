@@ -20,7 +20,7 @@
     <mat-sidenav-container *ngIf="isLoggedIn" class="example-container">
       <mat-sidenav  mode="side" opened>
         <mat-nav-list>
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1" (click)="showPosts()">
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 1 || roleId === 2" (click)="showPosts()">
             <mat-icon>post_add</mat-icon>
             Posts
           </a>
@@ -34,13 +34,17 @@
             Registered Users
           </a>
 
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1" (click)="trends()">
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 1 || roleId === 2" (click)="trends()">
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
           </a>
           <a mat-list-item *ngIf="isLoggedIn && roleId===1 && isBrowse"  (click)="maps()">
             <mat-icon>map</mat-icon> <!-- Ikona za Posts on Map -->
             Posts on Map
+          </a>
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 2" (click)="trends()"> <!-- promeniti na Analytics kad se to uradi -->
+            <mat-icon>bar_chart</mat-icon> 
+            Analytics	
           </a>
         </mat-nav-list>
       </mat-sidenav>
