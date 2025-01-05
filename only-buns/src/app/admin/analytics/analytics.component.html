@@ -1,0 +1,42 @@
+<div class="analytics-page">
+    <h2 class="analytics-header">Application Analytics</h2>
+  
+    <div class="analytics-cards">
+      <div class="card">
+        <p class="card-title">Weekly Posts</p>
+        <p>{{ weeklyPosts }}</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Weekly Comments</p>
+        <p>{{ weeklyComments }}</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Monthly Posts</p>
+        <p>{{ monthlyPosts }}</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Monthly Comments</p>
+        <p>{{ monthlyComments }}</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Yearly Posts</p>
+        <p>{{ yearlyPosts }}</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Yearly Comments</p>
+        <p>{{ yearlyComments }}</p>
+      </div>
+    </div>
+  
+    <div class="radial-chart">
+      <ngx-charts-pie-chart
+        [results]="userAnalyticsData"
+        [view]="[900, 900]"
+        [doughnut]="false"
+        [legend]="true"
+        [labels]="true"
+      >
+      </ngx-charts-pie-chart>
+    </div>
+  </div>
+  

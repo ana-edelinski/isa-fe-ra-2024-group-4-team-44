@@ -1,0 +1,57 @@
+.analytics-header {
+    font-size: 32px;
+    margin-bottom: 16px;
+    color: #28705e;
+    font-weight: bold;
+  }
+  
+  .analytics-cards {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 120px; 
+  }
+
+  .card:hover {
+    border: 2px solid #28705e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+  .card-title {
+    font-size: 2.4vh;
+    color: black;
+    font-weight: normal;
+  }
+  
+  p {
+    font-size: 4vh;
+    font-weight: bold;
+    color: #28705e;
+  }
+
+  .radial-chart {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+  }
+  
+  
+  
+  
