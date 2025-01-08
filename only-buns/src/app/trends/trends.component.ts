@@ -5,6 +5,8 @@ import { PostService } from '../post.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { Post } from '../model/post.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-trends',
@@ -14,6 +16,7 @@ import { Post } from '../model/post.model';
   styleUrl: './trends.component.css'
 })
 export class TrendsComponent implements OnInit {
+  filter: string = '';
   totalPosts!: number;
   postsLast30Days!: number;
   top5PostsLast7Days: any[] = [];
@@ -21,21 +24,41 @@ export class TrendsComponent implements OnInit {
   top10UsersLikesLast7Days: any[] = [];
   likesCount: number = 0;
   posts: Post[] = [];
+  isLoggedIn: boolean = false;
+  post: Post | null = null;
 
-    // Pratimo da li je sekcija otvorena
-  sectionsState: { [key: string]: boolean } = {
-      top5Posts: false,
-      top10Posts: false,
-      top10UsersLikes: false
-  };
   
-  constructor(private trendService: TrendsService, private postService:PostService) {}
-    ngOnInit(): void {
-      this.fetchTotalPosts();
-      this.fetchPostsLast30Days();
-      this.fetchTop5PostsLast7Days();
-      this.fetchTop10PostsAllTime();
-      this.fetchTop10UsersLikesLast7Days();
+  constructor(private trendService: TrendsService, 
+    private postService:PostService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService) {}
+
+    ngOnInit() {
+      this.route.queryParams.subscribe(params => {
+        this.filter = params['filter'] || '';
+        this.loadPosts();
+      });
+    }
+    loadPosts() {
+      switch (this.filter) {
+        case 'top5':
+          this.fetchTop5PostsLast7Days();
+          break;
+        case 'top10':
+          this.fetchTop10PostsAllTime();
+          break;
+        case 'top10users':
+          this.fetchTop10UsersLikesLast7Days();
+          break;
+        case 'statistics':
+          this.fetchTotalPosts();
+          this.fetchPostsLast30Days();
+          break;
+        default:
+          this.fetchTotalPosts();
+          this.fetchPostsLast30Days();
+      }
     }
   
     fetchTotalPosts(): void {
@@ -47,6 +70,7 @@ export class TrendsComponent implements OnInit {
     fetchPostsLast30Days(): void {
       this.trendService.getPostsLast30Days().subscribe((data) => {
         this.postsLast30Days = data;
+        
       });
     }
   
@@ -54,9 +78,13 @@ export class TrendsComponent implements OnInit {
       this.trendService.getTop5PostsLast7Days().subscribe((data: Post[]) => {
         this.top5PostsLast7Days = data;
         this.top5PostsLast7Days.forEach(post => {
-          post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-          //this.loadLikesCount(post.id);
-        });
+       
+          post.imagePath = `http://localhost:8080${post.imagePath.replace(/\\/g, '/')}?timestamp=${new Date().getTime()}`;
+          //  post.imagePath = this.post ? `${this.post.imagePath}?timestamp=${new Date().getTime()}` : '';
+
+          });
+          console.log('Top 5 Posts:', this.top5PostsLast7Days);
+        
       });
     }
   
@@ -65,8 +93,9 @@ export class TrendsComponent implements OnInit {
         this.top10PostsAllTime = data;
         this.top10PostsAllTime .forEach(post => {
           post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-          //this.loadLikesCount(post.id);
+          
         });
+        console.log('Top 10 Posts All Time:', this.top10PostsAllTime);
       });
     }
   
@@ -76,23 +105,37 @@ export class TrendsComponent implements OnInit {
       });
     }
 
-    toggleSection(section: string) {
-      this.sectionsState[section] = !this.sectionsState[section];
+  likePost(postId: number): void {
+    if (this.isLoggedIn) {
+      const userId = this.authService.getLoggedInUserId();
+    if (userId) {
+      this.postService.likeUnlikePost(postId, userId).subscribe(
+        () => {
+          console.log('Post liked/unliked successfully');
+          this.ngOnInit()
+        },
+        (error) => {
+          console.error('Error liking/unliking post:', error);
+        }
+      );
+    } else {
+      console.error('User is not logged in');
     }
-  
-    isSectionOpen(section: string): boolean {
-      return this.sectionsState[section];
-    }
-    
-    // loadLikesCount(postId: number): void {
-    //     this.postService.getLikesCount(postId).subscribe(
-    //       (count) => this.likesCount = count,
-    //       (error) => console.error('Error fetching likes count:', error)
-    //     );
-    //   }
-    
-      getImageUrl(post: Post): string {
-        return `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-      }
+    } 
+  }
 
+  commentOnPost(): void {
+
+  }
+
+  goToProfile(creatorId: number): void {
+
+    this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
+  }
+
+  viewDetails(postId: number) {
+   
+      this.router.navigate(['post-details', postId], { relativeTo: this.router.routerState.root });
+
+  }
 }

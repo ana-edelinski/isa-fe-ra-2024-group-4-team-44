@@ -7,7 +7,7 @@
 .title {
   font-size: 24px;
   font-weight: bold;
-  color: #196fb5; /* Plava boja za naslov */
+  color: #28705e;
   margin: 0;
 }
 
@@ -28,7 +28,7 @@
 }
 
 button {
-  background-color: #196fb5;
+  background-color: #28705e;
   color: rgb(241, 219, 222) !important;
   font-size: medium;
   height: 50px;
@@ -56,9 +56,17 @@ button mat-icon {
   min-height: 400px;
   
 }
-.tab-buttons{
+/* .tab-buttons{
   margin-bottom: 10px;
+} */
+.tab-buttons {
+  display: flex;
+  gap: 10px; /* Razmak između dugmadi */
+  justify-content: flex-start; /* Poravnanje dugmadi ulevo, može biti i 'center' ili 'space-between' */
+  align-items: center; /* Vertikalno poravnanje */
+  margin-bottom: 10px; /* Razmak ispod dugmadi */
 }
+
 
 mat-sidenav {
   width: 200px; 
@@ -75,7 +83,7 @@ mat-nav-list a {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  color: #196fb5;
+  /* color: #196fb5; */
   text-decoration: none;
 }
 

@@ -132,5 +132,24 @@ export class HomeComponent {
     }
   }
   
+  isTrendsActive(): boolean {
+    return this.router.url.includes('/trends');
+  }
+  loadTop5Posts() {
+    this.router.navigate(['/trends'], { queryParams: { filter: 'top5' } });
+  }
+  
+  loadTop10Posts() {
+    this.router.navigate(['/trends'], { queryParams: { filter: 'top10' } });
+  }
+  
+  loadPostStatistics() {
+    this.router.navigate(['/trends'], { queryParams: { filter: 'statistics' } });
+  }
+
+  loadTop10Users() {
+    this.router.navigate(['/trends'], { queryParams: { filter: 'top10users' } });
+  }
+  
   
 }

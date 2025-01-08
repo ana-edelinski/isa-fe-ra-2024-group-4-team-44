@@ -6,11 +6,15 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Post } from '../model/post.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule,],
+  imports: [CommonModule, MatIconModule,  MatCardModule],
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.css'
 })
@@ -96,10 +100,14 @@ export class PostListComponent implements OnInit {
   }
 
   showLoginNotification(): void {
-    this.snackBar.open('You must be logged in to like or comment.', 'OK', {
-      duration: 3000,
+    Swal.fire({
+      icon: 'warning',
+      title: 'You must be logged in',
+      text: 'Please log in to like or comment.',
+      confirmButtonText: 'OK'
     });
   }
+  
   showDetails(postId: number): void {
     this.router.navigate(['/post-details', postId]);
   }
@@ -108,5 +116,16 @@ export class PostListComponent implements OnInit {
 
     this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
   }
+  // viewDetails(postId: number) {
+  //   this.router.navigate(['post-details', postId], { relativeTo: this.router.routerState.root });
+  // }
+  viewDetails(postId: number) {
+    if (this.isLoggedIn) {
+      this.router.navigate(['post-details', postId], { relativeTo: this.router.routerState.root });
+    } else {
+      this.showLoginNotification();
+    }
+  }
+  
 
 }

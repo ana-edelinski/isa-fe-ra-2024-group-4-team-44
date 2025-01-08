@@ -113,22 +113,13 @@ export class PostsOnMapComponent implements AfterViewInit {
       (data: any[]) => {
         this.locationMessages = data;
         this.locationMessages.forEach(location => {
-          // const marker = this.L.marker([location.latitude, location.longitude], {
-          //   icon: this.L.icon({
-          //     iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/message-icon.png', 
-          //     iconSize: [30, 45], 
-          //     iconAnchor: [15, 45], 
-          //     popupAnchor: [0, -45], 
-          //     shadowSize: [50, 50], 
-          //   })
-                          // Ikona za message location
-        const messageLocationIcon = this.L.icon({
-          iconUrl: 'https://example.com/message-icon.png', // Zamenite sa linkom za ikonu poruke
-          iconSize: [30, 45], // Velicina ikone
-          iconAnchor: [15, 45], // Tačka u kojoj je ikona postavljena
-          popupAnchor: [0, -45], // Pozicija popup-a u odnosu na ikonu
-          shadowSize: [50, 50], // Velicina senke ikone
-        });
+          const messageLocationIcon = this.L.icon({
+            iconUrl: 'assets/message_icon.png', // Zamenite sa linkom za ikonu poruke
+            iconSize: [30, 30], // Velicina ikone
+            iconAnchor: [15, 45], // Tačka u kojoj je ikona postavljena
+            popupAnchor: [0, -45], // Pozicija popup-a u odnosu na ikonu
+            shadowSize: [50, 50], // Velicina senke ikone
+          });
 
         // Dodavanje markera za message location
         const marker = this.L.marker([location.latitude, location.longitude], {
