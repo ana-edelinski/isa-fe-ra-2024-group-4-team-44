@@ -13,6 +13,7 @@ import { PostEditComponent } from './post-details/post-edit/post-edit.component'
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
 import { TrendsComponent } from './trends/trends.component';
 import { PostsOnMapComponent } from './posts-on-map/posts-on-map.component';
+import { ChatsComponent } from './chats/chats.component';
 
 
 export const routes: Routes = [
@@ -28,6 +29,7 @@ export const routes: Routes = [
             { path: 'user', component: UserInfoComponent },
             { path: 'trends', component: TrendsComponent },
             { path: 'maps', component: PostsOnMapComponent },
+            { path: 'chats', component: ChatsComponent },
 
         ]
     },
@@ -41,6 +43,7 @@ export const routes: Routes = [
     { path: 'user', component: UserInfoComponent },
     { path: 'post/:id/edit', component: PostEditComponent },
     { path: 'registered-users', component: RegisteredUsersComponent },
+   // { path: 'chats', component: ChatsComponent },
     
 
 ];

@@ -15,6 +15,9 @@ import { PostListComponent } from '../../post-list/post-list.component';
 import { MyPostsComponent } from '../../my-posts/my-posts.component';
 import { ProfileComponent } from '../../profile/profile.component';
 import { PostsOnMapComponent } from '../../posts-on-map/posts-on-map.component';
+import { LocationMessage } from '../../model/location-message.model';
+import { ChatsComponent } from '../../chats/chats.component';
+import { MapsService } from '../../posts-on-map/maps.service';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +32,8 @@ import { PostsOnMapComponent } from '../../posts-on-map/posts-on-map.component';
     MyPostsComponent,
     TrendsComponent,
     ProfileComponent,
-    PostsOnMapComponent
+    PostsOnMapComponent,
+    ChatsComponent
     
   ]
 })
@@ -39,9 +43,15 @@ export class HomeComponent {
   roleId: number = 1;
   user: User = new User();
   currentView: string = 'posts';
+  newMessagesCount: number = 0;
   private userSubscription: Subscription = Subscription.EMPTY;
+  private messagesSubscription: Subscription = Subscription.EMPTY;
+
   isBrowse =false;
-  constructor(private authService: AuthService, private router: Router, private userService: UserService) {
+  constructor(private authService: AuthService, 
+    private router: Router,
+    private userService: UserService,
+    private mapsService:  MapsService) {
     this.isLoggedIn = this.authService.isAuthenticated();
     
   }
@@ -53,6 +63,8 @@ export class HomeComponent {
       if (user && user.id) {
         this.user = user; 
         this.setRoleId(user.id);
+        this.loadNewMessages();
+        setInterval(() => this.loadNewMessages(), 60000); 
       } else {
         this.router.navigate(['']);
       }
@@ -67,6 +79,7 @@ export class HomeComponent {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
+
   }
 
   async setRoleId(userId: number): Promise<void> {
@@ -89,6 +102,19 @@ export class HomeComponent {
   profile() {
     this.router.navigate(['/profile'], { state: { user: this.user } });
   }
+
+  chats() {
+
+    this.newMessagesCount = 0;
+    this.router.navigate(['/chats']);
+  }
+
+  loadNewMessages() {
+    this.mapsService.getAllLocationMessages().subscribe((messages: LocationMessage[]) => {
+      this.newMessagesCount = messages.filter(message => !message.isRead).length;
+    });
+  }
+
 
   isPostsTabActive(): boolean {
     const allowedRoutes = ['/posts', '/my-posts', '/trends', '/maps'];

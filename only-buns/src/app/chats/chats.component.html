@@ -1,0 +1,29 @@
+<div class="messages-list">
+    <mat-card *ngFor="let message of messages" class="message-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>location_on</mat-icon> {{ message.name }}
+        </mat-card-title>
+        <mat-card-subtitle>{{ message.city }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="message-details">
+          <p><mat-icon>badge</mat-icon> <strong>ID:</strong> {{ message.id }}</p>
+          <p><mat-icon>home</mat-icon> <strong>Street:</strong> {{ message.street }}</p>
+          <p><mat-icon>mail</mat-icon> <strong>Postal Code:</strong> {{ message.postalCode }}</p>
+          <p><mat-icon>gps_fixed</mat-icon> <strong>Latitude:</strong> {{ message.latitude }}</p>
+          <p><mat-icon>gps_not_fixed</mat-icon> <strong>Longitude:</strong> {{ message.longitude }}</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="centerOnMessage(message)">
+          <mat-icon>map</mat-icon> Show on Map
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  
+  <div class="map-frame" #mapContainer>
+    <div id="map" style="height: 500px;"></div>
+  </div>
+  
