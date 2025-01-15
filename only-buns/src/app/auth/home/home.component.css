@@ -130,8 +130,8 @@ mat-nav-list a:hover {
 
 .message-count {
   position: absolute;
-  top: -5px;
-  right: -10px;
+  top: -60%;
+  right: -60%;
   background-color: red;
   color: white;
   border-radius: 50%;
