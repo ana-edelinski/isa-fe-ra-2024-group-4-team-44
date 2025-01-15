@@ -9,9 +9,10 @@
         Profile
         <mat-icon>account_circle</mat-icon>  
       </button>
-      <button *ngIf="isLoggedIn && roleId === 1"  mat-button (click)="profile()">
+      <button *ngIf="isLoggedIn && roleId === 1"  mat-button (click)="chats()">
         Chats
         <mat-icon>chat</mat-icon>  
+        <span *ngIf="newMessagesCount > 0" class="message-count">{{ newMessagesCount }}</span>
       </button>
     </div>
   </div>
@@ -56,6 +57,12 @@
           Create post
         <mat-icon>add-circle</mat-icon>
         </button>  
+
+        <button class="buttons" (click)="loadPostStatistics()" *ngIf="isTrendsActive()">Post Statistics</button>
+        <button class="buttons" (click)="loadTop5Posts()" *ngIf="isTrendsActive()">Top 5 Posts in Last 7 Days</button>
+        <button class="buttons" (click)="loadTop10Posts()" *ngIf="isTrendsActive()">Top 10 Posts of All Time</button>
+        <button class="buttons" (click)="loadTop10Users()" *ngIf="isTrendsActive()">Top 10 Users in Last 7 Days</button>
+
       </div>
       <hr class="divider">
 

@@ -1,95 +1,93 @@
-<div>
-  <h4>Total Posts: {{ totalPosts }}</h4>
-  <h4>Posts Last 30 Days: {{ postsLast30Days }}</h4>
+<div *ngIf="filter === 'statistics' || filter === '' || filter == null">
+
+  <p>Total Posts: {{ totalPosts }}</p>
+  <p>Posts Last 30 Days: {{ postsLast30Days }}</p>
 </div>
 
 <!-- Sekcija za Top 5 Posts in Last 7 Days -->
-<div>
-  <button (click)="toggleSection('top5Posts')">
-    <mat-icon>expand_more</mat-icon>
-    Top 5 Posts in Last 7 Days
-  </button>
-  <div *ngIf="isSectionOpen('top5Posts')">
-    <!-- <h3>Top 5 Posts in Last 7 Days:</h3> -->
-    <ul>
-      <li *ngFor="let post of top5PostsLast7Days" class="post-item">
-        <div class="post-header">
-          <a class="username">{{ post.creator.username }}</a>
-          <span class="creation-time">{{ post.creationTime | date:'short' }}</span>
-        </div>
-        <div class="post-content">
-          <img [src]="post.imagePath" alt="Post image" class="post-image" />
-          <div class="post-description">
-            <p>{{ post.description }}</p>
-            <div class="post-stats">
-              <span>{{ post.likeCount }} likes</span>
-              <span>{{ post.comments?.length || 0 }} comments</span>
-            </div>
+<div *ngIf="filter === 'top5'">
+  <ul>
+<div class="posts-container">
+  <div *ngFor="let post of top5PostsLast7Days" class="post-card">
+    <mat-card class="post-card-content">
+      <div class="post-header">
+        <div class="post-left">
+          <p class="post-description">{{ post.description }}</p>
+          <div class="post-meta">
+            <span class="post-creator" (click)="goToProfile(post.creatorId)">{{ post.creator.username}}</span> |
+            <span class="post-time">{{ post.creationTime | date:'short' }}</span>
           </div>
         </div>
-        <div class="comments" *ngIf="post.comments && post.comments.length > 0">
-          <h6>Comments</h6>
-          <div *ngFor="let comment of post.comments" class="comment">
-            <a class="comment-author">{{ comment.user.username }}</a>
-            <p class="comment-text">{{ comment.text }}</p>
-          </div>
+        <div class="post-right">
+          <img [src]="post.imagePath" alt="Post Image" class="post-image">
         </div>
-      </li>
-    </ul>
+      </div>
+      <div class="post-footer">
+        <div class="post-likes" (click)="likePost(post.id)">
+          <mat-icon>favorite</mat-icon> 
+          <span>{{ post.likes.length }}</span>
+        </div>
+        <div class="post-comments" (click)="commentOnPost()">
+          <mat-icon>comment</mat-icon> {{ post.comments.length }} 
+        </div>
+        <button mat-button (click)="viewDetails(post.id)">View Details</button>
+      </div>
+    </mat-card>
   </div>
 </div>
+  </ul>
+</div>
+
 
 <!-- Sekcija za Top 10 Posts of All Time -->
-<div>
-  <button (click)="toggleSection('top10Posts')">
-    <mat-icon>expand_more</mat-icon>
-    Top 10 Posts of All Time
-  </button>
-  <div *ngIf="isSectionOpen('top10Posts')">
-    <!-- <h3>Top 10 Posts of All Time:</h3> -->
-    <ul>
-      <li *ngFor="let post of top10PostsAllTime" class="post-item">
-        <div class="post-header">
-          <a class="username">{{ post.creator.username }}</a>
-          <span class="creation-time">{{ post.creationTime  }}</span>
-        </div>
-        <div class="post-content">
-          <img [src]="post.imagePath" alt="Post image" class="post-image" />
-          <div class="post-description">
-            <p>{{ post.description }}</p>
-            <div class="post-stats">
-              <span>{{ post.likeCount }} likes</span>
-              <span>{{ post.comments?.length || 0 }} comments</span>
-            </div>
+ <div  *ngIf="filter === 'top10'">
+    
+<div class="posts-container">
+  <div *ngFor="let post of top10PostsAllTime" class="post-card">
+    <mat-card class="post-card-content">
+      <div class="post-header">
+        <div class="post-left">
+          <p class="post-description">{{ post.description }}</p>
+          <div class="post-meta">
+            <span class="post-creator" (click)="goToProfile(post.creatorId)">{{ post.creator.username }}</span> |
+            <span class="post-time">{{ post.creationTime | date:'short' }}</span>
           </div>
         </div>
-        <div class="comments" *ngIf="post.comments && post.comments.length > 0">
-          <h6>Comments</h6>
-          <div *ngFor="let comment of post.comments" class="comment">
-            <a class="comment-author">{{ comment.user.username }}</a>
-            <p class="comment-text">{{ comment.text }}</p>
-          </div>
+        <div class="post-right">
+          <img [src]="post.imagePath" alt="Post Image" class="post-image">
         </div>
-      </li>
-    </ul>
+      </div>
+      <div class="post-footer">
+        <div class="post-likes" (click)="likePost(post.id)">
+          <mat-icon>favorite</mat-icon> 
+          <span>{{ post.likes.length }}</span>
+        </div>
+        <div class="post-comments" (click)="commentOnPost()">
+          <mat-icon>comment</mat-icon> {{ post.comments.length }} 
+        </div>
+        <button mat-button (click)="viewDetails(post.id)">View Details</button>
+      </div>
+    </mat-card>
   </div>
 </div>
+ </div>
+
 
 <!-- Sekcija za Top 10 Users Who Gave Most Likes in Last 7 Days -->
-<div>
-  <button (click)="toggleSection('top10UsersLikes')">
-    <mat-icon>expand_more</mat-icon>
-    Top 10 Users Who Gave Most Likes in Last 7 Days
-  </button>
-  <div *ngIf="isSectionOpen('top10UsersLikes')">
-    <!-- <h3>Top 10 Users Who Gave Most Likes in Last 7 Days:</h3> -->
-    <ul>
-      <li *ngFor="let user of top10UsersLikesLast7Days">
-        {{ user.username }} - {{ user.likeCount }} likes given
-      </li>
-    </ul>
-  </div>
+<div *ngIf="filter === 'top10users'">
+  <ul>
+    <li *ngFor="let user of top10UsersLikesLast7Days" class="user-item">
+      <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="{{ user.name }}" class="avatar" />
+      <div class="user-info">
+        <span class="username">{{ '@' + user.username }}</span>
+        <span class="like-count">- {{ user.likeCount }} likes given</span>
+      </div>
+    </li>
+  </ul>
 </div>
+
+
+
 
 
 
