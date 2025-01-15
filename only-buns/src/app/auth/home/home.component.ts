@@ -177,5 +177,8 @@ export class HomeComponent {
     this.router.navigate(['/trends'], { queryParams: { filter: 'top10users' } });
   }
   
+  analytics() {
+    this.router.navigate(['analytics'], { relativeTo: this.router.routerState.root });
+  }
   
 }

@@ -3,11 +3,13 @@ import { UserService } from '../../profile/profile.service';
 import { UserInfoDTO } from '../../model/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-registered-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIcon],
   templateUrl: './registered-users.component.html',
   styleUrl: './registered-users.component.css'
 })
@@ -18,6 +20,8 @@ export class RegisteredUsersComponent implements OnInit {
   pageSize = 5;
   sortField: string = 'id';
   sortDirection: string = 'asc';
+  selectedSort: string = 'default'; 
+  isSearchVisible: boolean = false;
 
   searchCriteria = {
     name: '',
@@ -28,10 +32,14 @@ export class RegisteredUsersComponent implements OnInit {
   };
 
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchUsers();
+  }
+
+  toggleSearch(): void {
+    this.isSearchVisible = !this.isSearchVisible;
   }
 
   fetchUsers(): void {
@@ -79,14 +87,20 @@ export class RegisteredUsersComponent implements OnInit {
     this.fetchUsers();
   }
 
-  sortBy(key: string): void {
-    if (this.sortField === key) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortField = key;
-      this.sortDirection = 'asc';
-    }  
+  onSortChange(): void {
+    const [field, direction] = this.selectedSort.includes('-')
+      ? this.selectedSort.split('-')
+      : [this.selectedSort, 'asc']; 
+  
+    this.sortField = field;
+    this.sortDirection = direction;
+  
     this.searchUsers();
+
+  }
+
+  goToProfile(userId: number): void {
+    this.router.navigate(['/user'], { queryParams: { userId: userId } });
   }
 
 }
