@@ -1,1 +1,56 @@
-<p>user-chat works!</p>
+<div class="chat-container">
+  <!-- Sidebar with chat list -->
+  <div class="chat-sidebar">
+    <h3>My Chats</h3>
+    <button mat-raised-button color="primary" (click)="openCreateGroup()">+ New Group</button> 
+    <mat-nav-list>
+      <mat-list-item 
+        *ngFor="let chat of chatList" 
+        [class.active]="chat.id === activeChat?.id"> 
+        <mat-icon matListIcon>group</mat-icon> <!-- (click)="selectChat(chat)"-->
+        <h4 matLine>{{ chat.name }}</h4>
+        <p matLine *ngIf="chat.lastMessage">{{ chat.lastMessage }}</p>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
+
+  <!-- Main chat window -->
+  <div class="chat-main">
+    <div *ngIf="!activeChat" class="empty-chat">
+      <p>Select a chat to start messaging</p>
+    </div>
+
+    <div *ngIf="activeChat" class="chat-window">
+      <div class="chat-header">
+        <h3>{{ activeChat.name }}</h3>
+        <button *ngIf="isAdmin" mat-button > <!--(click)="openAdminPanel()"-->
+          Manage Group
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
+
+      <div class="chat-messages">
+        <div *ngFor="let message of messages" class="message" [class.mine]="message.senderId === currentUserId">
+          <div class="sender">{{ message.senderName }}</div>
+          <div class="content">{{ message.content }}</div>
+          <div class="timestamp">{{ message.timestamp | date:'shortTime' }}</div>
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <mat-form-field class="input-field">
+          <input matInput placeholder="Type your message..." [(ngModel)]="newMessage">
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="sendMessage()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Group Dialog -->
+<!-- <app-create-group-dialog *ngIf="showCreateGroup" (close)="closeCreateGroup()"></app-create-group-dialog> -->
+
+<!-- Admin Panel Dialog -->
+<!-- <app-admin-panel-dialog *ngIf="showAdminPanel" (close)="closeAdminPanel()"></app-admin-panel-dialog> -->
