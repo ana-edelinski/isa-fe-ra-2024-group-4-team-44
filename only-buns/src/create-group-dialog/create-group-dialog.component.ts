@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
 
 interface GroupUser {
   id: number;
@@ -43,7 +45,8 @@ export class CreateGroupDialogComponent {
   ];
 
   constructor(
-    public dialogRef: MatDialogRef<CreateGroupDialogComponent>
+    public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
+    private dialog: MatDialog
   ) {}
 
   maxVisibleUsers = 3;
@@ -77,7 +80,20 @@ export class CreateGroupDialogComponent {
   }
 
   openMoreUsersDialog() {
-    console.log('Open full user list!');
-  }
+  const dialogRef = this.dialog.open(SelectUsersDialogComponent, {
+    width: '400px',
+    data: {
+      users: this.allUsers,
+      preselected: this.selectedUsers
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.selectedUsers = result;
+    }
+  });
+}
+
 
 }
