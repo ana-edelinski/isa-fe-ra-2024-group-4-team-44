@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../profile/user.model';
 import { LoginResponse } from './model/login_response.model';
+import { SimpleUserDTO } from '../model/simple-user-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -159,6 +160,10 @@ export class AuthService {
   get userObservable(): Observable<User | null> {
     return this.user$.asObservable();
   }  
+
+  getAllUsers(): Observable<SimpleUserDTO[]> {
+    return this.http.get<SimpleUserDTO[]>(`${this.apiUrl}`, { headers: this.getHeaders() });
+  }
 
 }
 

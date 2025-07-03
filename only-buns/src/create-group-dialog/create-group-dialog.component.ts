@@ -8,11 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
-
-interface GroupUser {
-  id: number;
-  name: string;
-}
+import { SimpleUserDTO } from '../app/model/simple-user-dto';
+import { AuthService } from '../app/auth/auth.service';
 
 @Component({
   selector: 'app-create-group-dialog',
@@ -30,34 +27,35 @@ interface GroupUser {
 })
 export class CreateGroupDialogComponent {
   groupName = '';
-  selectedUsers: GroupUser[] = [];
-  allUsers: GroupUser[] = [
-    { id: 1, name: 'Ana' },
-    { id: 2, name: 'Marko' },
-    { id: 3, name: 'Jovana' },
-    { id: 4, name: 'Stefan' },
-    { id: 5, name: 'Milica' },
-    { id: 6, name: 'Nikola' },
-    { id: 7, name: 'Petar' },
-    { id: 8, name: 'Marija' },
-    { id: 9, name: 'Vladimir' },
-    { id: 10, name: 'Ivana' }
-  ];
-
+  selectedUsers: SimpleUserDTO[] = [];
+  allUsers: SimpleUserDTO[] = [];
+  
   constructor(
     public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
+
+  ngOnInit() {
+    this.loadUsers();
+  }
+
+  loadUsers() {
+  this.authService.getAllUsers().subscribe({
+    next: (users) => this.allUsers = users,
+    error: (err) => console.error('Error loading users:', err)
+  });
+}
 
   maxVisibleUsers = 3;
 
-  toggleUser(user: GroupUser) {
-    if (this.selectedUsers.some(u => u.id === user.id)) {
-      this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
-    } else {
-      this.selectedUsers.push(user);
-    }
+  toggleUser(user: SimpleUserDTO) {
+  if (this.selectedUsers.some(u => u.id === user.id)) {
+    this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+  } else {
+    this.selectedUsers.push(user);
   }
+}
 
   createGroup() {
     const group = {
@@ -94,6 +92,7 @@ export class CreateGroupDialogComponent {
     }
   });
 }
+
 
 
 }
