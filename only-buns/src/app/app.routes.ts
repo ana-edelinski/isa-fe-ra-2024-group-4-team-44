@@ -15,6 +15,7 @@ import { TrendsComponent } from './trends/trends.component';
 import { PostsOnMapComponent } from './posts-on-map/posts-on-map.component';
 import { ChatsComponent } from './chats/chats.component';
 import { AnalyticsComponent } from './admin/analytics/analytics.component';
+import { UserChatComponent } from '../user-chat/user-chat.component';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,7 @@ export const routes: Routes = [
             { path: 'maps', component: PostsOnMapComponent },
             { path: 'chats', component: ChatsComponent },
             { path: 'analytics', component: AnalyticsComponent },
+            { path: 'user-chat', component: UserChatComponent },
 
         ]
     },
@@ -46,6 +48,7 @@ export const routes: Routes = [
     { path: 'registered-users', component: RegisteredUsersComponent },
    // { path: 'chats', component: ChatsComponent },
     { path: 'analytics', component: AnalyticsComponent },
+    { path: 'user-chat', component: UserChatComponent },
 ];
 
 @NgModule({

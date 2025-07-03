@@ -182,7 +182,7 @@ export class HomeComponent {
   }
 
   userChats() {
-    this.router.navigate(['/user-chats']);
+    this.router.navigate(['/user-chat']);
   }
   
 }
