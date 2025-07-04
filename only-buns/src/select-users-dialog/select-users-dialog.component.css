@@ -64,3 +64,11 @@
 .dialog-actions button:hover {
   background-color: #215a4c;
 }
+
+.users-list button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  border: 1px solid #aaaaaa;
+}
+

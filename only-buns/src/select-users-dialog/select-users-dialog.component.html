@@ -11,7 +11,8 @@
       *ngFor="let user of data.users"
       mat-button
       [class.selected]="isSelected(user)"
-      (click)="toggleUser(user)">
+      (click)="toggleUser(user)"
+      [disabled]="isCurrentUser(user)">
       {{ user.username }}
     </button>
   </div>

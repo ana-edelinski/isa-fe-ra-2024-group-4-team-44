@@ -42,11 +42,11 @@ interface ChatMessage {
 export class UserChatComponent implements OnInit {
   chatList: GroupResponseDTO[] = [];
 
-  currentUserId = 1; // Pretpostavimo da je logovani user sa ID 1 (demo - menjace se posle)
   activeChat: GroupResponseDTO | null = null;
   messages: ChatMessage[] = [];
   newMessage = '';
-  isAdmin = true; // Pretpostavimo da je logovani user kreirao sve grupe (demo - menjace se posle)
+  isAdmin = false;
+  currentUserId: number | null = null;
   selectedUsers: SimpleUserDTO[] = [];
   allUsers: SimpleUserDTO[] = [];
 
@@ -56,6 +56,7 @@ export class UserChatComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentUserId = this.authService.getLoggedInUserId();
     this.loadGroups();
     this.loadUsers();
   }
@@ -88,9 +89,11 @@ export class UserChatComponent implements OnInit {
   }
 
   selectChat(chat: GroupResponseDTO) {
-  this.activeChat = chat;
-  this.loadMessages(chat.id);
-}
+    this.activeChat = chat;
+    this.isAdmin = chat.creatorId === this.currentUserId;
+    this.loadMessages(chat.id);
+  }
+
 
   loadMessages(chatId: number) {
     // MOCK DATA
@@ -103,6 +106,11 @@ export class UserChatComponent implements OnInit {
 
   sendMessage() {
     if (this.newMessage.trim()) {
+      if (this.currentUserId === null) {
+        console.error('User not logged in!');
+        return;
+      }
+
       this.messages.push({
         senderId: this.currentUserId,
         senderName: 'You',
@@ -113,26 +121,32 @@ export class UserChatComponent implements OnInit {
     }
   }
 
-  openAdminPanel() {
-  const active = this.activeChat;
-  if (!active) {
-    console.warn('No active chat selected.');
-    return;
-  }
 
-  this.dialog.open(SelectUsersDialogComponent, {
-  width: '400px',
-  data: {
-    users: this.allUsers,
-    preselected: this.allUsers.filter(u => active.memberIds.includes(u.id))
-  }
-}).afterClosed().subscribe((selected: SimpleUserDTO[] | undefined) => {
-  if (!selected) {
-    console.log('User cancelled dialog');
-    return;
+  openAdminPanel() {
+    const active = this.activeChat;
+    if (!active) {
+      console.warn('No active chat selected.');
+      return;
+    }
+
+    this.dialog.open(SelectUsersDialogComponent, {
+    width: '400px',
+    data: {
+      users: this.allUsers,
+      preselected: this.allUsers.filter(u => active.memberIds.includes(u.id)),
+      currentUserId: this.currentUserId
+    }
+  }).afterClosed().subscribe((selected: SimpleUserDTO[] | undefined) => {
+    if (!selected) {
+      console.log('User cancelled dialog');
+      return;
   }
 
   const newMemberIds = selected.map(u => u.id);
+
+  if (this.currentUserId !== null && !newMemberIds.includes(this.currentUserId)) {
+      newMemberIds.push(this.currentUserId);
+    }
 
   this.groupService.updateGroupMembers(active.id, newMemberIds).subscribe({
     next: () => {

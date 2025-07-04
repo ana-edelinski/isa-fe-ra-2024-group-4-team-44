@@ -19,9 +19,10 @@ export interface User {
 })
 export class SelectUsersDialogComponent {
   dialogRef = inject(MatDialogRef<SelectUsersDialogComponent>);
-  data = inject(MAT_DIALOG_DATA) as { users: User[], preselected: User[] };
+  data = inject(MAT_DIALOG_DATA) as { users: User[], preselected: User[], currentUserId: number | null };
 
   selectedUsers: User[] = [...this.data.preselected];
+  currentUserId: number | null = this.data.currentUserId;
 
   toggleUser(user: User) {
     if (this.selectedUsers.some(u => u.id === user.id)) {
@@ -42,4 +43,10 @@ export class SelectUsersDialogComponent {
   cancel() {
     this.dialogRef.close();
   }
+
+  isCurrentUser(user: User): boolean {
+    return this.currentUserId !== null && user.id === this.currentUserId;
+  }
+
+
 }

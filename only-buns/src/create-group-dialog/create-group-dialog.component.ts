@@ -30,6 +30,7 @@ export class CreateGroupDialogComponent {
   groupName = '';
   selectedUsers: SimpleUserDTO[] = [];
   allUsers: SimpleUserDTO[] = [];
+  currentUserId: number | null = null;
   
   constructor(
     public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
@@ -40,6 +41,7 @@ export class CreateGroupDialogComponent {
 
   ngOnInit() {
     this.loadUsers();
+    this.currentUserId = this.authService.getLoggedInUserId();
   }
 
   loadUsers() {
@@ -48,14 +50,27 @@ export class CreateGroupDialogComponent {
         this.allUsers = users;
 
         const loggedInId = this.authService.getLoggedInUserId();
-        const me = users.find(u => u.id === loggedInId);
-        if (me && !this.selectedUsers.some(u => u.id === me.id)) {
-          this.selectedUsers.push(me);
+        if (loggedInId == null) {
+          console.warn('No logged in user ID!');
+          return;
+        }
+
+        // Da li već postoji među selektovanima?
+        const alreadySelected = this.selectedUsers.some(u => u.id === loggedInId);
+
+        if (!alreadySelected) {
+          const me = users.find(u => u.id === loggedInId);
+          if (me) {
+            this.selectedUsers.push(me);
+          } else {
+            console.warn('Logged in user not found in allUsers list!');
+          }
         }
       },
       error: (err) => console.error('Error loading users:', err)
     });
   }
+
 
 
   maxVisibleUsers = 3;
@@ -74,25 +89,26 @@ toggleUser(user: SimpleUserDTO) {
   }
 
   createGroup() {
-  if (!this.groupName || this.selectedUsers.length === 0) {
-    return;
-  }
-
-  const request = {
-    name: this.groupName,
-    memberIds: this.selectedUsers.map(u => u.id)
-  };
-
-  this.groupService.createGroup(request).subscribe({
-    next: (response) => {
-      console.log('Group created:', response);
-      this.dialogRef.close(response);
-    },
-    error: (err) => {
-      console.error('Error creating group:', err);
+    if (!this.groupName || this.selectedUsers.length === 0) {
+      return;
     }
-  });
-}
+
+    const request = {
+      name: this.groupName,
+      memberIds: this.selectedUsers.map(u => u.id),
+      creatorId: this.authService.getLoggedInUserId()
+    };
+
+    this.groupService.createGroup(request).subscribe({
+      next: (response) => {
+        console.log('Group created:', response);
+        this.dialogRef.close(response);
+      },
+      error: (err) => {
+        console.error('Error creating group:', err);
+      }
+    });
+  }
 
   cancel() {
     this.dialogRef.close();
@@ -107,20 +123,28 @@ toggleUser(user: SimpleUserDTO) {
   }
 
   openMoreUsersDialog() {
-  const dialogRef = this.dialog.open(SelectUsersDialogComponent, {
-    width: '400px',
-    data: {
-      users: this.allUsers,
-      preselected: this.selectedUsers
-    }
-  });
+    const dialogRef = this.dialog.open(SelectUsersDialogComponent, {
+      width: '400px',
+      data: {
+        users: this.allUsers,
+        preselected: this.selectedUsers,
+        currentUserId: this.currentUserId
+      }
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.selectedUsers = result;
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (this.currentUserId !== null && !result.some((u: SimpleUserDTO) => u.id === this.currentUserId)) {
+          const me = this.allUsers.find(u => u.id === this.currentUserId);
+          if (me) {
+            result.push(me);
+          }
+        }
+        this.selectedUsers = result;
+      }
+    });
+  }
+
 
 
 
