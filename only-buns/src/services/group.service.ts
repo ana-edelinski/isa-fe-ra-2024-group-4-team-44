@@ -22,4 +22,15 @@ export class GroupService {
     const headers = this.authService.getHeaders();
     return this.http.get<GroupResponseDTO[]>(this.apiUrl, { headers });
   }
+
+  updateGroupMembers(groupId: number, memberIds: number[]): Observable<void> {
+    const headers = this.authService.getHeaders();
+    return this.http.put<void>(`${this.apiUrl}/${groupId}/members`, memberIds, { headers });
+  }
+
+  getMyGroups(): Observable<GroupResponseDTO[]> {
+    const headers = this.authService.getHeaders();
+    return this.http.get<GroupResponseDTO[]>(`${this.apiUrl}/my`, { headers });
+  }
+
 }

@@ -61,7 +61,7 @@ export class UserChatComponent implements OnInit {
   }
 
   loadGroups() {
-    this.groupService.getAllGroups().subscribe({
+    this.groupService.getMyGroups().subscribe({
       next: (groups) => {
         this.chatList = groups;
       },
@@ -114,39 +114,54 @@ export class UserChatComponent implements OnInit {
   }
 
   openAdminPanel() {
-  console.log('Opening dialog with users:', this.allUsers);
+  const active = this.activeChat;
+  if (!active) {
+    console.warn('No active chat selected.');
+    return;
+  }
+
   this.dialog.open(SelectUsersDialogComponent, {
-    width: '400px',
-    data: {
-      users: this.allUsers,
-      preselected: []
-    }
+  width: '400px',
+  data: {
+    users: this.allUsers,
+    preselected: this.allUsers.filter(u => active.memberIds.includes(u.id))
+  }
+}).afterClosed().subscribe((selected: SimpleUserDTO[] | undefined) => {
+  if (!selected) {
+    console.log('User cancelled dialog');
+    return;
+  }
+
+  const newMemberIds = selected.map(u => u.id);
+
+  this.groupService.updateGroupMembers(active.id, newMemberIds).subscribe({
+    next: () => {
+      console.log('Group members updated!');
+      active.memberIds = newMemberIds;
+    },
+    error: (err) => console.error('Error updating group members:', err)
   });
+});
+
 }
+
 
 
 
   openCreateGroup() {
-  const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
-    width: '600px',
-    height: '400px',
-    maxWidth: '90vw'
-  });
+    const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
+      width: '600px',
+      height: '400px',
+      maxWidth: '90vw'
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      console.log('New Group Created:', result);
-      this.groupService.createGroup(result).subscribe({
-        next: (newGroup) => {
-          console.log('Group saved on server:', newGroup);
-          this.chatList.push(newGroup);  // dodaj u prikazanu listu!
-        },
-        error: (err) => {
-          console.error('Error saving group:', err);
-        }
-      });
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('New Group Created (from dialog):', result);
+        this.chatList.push(result);  // dialog je već kreirao i vratio GroupResponseDTO
+      }
+    });
+  }
+
   
 }

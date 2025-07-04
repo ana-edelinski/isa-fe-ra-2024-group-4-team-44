@@ -43,21 +43,35 @@ export class CreateGroupDialogComponent {
   }
 
   loadUsers() {
-  this.authService.getAllUsers().subscribe({
-    next: (users) => this.allUsers = users,
-    error: (err) => console.error('Error loading users:', err)
-  });
-}
+    this.authService.getAllUsers().subscribe({
+      next: (users) => {
+        this.allUsers = users;
+
+        const loggedInId = this.authService.getLoggedInUserId();
+        const me = users.find(u => u.id === loggedInId);
+        if (me && !this.selectedUsers.some(u => u.id === me.id)) {
+          this.selectedUsers.push(me);
+        }
+      },
+      error: (err) => console.error('Error loading users:', err)
+    });
+  }
+
 
   maxVisibleUsers = 3;
 
-  toggleUser(user: SimpleUserDTO) {
-  if (this.selectedUsers.some(u => u.id === user.id)) {
-    this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
-  } else {
-    this.selectedUsers.push(user);
+toggleUser(user: SimpleUserDTO) {
+    const loggedInId = this.authService.getLoggedInUserId();
+    if (user.id === loggedInId) {
+      return; // ne dozvoli da sebe izbaci iz selekcije
+    }
+
+    if (this.selectedUsers.some(u => u.id === user.id)) {
+      this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+    } else {
+      this.selectedUsers.push(user);
+    }
   }
-}
 
   createGroup() {
   if (!this.groupName || this.selectedUsers.length === 0) {
@@ -76,7 +90,6 @@ export class CreateGroupDialogComponent {
     },
     error: (err) => {
       console.error('Error creating group:', err);
-      // Možeš prikazati i poruku korisniku
     }
   });
 }
