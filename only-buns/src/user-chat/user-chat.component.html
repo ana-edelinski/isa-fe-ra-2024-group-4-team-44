@@ -5,18 +5,46 @@
     <button class="new-group-btn" (click)="openCreateGroup()">+ New Group</button>
 
     <ul class="chat-list">
-      <li *ngFor="let chat of chatList">
+      <li *ngFor="let chat of chatList"[class.active]="chat.id === activeChat?.id" 
+        (click)="selectChat(chat)">
         <span class="chat-name">{{ chat.name }}</span>
       </li>
     </ul>
   </div>
 
-  <!-- Main chat window (future feature) -->
-  <!--
+  <!-- Main Chat Window -->
   <div class="chat-main">
     <div *ngIf="!activeChat" class="empty-chat">
       <p>Select a chat to start messaging</p>
     </div>
+
+    <div *ngIf="activeChat" class="chat-window">
+      <div class="chat-header">
+        <h3>{{ activeChat.name }}</h3>
+        <button *ngIf="isAdmin" mat-icon-button (click)="openAdminPanel()">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
+
+      <div class="chat-messages">
+        <div 
+          *ngFor="let message of messages" 
+          class="message" 
+          [class.mine]="message.senderId === currentUserId">
+          <div class="sender">{{ message.senderName }}</div>
+          <div class="content">{{ message.content }}</div>
+          <div class="timestamp">{{ message.timestamp | date:'shortTime' }}</div>
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <mat-form-field class="input-field" appearance="outline">
+          <input matInput placeholder="Type your message..." [(ngModel)]="newMessage">
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="sendMessage()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
-  -->
 </div>

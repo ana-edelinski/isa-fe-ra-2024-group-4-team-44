@@ -42,11 +42,11 @@ export class UserChatComponent implements OnInit {
 
   chatList: GroupResponseDTO[] = [];
 
-  // activeChat: any = null;
-  // messages: ChatMessage[] = [];
-  // newMessage = '';
-  // currentUserId = 1;
-  // isAdmin = true;
+  currentUserId = 1; // Pretpostavimo da je logovani user sa ID 1 (demo - menjace se posle)
+  activeChat: GroupResponseDTO | null = null;
+  messages: ChatMessage[] = [];
+  newMessage = '';
+  isAdmin = true; // Pretpostavimo da je logovani user kreirao sve grupe (demo - menjace se posle)
 
   ngOnInit(): void {
     this.loadGroups();
@@ -63,30 +63,35 @@ export class UserChatComponent implements OnInit {
     });
   }
 
-  // selectChat(chat: any) {
-  //   this.activeChat = chat;
-  //   this.loadMessages(chat.id);
-  // }
+  selectChat(chat: GroupResponseDTO) {
+  this.activeChat = chat;
+  this.loadMessages(chat.id);
+}
 
-  // loadMessages(chatId: number) {
-  //   // MOCK: last 10 messages
-  //   this.messages = [
-  //     { senderId: 1, senderName: 'You', content: 'Hello!', timestamp: new Date() },
-  //     { senderId: 2, senderName: 'Ana', content: 'Hi!', timestamp: new Date() }
-  //   ];
-  // }
+  loadMessages(chatId: number) {
+    // MOCK DATA
+    this.messages = [
+      { senderId: 1, senderName: 'You', content: 'Hello everyone!', timestamp: new Date() },
+      { senderId: 2, senderName: 'Ana', content: 'Hi! How are you?', timestamp: new Date() },
+      { senderId: 1, senderName: 'You', content: 'I\'m good, thanks!', timestamp: new Date() },
+    ];
+  }
 
-  // sendMessage() {
-  //   if (this.newMessage.trim()) {
-  //     this.messages.push({
-  //       senderId: this.currentUserId,
-  //       senderName: 'You',
-  //       content: this.newMessage,
-  //       timestamp: new Date()
-  //     });
-  //     this.newMessage = '';
-  //   }
-  // }
+  sendMessage() {
+    if (this.newMessage.trim()) {
+      this.messages.push({
+        senderId: this.currentUserId,
+        senderName: 'You',
+        content: this.newMessage,
+        timestamp: new Date()
+      });
+      this.newMessage = '';
+    }
+  }
+
+  openAdminPanel() {
+    console.log('Admin panel opens here (future feature)');
+  }
 
   openCreateGroup() {
   const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
@@ -110,10 +115,5 @@ export class UserChatComponent implements OnInit {
     }
   });
 }
-
-  openAdminPanel() {
-    console.log('Open Admin Panel');
-  }
-
   
 }
