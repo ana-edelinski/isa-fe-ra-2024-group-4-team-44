@@ -33,12 +33,12 @@ export const routes: Routes = [
             { path: 'chats', component: ChatsComponent },
             { path: 'analytics', component: AnalyticsComponent },
             { path: 'user-chat', component: UserChatComponent },
+            { path: 'profile', component: ProfileComponent }
 
         ]
     },
     { path: 'register', component: RegistrationComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'profile', component: ProfileComponent },
     { path: 'create-post', component: CreatePostComponent},
     { path: 'post-list', component: PostListComponent},
     { path: 'my-posts', component: MyPostsComponent },
@@ -46,7 +46,6 @@ export const routes: Routes = [
     { path: 'user', component: UserInfoComponent },
     { path: 'post/:id/edit', component: PostEditComponent },
     { path: 'registered-users', component: RegisteredUsersComponent },
-   // { path: 'chats', component: ChatsComponent },
     { path: 'analytics', component: AnalyticsComponent },
     { path: 'user-chat', component: UserChatComponent },
 ];

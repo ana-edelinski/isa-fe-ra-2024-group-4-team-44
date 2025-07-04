@@ -177,6 +177,11 @@
   /* min-height: calc(100vh - 150px); */
 }
 
+.user-card-header {
+  position: relative;
+}
+
+
 .user-card-header .background {
   width: 100%;
   height: 250px;
@@ -587,3 +592,15 @@ form button[type="submit"]:hover {
   margin-left: 35px;
 }
 
+.settings-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(40, 112, 94, 0.9);
+  color: white;
+  border-radius: 50%;
+}
+
+.settings-button:hover {
+  background-color: rgba(33, 90, 76, 0.9);
+}
