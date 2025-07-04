@@ -53,7 +53,7 @@
 
     <div class="main-content" >   
       <div height="30px" class="tab-buttons" *ngIf="isPostsTabActive()">
-        <button  class="buttons" (click)="createPost()" *ngIf="isLoggedIn && roleId === 1">
+        <button  class="buttons" (click)="openDialog()" *ngIf="isLoggedIn && roleId === 1">
           Create post
         <mat-icon>add-circle</mat-icon>
         </button>  

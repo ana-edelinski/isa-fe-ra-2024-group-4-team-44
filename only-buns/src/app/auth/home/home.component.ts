@@ -18,6 +18,8 @@ import { PostsOnMapComponent } from '../../posts-on-map/posts-on-map.component';
 import { LocationMessage } from '../../model/location-message.model';
 import { ChatsComponent } from '../../chats/chats.component';
 import { MapsService } from '../../posts-on-map/maps.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreatePostComponent } from '../../create-post/create-post.component';
 
 @Component({
   selector: 'app-home',
@@ -46,12 +48,14 @@ export class HomeComponent {
   newMessagesCount: number = 0;
   private userSubscription: Subscription = Subscription.EMPTY;
   private messagesSubscription: Subscription = Subscription.EMPTY;
+  @ViewChild(PostListComponent) postListComp!: PostListComponent;
 
   isBrowse =false;
   constructor(private authService: AuthService, 
     private router: Router,
     private userService: UserService,
-    private mapsService:  MapsService) {
+    private mapsService:  MapsService,
+    private dialog: MatDialog) {
     this.isLoggedIn = this.authService.isAuthenticated();
     
   }
@@ -125,20 +129,20 @@ export class HomeComponent {
     this.router.navigate(['/create-post'], { state: { user: this.user } });
   }
 
-  // openDialog(): void {
-  //   const dialogRef = this.dialog.open(CreatePostComponent, {
-  //     width: '80%', 
-  //     maxWidth: 'none',
-  //     height: '90%',
-  //   });
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CreatePostComponent, {
+      width: '80%', 
+      maxWidth: 'none',
+      height: '90%',
+    });
   
-  //   dialogRef.afterClosed().subscribe(newPost => {
-  //     if (newPost) {
-  //       this.postListComp.posts.push(newPost);
-  //     }
+    dialogRef.afterClosed().subscribe(newPost => {
+      if (newPost) {
+        this.postListComp.posts.push(newPost);
+      }
       
-  //   });
-  // }
+    });
+  }
 
   isHomePage(): boolean {
     return true; 
