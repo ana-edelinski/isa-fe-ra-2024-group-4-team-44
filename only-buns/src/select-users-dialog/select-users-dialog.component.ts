@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 export interface User {
   id: number;
-  name: string;
+  username: string;
 }
 
 @Component({
