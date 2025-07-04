@@ -5,4 +5,6 @@ export interface UserInfoDTO {
     email: string;
     numberOfPosts: number;
     numberOfFollowing: number;
+    likeCount?: number;
+    username: string;
   }

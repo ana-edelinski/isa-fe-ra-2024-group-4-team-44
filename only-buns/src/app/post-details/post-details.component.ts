@@ -5,6 +5,8 @@ import { PostService } from '../post.service';
 import { Post } from '../model/post.model';
 import { User } from '../profile/user.model';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { PostEditComponent } from './post-edit/post-edit.component';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
 
@@ -19,7 +21,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   post: Post | null = null;
   likesCount: number = 0;
 
-  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService) {}
+  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService, private dialog: MatDialog) {}
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
 
@@ -39,7 +41,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         (data: Post) => {
           this.post = data;
           this.post.imagePath = `${this.post.imagePath}?timestamp=${new Date().getTime()}`;
-          this.loadLikesCount(id);
+          this.likesCount = data.likeCount;
         },
         (error) => console.error('Error fetching post details:', error)
       );
@@ -52,16 +54,20 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadLikesCount(postId: number): void {
-    this.postService.getLikesCount(postId).subscribe(
-      (count) => this.likesCount = count,
-      (error) => console.error('Error fetching likes count:', error)
-    );
-  }
-
   onEdit(): void {
     if (this.post) {
-      this.router.navigate(['/post', this.post.id, 'edit']); 
+      //this.router.navigate(['/post', this.post.id, 'edit']); 
+      const dialogRef = this.dialog.open(PostEditComponent, {
+        width: '50vw',
+        height: '55vh',
+        data: { post: this.post } 
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result && result.updatedPost) {
+          this.post = result.updatedPost;
+        }
+      });
     }
   }
 
@@ -89,12 +95,20 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   likeUnlikePost(postId: number): void {
-    const userId = this.authService.getLoggedInUserId();
-    if (userId) {
-      this.postService.likeUnlikePost(postId, userId).subscribe(
+    const loggedInUserId = this.authService.getLoggedInUserId();
+    if (loggedInUserId) {
+      this.postService.likeUnlikePost(postId, loggedInUserId).subscribe(
         () => {
           console.log('Post liked/unliked successfully');
-          this.loadLikesCount(postId); 
+          if (this.post) {
+            this.postService.getPostById(postId).subscribe(
+              (updatedPost) => {
+                this.post!.likeCount = updatedPost.likeCount; // Ažuriraj post.likeCount
+                this.likesCount = updatedPost.likeCount; // Ažuriraj lokalni likesCount
+              },
+              (error) => console.error('Error fetching updated post:', error)
+            );
+          }
         },
         (error) => {
           console.error('Error liking/unliking post:', error);

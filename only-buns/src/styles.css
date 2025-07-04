@@ -7,7 +7,7 @@ mat-card {
     margin: 20px;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: #1e5947; 
   }
   
 
@@ -43,30 +43,30 @@ mat-card {
   }
   
   button.mat-raised-button {
-    background-color: #e91e63; /* Pink color */
+    background-color: #28705e;; 
     color: white;
   }
   
   button.mat-raised-button:hover {
-    background-color: #d81b60; /* Darker pink on hover */
+    background-color: #28705e;; 
   }
   
   button.mat-button {
     background-color: transparent;
-    color: #e91e63; /* Pink color */
+    color: #28705e;
   }
   
   button.mat-button:hover {
-    background-color: rgba(233, 30, 99, 0.1); /* Light pink on hover */
+    background-color: #1e5947; 
   }
   
   button.mat-icon-button {
     background-color: transparent;
-    color: #e91e63; /* Pink color */
+    color: #28705e;
   }
   
   button.mat-icon-button:hover {
-    background-color: rgba(233, 30, 99, 0.1); /* Light pink on hover */
+    background-color: #1e5947;
   }
   
   button:disabled {
@@ -77,11 +77,11 @@ mat-card {
   
   /* Global button color */
   button {
-    background-color: #f06292; /* Light pink */
+    background-color: #28705e;
     color: white;
   }
   
   button:hover {
-    background-color: #ec407a; /* Darker light pink on hover */
+    background-color: #28705e;
   }
   

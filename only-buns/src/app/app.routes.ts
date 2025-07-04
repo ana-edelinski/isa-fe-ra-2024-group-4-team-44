@@ -11,10 +11,29 @@ import { PostDetailsComponent } from './post-details/post-details.component';
 import { UserInfoComponent } from './user-info/user-info/user-info.component';
 import { PostEditComponent } from './post-details/post-edit/post-edit.component';
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
-
+import { TrendsComponent } from './trends/trends.component';
+import { PostsOnMapComponent } from './posts-on-map/posts-on-map.component';
+import { ChatsComponent } from './chats/chats.component';
+import { AnalyticsComponent } from './admin/analytics/analytics.component';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
+    {
+        path: '',
+        component: HomeComponent,
+        children: [
+            { path: '', redirectTo: 'posts', pathMatch: 'full' }, // Default prikaz
+            { path: 'posts', component: PostListComponent }, // Posts list
+            { path: 'my-posts', component: MyPostsComponent }, // My posts
+            { path: 'post-details/:id', component: PostDetailsComponent }, // Post details
+            { path: 'registered-users', component: RegisteredUsersComponent },
+            { path: 'user', component: UserInfoComponent },
+            { path: 'trends', component: TrendsComponent },
+            { path: 'maps', component: PostsOnMapComponent },
+            { path: 'chats', component: ChatsComponent },
+            { path: 'analytics', component: AnalyticsComponent },
+
+        ]
+    },
     { path: 'register', component: RegistrationComponent },
     { path: 'login', component: LoginComponent },
     { path: 'profile', component: ProfileComponent },
@@ -24,11 +43,13 @@ export const routes: Routes = [
     { path: 'post-details/:id', component: PostDetailsComponent },
     { path: 'user', component: UserInfoComponent },
     { path: 'post/:id/edit', component: PostEditComponent },
-    { path: 'registered-users', component: RegisteredUsersComponent }
-
+    { path: 'registered-users', component: RegisteredUsersComponent },
+   // { path: 'chats', component: ChatsComponent },
+    { path: 'analytics', component: AnalyticsComponent },
 ];
 
 @NgModule({
+    
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
   })

@@ -6,11 +6,15 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Post } from '../model/post.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule,],
+  imports: [CommonModule, MatIconModule,  MatCardModule],
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.css'
 })
@@ -22,27 +26,49 @@ export class PostListComponent implements OnInit {
   
   posts: Post[] = [];
   likesCount: number = 0;
-
-  
   
   ngOnInit(): void {
-    this.getPosts();
-    this.isLoggedIn = this.authService.isAuthenticated();
-  }
-
-  getPosts(): void {
-    this.postService.getAll().subscribe(
-      (data: Post[]) => {
-        this.posts = data;
-        this.posts.forEach(post => {
-          post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
-        });
-        console.log('Fetched posts:', this.posts);
-      },
-      (error) => {
-        console.error('Error fetching posts:', error);
+    this.authService.userObservable.subscribe(user => {
+      this.isLoggedIn = this.authService.isAuthenticated();
+      console.log('Is logged in:', this.isLoggedIn);
+      console.log('Logged in user:', user);
+  
+      if (this.isLoggedIn && user) {
+        this.getPosts(user.id); 
+      } else {
+        this.getPosts(); 
       }
-    );
+    });
+  }  
+  
+  getPosts(userId?: number): void {
+    if (this.isLoggedIn && userId) {
+      this.postService.getPostsFromFollowing(userId).subscribe(
+        (data: Post[]) => {
+          this.posts = data;
+          this.posts.forEach(post => {
+            post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+          });
+          console.log('Fetched posts from following:', this.posts);
+        },
+        (error) => {
+          console.error('Error fetching posts from following:', error);
+        }
+      );
+    } else {
+      this.postService.getAll().subscribe(
+        (data: Post[]) => {
+          this.posts = data;
+          this.posts.forEach(post => {
+            post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+          });
+          console.log('Fetched all posts:', this.posts);
+        },
+        (error) => {
+          console.error('Error fetching posts:', error);
+        }
+      );
+    }
   }
 
   likePost(postId: number): void {
@@ -74,10 +100,14 @@ export class PostListComponent implements OnInit {
   }
 
   showLoginNotification(): void {
-    this.snackBar.open('You must be logged in to like or comment.', 'OK', {
-      duration: 3000,
+    Swal.fire({
+      icon: 'warning',
+      title: 'You must be logged in',
+      text: 'Please log in to like or comment.',
+      confirmButtonText: 'OK'
     });
   }
+  
   showDetails(postId: number): void {
     this.router.navigate(['/post-details', postId]);
   }
@@ -86,13 +116,16 @@ export class PostListComponent implements OnInit {
 
     this.router.navigate(['/user'], { queryParams: { userId: creatorId } });
   }
-
-  loadLikesCount(postId: number): void {
-    this.postService.getLikesCount(postId).subscribe(
-      (count) => this.likesCount = count,
-      (error) => console.error('Error fetching likes count:', error)
-    );
+  // viewDetails(postId: number) {
+  //   this.router.navigate(['post-details', postId], { relativeTo: this.router.routerState.root });
+  // }
+  viewDetails(postId: number) {
+    if (this.isLoggedIn) {
+      this.router.navigate(['post-details', postId], { relativeTo: this.router.routerState.root });
+    } else {
+      this.showLoginNotification();
+    }
   }
-
+  
 
 }

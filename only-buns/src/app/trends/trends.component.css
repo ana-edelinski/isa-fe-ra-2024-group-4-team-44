@@ -1,0 +1,213 @@
+.trends {
+    margin: 20px;
+  }
+  
+  p {
+    margin-top: 2%;
+    text-align: left;
+  }
+
+
+.username {
+  color: #28705e;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.username:hover {
+  text-decoration: underline;
+}
+
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.user-item {
+  display: flex; /* Koristi flexbox za raspored elemenata u redu */
+  align-items: center; /* Poravnaj sve elemente vertikalno na sredinu */
+  margin-bottom: 10px; /* Dodaj malo razmaka između stavki */
+}
+
+.avatar {
+  width: 40px; /* Postavi širinu avatar slike */
+  height: 40px; /* Postavi visinu avatar slike */
+  border-radius: 50%; /* Zaokruži avatar da bude kružan */
+  margin-right: 10px; /* Razmak između avatar slike i teksta */
+}
+
+.user-info {
+  display: flex; /* Koristi flexbox za raspored unutar user-info div-a */
+  flex-direction: column; /* Stavite username i like count u vertikalni niz */
+  justify-content: center; /* Poravnaj tekstove na sredinu vertikalno */
+}
+
+.username {
+  font-weight: bold; /* Dodaj podebljanje za username */
+}
+
+.like-count {
+  color: #888; /* Možeš promeniti boju za like count */
+  font-size: 0.9rem; /* Malo smanji veličinu teksta za like count */
+}
+
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: stretch;
+}
+
+.post-card {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.post-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-left {
+  flex: 1;
+}
+
+.post-description {
+  font-size: 16px;
+  color: #333;
+}
+
+.post-meta {
+  font-size: 12px;
+  color: #888;
+}
+
+.post-right {
+  max-width: 120px;
+  margin-left: 20px;
+}
+
+.post-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  gap: 15px;
+}
+
+.post-footer button {
+  margin-left: auto; 
+  width: 10%;
+}
+
+
+.post-comments {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.post-likes {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.mat-icon {
+  margin-right: 5px;
+}
+
+button {
+  background-color: #28705e;
+  font-size: medium;
+  padding: 5px 15px;
+  width: 30%;
+  margin-left: 400px;
+}
+
+button mat-icon {
+  margin-left: 8px;
+}
+
+.post-likes mat-icon {
+  transition: color 0.3s ease; 
+}
+
+.post-likes:hover mat-icon {
+  color: #28705e;
+}
+
+
+.no-posts-message {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}
+
+.comments {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+h6 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.comment {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #28705e;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.comment-author:hover {
+  text-decoration: underline;
+}
+
+.comment-text {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.comment-author, .comment-text {
+  display: block;
+}
+
+.comment-author {
+  margin-bottom: 5px;
+}

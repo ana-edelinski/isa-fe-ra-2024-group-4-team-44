@@ -35,6 +35,7 @@ export class LoginComponent {
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
   loggedInUserId: number  | null = null;
+  errorMessage: string | null = null; 
 
   constructor(
     private fb: FormBuilder,
@@ -66,9 +67,18 @@ export class LoginComponent {
           })
           this.router.navigate(['/']);
         },
-        error: ( ) => {
+        error: (err) => {
           this.isLoading = false;
-          alert("Neispravan username ili lozinka!");
+          //alert("Neispravan username ili lozinka!");
+          if (err.status === 429) {
+           
+            this.errorMessage = 'Too many failed attempts. Please try again later.';
+
+          } else {
+            
+            this.errorMessage = 'Invalid username or password!';
+
+          }
         }
       });
     }

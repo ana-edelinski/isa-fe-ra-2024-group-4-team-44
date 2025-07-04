@@ -3,17 +3,25 @@ import { UserService } from '../../profile/profile.service';
 import { UserInfoDTO } from '../../model/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-registered-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIcon],
   templateUrl: './registered-users.component.html',
   styleUrl: './registered-users.component.css'
 })
 export class RegisteredUsersComponent implements OnInit {
   users: UserInfoDTO[] = [];
-  filteredUsers: UserInfoDTO[] = [];
+  currentPage = 0;
+  totalPages = 0;
+  pageSize = 5;
+  sortField: string = 'id';
+  sortDirection: string = 'asc';
+  selectedSort: string = 'default'; 
+  isSearchVisible: boolean = false;
 
   searchCriteria = {
     name: '',
@@ -23,88 +31,76 @@ export class RegisteredUsersComponent implements OnInit {
     maxPosts: null
   };
 
-  sortCriteria = {
-    emailAsc: true,
-    emailDesc: false,
-    followingAsc: false,
-    followingDesc: false
-  };
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchUsers();
   }
 
-  fetchUsers(): void {
-    this.userService.getAllUsers().subscribe(
-      (data) => {
-        this.users = data;
-        this.filteredUsers = data;
-        console.log(data);
-      },
-      (error) => {
-        console.error('Error fetching users:', error);
-      }
-    );
+  toggleSearch(): void {
+    this.isSearchVisible = !this.isSearchVisible;
   }
 
-  searchUsers(): void {
-    this.userService.searchUsers(this.searchCriteria).subscribe(
-      (data) => {
-        console.log('Search results:', data);
-        this.users = data;
-        this.filteredUsers = data;
-        console.log('Updated users:', this.users);
+  fetchUsers(): void {
+    this.userService.getAllUsersPaged(this.currentPage, this.pageSize).subscribe(
+      data => {
+        this.users = data.content; 
+        this.totalPages = data.totalPages;
       },
-      (error) => {
-        console.error('Error searching users:', error);
-      }
+      error => console.error('Error fetching users:', error)
     );
+  }
+  
+  searchUsers(resetPage: boolean = false): void {
+    if (resetPage) {
+      this.currentPage = 0; 
+    }
+  
+    this.userService.searchUsers(
+      this.searchCriteria,
+      this.currentPage,
+      this.pageSize,
+      this.sortField,
+      this.sortDirection
+    ).subscribe(
+      (data) => {
+        this.users = data.content;
+        this.totalPages = data.totalPages;
+        console.log('Filtered Search results:', data);
+      },
+      (error) => console.error('Error searching users:', error)
+    );
+  }
+  
+
+  changePage(newPage: number): void {
+    if (newPage >= 0 && newPage < this.totalPages) {
+      this.currentPage = newPage;
+      this.fetchUsers();
+    }
   }
 
   clearSearch(): void {
-    this.searchCriteria = {
-      name: '',
-      surname: '',
-      email: '',
-      minPosts: null,
-      maxPosts: null
-    };
-    this.fetchUsers();  
+    this.searchCriteria = { name: '', surname: '', email: '', minPosts: null, maxPosts: null };
+    this.currentPage = 0;
+    this.fetchUsers();
   }
 
-  sortBy(key: string): void {
-    if (key === 'email') {
-      if (this.sortCriteria.emailAsc) {
-        this.userService.getUsersSortedByEmailDesc().subscribe(data => {
-          this.filteredUsers = data;
-          this.sortCriteria.emailAsc = false;
-          this.sortCriteria.emailDesc = true;
-          console.log(data);
-        });
-      } else {
-        this.userService.getUsersSortedByEmailAsc().subscribe(data => {
-          this.filteredUsers = data;
-          this.sortCriteria.emailAsc = true;
-          this.sortCriteria.emailDesc = false;
-        });
-      }
-    } else if (key === 'following') {
-      if (this.sortCriteria.followingAsc) {
-        this.userService.getUsersSortedByFollowingDesc().subscribe(data => {
-          this.filteredUsers = data;
-          this.sortCriteria.followingAsc = false;
-          this.sortCriteria.followingDesc = true;
-        });
-      } else {
-        this.userService.getUsersSortedByFollowingAsc().subscribe(data => {
-          this.filteredUsers = data;
-          this.sortCriteria.followingAsc = true;
-          this.sortCriteria.followingDesc = false;
-        });
-      }
-    }
+  onSortChange(): void {
+    const [field, direction] = this.selectedSort.includes('-')
+      ? this.selectedSort.split('-')
+      : [this.selectedSort, 'asc']; 
+  
+    this.sortField = field;
+    this.sortDirection = direction;
+  
+    this.searchUsers();
+
+  }
+
+  goToProfile(userId: number): void {
+    this.router.navigate(['/user'], { queryParams: { userId: userId } });
   }
 
 }

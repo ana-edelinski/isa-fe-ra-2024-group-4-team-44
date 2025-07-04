@@ -67,61 +67,6 @@ export class UserService {
     return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/registered`, {headers});
   }
 
-  searchUsers(searchCriteria: any): Observable<UserInfoDTO[]> {
-    let params = new HttpParams();
-
-    if (searchCriteria.name) {
-      params = params.set('name', searchCriteria.name);
-    }
-    if (searchCriteria.surname) {
-      params = params.set('surname', searchCriteria.surname);
-    }
-    if (searchCriteria.email) {
-      params = params.set('email', searchCriteria.email);
-    }
-    if (searchCriteria.minPosts !== null) {
-      params = params.set('minPosts', searchCriteria.minPosts);
-    }
-    if (searchCriteria.maxPosts !== null) {
-      params = params.set('maxPosts', searchCriteria.maxPosts);
-    }
-
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/search`, { 
-      headers: headers,
-      params });
-  }
-
-  getUsersSortedByFollowingAsc(): Observable<UserInfoDTO[]> {
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/asc`, { headers });
-  }
-
-  getUsersSortedByFollowingDesc(): Observable<UserInfoDTO[]> {
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/following/desc`, { headers });
-  }
-
-  getUsersSortedByEmailAsc(): Observable<UserInfoDTO[]> {
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/asc`, { headers });
-  }
-
-  getUsersSortedByEmailDesc(): Observable<UserInfoDTO[]> {
-    const token = localStorage.getItem('token');  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<UserInfoDTO[]>(`${this.baseUrl}/sort/email/desc`, { headers });
-  }
-
   // getRole(userId: number): Observable<number> {
   //   return this.http.get<number>(`${this.baseUrl}/role/` + userId);
   // }
@@ -130,5 +75,32 @@ export class UserService {
     return await this.http.get<number>(`${this.baseUrl}/role/` + userId).toPromise() || -1;
   }
   
+  getAllUsersPaged(page: number, size: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+  
+    return this.http.get<any>(`${this.baseUrl}/paged`, { headers, params });
+  }
+  
+  searchUsers(criteria: any, page: number, size: number, sortField: string, sortDirection: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sortField', sortField)
+      .set('sortDirection', sortDirection);
+  
+    if (criteria.name) params = params.set('name', criteria.name);
+    if (criteria.surname) params = params.set('surname', criteria.surname);
+    if (criteria.email) params = params.set('email', criteria.email);
+    if (criteria.minPosts) params = params.set('minPosts', criteria.minPosts.toString());
+    if (criteria.maxPosts) params = params.set('maxPosts', criteria.maxPosts.toString());
+  
+    return this.http.get<any>(`${this.baseUrl}/search`, { headers, params });
+  }
   
 }

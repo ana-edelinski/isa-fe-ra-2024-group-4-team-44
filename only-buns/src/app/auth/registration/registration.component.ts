@@ -37,7 +37,9 @@ export class RegistrationComponent {
       confirmPassword: ['', Validators.required],
       street: ['', Validators.required],        
       city: ['', Validators.required],          
-      postalCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]] 
+      postalCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]] ,
+      latitude: ['', Validators.required], 
+      longitude: ['', Validators.required]
     }, { validator: this.passwordMatchValidator }); 
   }
 

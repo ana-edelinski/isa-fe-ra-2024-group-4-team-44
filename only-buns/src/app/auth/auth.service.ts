@@ -65,18 +65,17 @@ export class AuthService {
   
 
     isAuthenticated(): boolean {
-      const token = this.getAuthToken();
-      const expiresIn = localStorage.getItem('expiresIn');
-      if (token && expiresIn) {
-        const expirationDate = new Date(expiresIn);  
-        if (expirationDate > new Date()) {
-   
-          return true; 
+      if (typeof window !== 'undefined' && localStorage) {
+        const token = this.getAuthToken();
+        const expiresIn = localStorage.getItem('expiresIn');
+        if (token && expiresIn) {
+          const expirationDate = new Date(expiresIn);
+          return expirationDate > new Date();
         }
       }
-      return false; 
-      
+      return false;
     }
+    
 
   // Logout korisnika
   logout(): void {
@@ -95,7 +94,10 @@ export class AuthService {
   }
 
   private getAuthToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   private getStoredUserId(): number | null {
@@ -117,6 +119,46 @@ export class AuthService {
       (error) => console.error('Error fetching user profile after login:', error)
     );
   }
+
+  isFollowingUser(targetUserId: number): Observable<boolean> {
+    const currentUserId = this.getStoredUserId(); 
+    if (!currentUserId) {
+      throw new Error('User is not logged in');
+    }
+  
+    return this.http.get<boolean>(`${this.apiUrl}/${currentUserId}/isFollowing/${targetUserId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+  
+
+  followUser(followingId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/follow/${followingId}`, null, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  unfollowUser(followingId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/unfollow/${followingId}`, null, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  getFollowers(userId: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/${userId}/followers`, {
+      headers: this.getHeaders(),
+    });
+  }
+  
+  getFollowing(userId: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/${userId}/following`, {
+      headers: this.getHeaders(),
+    });
+  }
+  
+  get userObservable(): Observable<User | null> {
+    return this.user$.asObservable();
+  }  
 
 }
 

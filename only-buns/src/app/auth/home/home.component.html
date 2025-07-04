@@ -1,6 +1,6 @@
 <div class="content">
   <div class="header">
-    <p class="title">OnlyBuns</p>
+    <p class="title" [routerLink]="['/']" style="cursor: pointer;">OnlyBuns</p>
     <div class="buttons">
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['login']">Login</button>
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['register']">Sign Up</button>
@@ -9,9 +9,10 @@
         Profile
         <mat-icon>account_circle</mat-icon>  
       </button>
-      <button *ngIf="isLoggedIn && roleId === 1"  mat-button (click)="profile()">
+      <button *ngIf="isLoggedIn && roleId === 1"  mat-button (click)="chats()">
         Chats
         <mat-icon>chat</mat-icon>  
+        <span *ngIf="newMessagesCount > 0" class="message-count">{{ newMessagesCount }}</span>
       </button>
     </div>
   </div>
@@ -20,7 +21,7 @@
     <mat-sidenav-container *ngIf="isLoggedIn" class="example-container">
       <mat-sidenav  mode="side" opened>
         <mat-nav-list>
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1" (click)="showPosts()">
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 1 || roleId === 2" (click)="showPosts()">
             <mat-icon>post_add</mat-icon>
             Posts
           </a>
@@ -31,35 +32,42 @@
 
           <a mat-list-item *ngIf="isLoggedIn && roleId === 2" (click)="registeredUsers()"> 
             <mat-icon>group</mat-icon> 
-            Registered Users
+            Users
           </a>
 
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1">
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 1 || roleId === 2" (click)="trends()">
             <mat-icon>trending_up</mat-icon> <!-- Ikona za Trends -->
             Trends
           </a>
-          <a mat-list-item *ngIf="isLoggedIn && roleId === 1" >
+          <a mat-list-item *ngIf="isLoggedIn && roleId===1 && isBrowse"  (click)="maps()">
             <mat-icon>map</mat-icon> <!-- Ikona za Posts on Map -->
             Posts on Map
+          </a>
+          <a mat-list-item *ngIf="isLoggedIn && roleId === 2" (click)="analytics()"> <!-- promeniti na Analytics kad se to uradi -->
+            <mat-icon>bar_chart</mat-icon> 
+            Analytics	
           </a>
         </mat-nav-list>
       </mat-sidenav>
     </mat-sidenav-container>
 
     <div class="main-content" >   
-      <div height="30px" class="tab-buttons">
-        <button  class="buttons" (click)="openDialog()" *ngIf="isLoggedIn && roleId === 1">
+      <div height="30px" class="tab-buttons" *ngIf="isPostsTabActive()">
+        <button  class="buttons" (click)="createPost()" *ngIf="isLoggedIn && roleId === 1">
           Create post
         <mat-icon>add-circle</mat-icon>
         </button>  
+
+        <button class="buttons" (click)="loadPostStatistics()" *ngIf="isTrendsActive()">Post Statistics</button>
+        <button class="buttons" (click)="loadTop5Posts()" *ngIf="isTrendsActive()">Top 5 Posts in Last 7 Days</button>
+        <button class="buttons" (click)="loadTop10Posts()" *ngIf="isTrendsActive()">Top 10 Posts of All Time</button>
+        <button class="buttons" (click)="loadTop10Users()" *ngIf="isTrendsActive()">Top 10 Users in Last 7 Days</button>
+
       </div>
       <hr class="divider">
-      <ng-container *ngIf="currentView === 'posts'">
-        <app-post-list></app-post-list>
-      </ng-container>
-      <ng-container *ngIf="currentView === 'my-posts'">
-        <app-my-posts></app-my-posts>
-      </ng-container>
+
+      <router-outlet></router-outlet>
+
     </div>
   </div>
 </div>

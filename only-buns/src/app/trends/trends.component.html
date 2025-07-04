@@ -1,0 +1,93 @@
+<div *ngIf="filter === 'statistics' || filter === '' || filter == null">
+
+  <p>Total Posts: {{ totalPosts }}</p>
+  <p>Posts Last 30 Days: {{ postsLast30Days }}</p>
+</div>
+
+<!-- Sekcija za Top 5 Posts in Last 7 Days -->
+<div *ngIf="filter === 'top5'">
+  <ul>
+<div class="posts-container">
+  <div *ngFor="let post of top5PostsLast7Days" class="post-card">
+    <mat-card class="post-card-content">
+      <div class="post-header">
+        <div class="post-left">
+          <p class="post-description">{{ post.description }}</p>
+          <div class="post-meta">
+            <span class="post-creator" (click)="goToProfile(post.creatorId)">{{ post.creator.username}}</span> |
+            <span class="post-time">{{ post.creationTime | date:'short' }}</span>
+          </div>
+        </div>
+        <div class="post-right">
+          <img [src]="post.imagePath" alt="Post Image" class="post-image">
+        </div>
+      </div>
+      <div class="post-footer">
+        <div class="post-likes" (click)="likePost(post.id)">
+          <mat-icon>favorite</mat-icon> 
+          <span>{{ post.likes.length }}</span>
+        </div>
+        <div class="post-comments" (click)="commentOnPost()">
+          <mat-icon>comment</mat-icon> {{ post.comments.length }} 
+        </div>
+        <button mat-button (click)="viewDetails(post.id)">View Details</button>
+      </div>
+    </mat-card>
+  </div>
+</div>
+  </ul>
+</div>
+
+
+<!-- Sekcija za Top 10 Posts of All Time -->
+ <div  *ngIf="filter === 'top10'">
+    
+<div class="posts-container">
+  <div *ngFor="let post of top10PostsAllTime" class="post-card">
+    <mat-card class="post-card-content">
+      <div class="post-header">
+        <div class="post-left">
+          <p class="post-description">{{ post.description }}</p>
+          <div class="post-meta">
+            <span class="post-creator" (click)="goToProfile(post.creatorId)">{{ post.creator.username }}</span> |
+            <span class="post-time">{{ post.creationTime | date:'short' }}</span>
+          </div>
+        </div>
+        <div class="post-right">
+          <img [src]="post.imagePath" alt="Post Image" class="post-image">
+        </div>
+      </div>
+      <div class="post-footer">
+        <div class="post-likes" (click)="likePost(post.id)">
+          <mat-icon>favorite</mat-icon> 
+          <span>{{ post.likes.length }}</span>
+        </div>
+        <div class="post-comments" (click)="commentOnPost()">
+          <mat-icon>comment</mat-icon> {{ post.comments.length }} 
+        </div>
+        <button mat-button (click)="viewDetails(post.id)">View Details</button>
+      </div>
+    </mat-card>
+  </div>
+</div>
+ </div>
+
+
+<!-- Sekcija za Top 10 Users Who Gave Most Likes in Last 7 Days -->
+<div *ngIf="filter === 'top10users'">
+  <ul>
+    <li *ngFor="let user of top10UsersLikesLast7Days" class="user-item">
+      <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="{{ user.name }}" class="avatar" />
+      <div class="user-info">
+        <span class="username">{{ '@' + user.username }}</span>
+        <span class="like-count">- {{ user.likeCount }} likes given</span>
+      </div>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+
