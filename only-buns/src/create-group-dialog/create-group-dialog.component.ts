@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
 import { SimpleUserDTO } from '../app/model/simple-user-dto';
 import { AuthService } from '../app/auth/auth.service';
+import { GroupService } from '../services/group.service';
 
 @Component({
   selector: 'app-create-group-dialog',
@@ -33,7 +34,8 @@ export class CreateGroupDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private groupService: GroupService,
   ) {}
 
   ngOnInit() {
@@ -58,12 +60,26 @@ export class CreateGroupDialogComponent {
 }
 
   createGroup() {
-    const group = {
-      name: this.groupName,
-      users: this.selectedUsers
-    };
-    this.dialogRef.close(group);
+  if (!this.groupName || this.selectedUsers.length === 0) {
+    return;
   }
+
+  const request = {
+    name: this.groupName,
+    memberIds: this.selectedUsers.map(u => u.id)
+  };
+
+  this.groupService.createGroup(request).subscribe({
+    next: (response) => {
+      console.log('Group created:', response);
+      this.dialogRef.close(response);
+    },
+    error: (err) => {
+      console.error('Error creating group:', err);
+      // Možeš prikazati i poruku korisniku
+    }
+  });
+}
 
   cancel() {
     this.dialogRef.close();

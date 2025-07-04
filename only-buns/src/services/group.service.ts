@@ -1,0 +1,25 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { GroupRequestDTO } from '../app/model/group-request.model';
+import { GroupResponseDTO } from '../app/model/group-response.model';
+import { AuthService } from '../app/auth/auth.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GroupService {
+  private apiUrl = 'http://localhost:8080/api/groups';
+
+  constructor(private http: HttpClient, private authService: AuthService) { }
+
+  createGroup(group: GroupRequestDTO): Observable<GroupResponseDTO> {
+    const headers = this.authService.getHeaders();
+    return this.http.post<GroupResponseDTO>(this.apiUrl, group, { headers });
+  }
+
+  getAllGroups(): Observable<GroupResponseDTO[]> {
+    const headers = this.authService.getHeaders();
+    return this.http.get<GroupResponseDTO[]>(this.apiUrl, { headers });
+  }
+}

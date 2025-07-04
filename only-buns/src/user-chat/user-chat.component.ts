@@ -8,6 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
+import { GroupService } from '../services/group.service';
+import { GroupResponseDTO } from '../app/model/group-response.model';
+import { OnInit } from '@angular/core';
 
 //TODO: premesti u model
 interface ChatMessage { 
@@ -32,44 +35,58 @@ interface ChatMessage {
   templateUrl: './user-chat.component.html',
   styleUrls: ['./user-chat.component.css']
 })
-export class UserChatComponent {
-  constructor(private dialog: MatDialog) { }
+export class UserChatComponent implements OnInit {
+  constructor(private dialog: MatDialog,
+              private groupService: GroupService
+  ) { }
 
-  chatList = [
-    { id: 1, name: 'Family Chat', lastMessage: 'Hello there!' },
-    { id: 2, name: 'Work Group', lastMessage: 'Meeting at 3pm' }
-  ];
+  chatList: GroupResponseDTO[] = [];
 
-  activeChat: any = null;
-  messages: ChatMessage[] = [];
-  newMessage = '';
-  currentUserId = 1;
-  isAdmin = true;
+  // activeChat: any = null;
+  // messages: ChatMessage[] = [];
+  // newMessage = '';
+  // currentUserId = 1;
+  // isAdmin = true;
 
-  selectChat(chat: any) {
-    this.activeChat = chat;
-    this.loadMessages(chat.id);
+  ngOnInit(): void {
+    this.loadGroups();
   }
 
-  loadMessages(chatId: number) {
-    // MOCK: last 10 messages
-    this.messages = [
-      { senderId: 1, senderName: 'You', content: 'Hello!', timestamp: new Date() },
-      { senderId: 2, senderName: 'Ana', content: 'Hi!', timestamp: new Date() }
-    ];
+  loadGroups() {
+    this.groupService.getAllGroups().subscribe({
+      next: (groups) => {
+        this.chatList = groups;
+      },
+      error: (err) => {
+        console.error('Error loading groups:', err);
+      }
+    });
   }
 
-  sendMessage() {
-    if (this.newMessage.trim()) {
-      this.messages.push({
-        senderId: this.currentUserId,
-        senderName: 'You',
-        content: this.newMessage,
-        timestamp: new Date()
-      });
-      this.newMessage = '';
-    }
-  }
+  // selectChat(chat: any) {
+  //   this.activeChat = chat;
+  //   this.loadMessages(chat.id);
+  // }
+
+  // loadMessages(chatId: number) {
+  //   // MOCK: last 10 messages
+  //   this.messages = [
+  //     { senderId: 1, senderName: 'You', content: 'Hello!', timestamp: new Date() },
+  //     { senderId: 2, senderName: 'Ana', content: 'Hi!', timestamp: new Date() }
+  //   ];
+  // }
+
+  // sendMessage() {
+  //   if (this.newMessage.trim()) {
+  //     this.messages.push({
+  //       senderId: this.currentUserId,
+  //       senderName: 'You',
+  //       content: this.newMessage,
+  //       timestamp: new Date()
+  //     });
+  //     this.newMessage = '';
+  //   }
+  // }
 
   openCreateGroup() {
   const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
@@ -81,7 +98,15 @@ export class UserChatComponent {
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
       console.log('New Group Created:', result);
-      // Pozovi backend servis da napravi grupu
+      this.groupService.createGroup(result).subscribe({
+        next: (newGroup) => {
+          console.log('Group saved on server:', newGroup);
+          this.chatList.push(newGroup);  // dodaj u prikazanu listu!
+        },
+        error: (err) => {
+          console.error('Error saving group:', err);
+        }
+      });
     }
   });
 }
