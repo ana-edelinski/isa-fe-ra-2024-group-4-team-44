@@ -23,7 +23,8 @@
         </div>
         <button mat-button (click)="viewDetails(post.id)">View Details</button>
       </div>
-      <div class="comments" *ngIf="post.comments && post.comments.length > 0 && !isLoggedIn">
+      
+      <div class="comments" *ngIf="post.comments && post.comments.length > 0 && isLoggedIn">
         <h6>Comments</h6>
         <div *ngFor="let comment of post.comments" class="comment">
           <a class="comment-author" (click)="goToProfile(comment.userId)">{{ comment.username }}</a>
