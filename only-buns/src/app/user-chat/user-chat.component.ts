@@ -15,6 +15,7 @@ import { SimpleUserDTO } from '../model/simple-user-dto';
 import { AuthService } from '../auth/auth.service';
 import { ChatService, ChatMessageDTO } from '../services/chat.service';
 import { Subscription } from 'rxjs';
+import { ElementRef, ViewChild } from '@angular/core';
 
 interface ChatMessage { 
   senderId: number;
@@ -39,8 +40,10 @@ interface ChatMessage {
   styleUrls: ['./user-chat.component.css']
 })
 export class UserChatComponent implements OnInit, OnDestroy {
-  chatList: GroupResponseDTO[] = [];
 
+  @ViewChild('messagesContainer') messagesContainer!: ElementRef<HTMLDivElement>;
+
+  chatList: GroupResponseDTO[] = [];
   activeChat: GroupResponseDTO | null = null;
   messages: ChatMessage[] = [];
   newMessage = '';
@@ -111,6 +114,7 @@ export class UserChatComponent implements OnInit, OnDestroy {
     this.chatService.getHistoryForUser(chatId, this.currentUserId).subscribe({
       next: (msgs) => {
         this.messages = msgs.map(dto => this.mapDtoToChatMessage(dto));
+        this.scrollToBottom();
       },
       error: (err) => console.error('Error loading messages:', err)
     });
@@ -130,6 +134,7 @@ export class UserChatComponent implements OnInit, OnDestroy {
 
     this.messageSubscription = this.chatService.getMessages().subscribe((msg) => {
       this.messages.push(this.mapDtoToChatMessage(msg));
+      this.scrollToBottom(); 
     });
   }
 
@@ -212,6 +217,15 @@ export class UserChatComponent implements OnInit, OnDestroy {
       timestamp: dto.timestamp ? new Date(dto.timestamp) : new Date()
     };
   }
+
+  private scrollToBottom(): void {
+    try {
+      this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Scroll error:', err);
+    }
+  }
+
 
   ngOnDestroy(): void {
     if (this.messageSubscription) {
