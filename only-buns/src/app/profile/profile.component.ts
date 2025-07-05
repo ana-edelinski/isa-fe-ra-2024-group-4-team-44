@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MyPostsComponent } from '../my-posts/my-posts.component';
-import { UserInfoComponent } from '../user-info/user-info/user-info.component';
+import { UserInfoComponent } from '../user-info/user-info.component';
 import { PostService } from '../post.service';
 import { Post } from '../model/post.model';
 

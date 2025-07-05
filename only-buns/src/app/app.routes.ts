@@ -8,7 +8,7 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
 import { PostDetailsComponent } from './post-details/post-details.component';
-import { UserInfoComponent } from './user-info/user-info/user-info.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 import { PostEditComponent } from './post-details/post-edit/post-edit.component';
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
 import { TrendsComponent } from './trends/trends.component';
