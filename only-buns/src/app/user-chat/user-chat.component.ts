@@ -102,34 +102,37 @@ export class UserChatComponent implements OnInit, OnDestroy {
   loadMessages(chatId: number) {
     this.messages = [];
 
-    // 1. REST poziv za celu istoriju
-    this.chatService.getAllMessages(chatId).subscribe({
+    if (!this.currentUserId) {
+      console.error('User ID not found!');
+      return;
+    }
+
+    // 1. REST poziv za istoriju za ovog korisnika
+    this.chatService.getHistoryForUser(chatId, this.currentUserId).subscribe({
       next: (msgs) => {
         this.messages = msgs.map(dto => this.mapDtoToChatMessage(dto));
       },
       error: (err) => console.error('Error loading messages:', err)
     });
 
-    // 2. Diskonektuj WebSocket ako je već bio povezan
+    // 2. WebSocket
     if (this.wsConnected) {
       this.chatService.disconnect();
       this.wsConnected = false;
     }
 
-    // 3. Otvori WebSocket konekciju
     this.chatService.connect(chatId);
     this.wsConnected = true;
 
-    // 4. Odjavi prethodnu subscription (da se ne duplira)
     if (this.messageSubscription) {
       this.messageSubscription.unsubscribe();
     }
 
-    // 5. Slušaj nove poruke sa WS
     this.messageSubscription = this.chatService.getMessages().subscribe((msg) => {
       this.messages.push(this.mapDtoToChatMessage(msg));
     });
   }
+
 
   sendMessage() {
     if (!this.newMessage.trim() || !this.activeChat) return;
