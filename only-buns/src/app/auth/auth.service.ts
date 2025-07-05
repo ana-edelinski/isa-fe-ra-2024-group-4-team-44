@@ -165,5 +165,11 @@ export class AuthService {
     return this.http.get<SimpleUserDTO[]>(`${this.apiUrl}`, { headers: this.getHeaders() });
   }
 
+  getLoggedInUsername(): string | null {
+    const user = this.user$.getValue();
+    return user ? user.username : null;
+  }
+
+
 }
 

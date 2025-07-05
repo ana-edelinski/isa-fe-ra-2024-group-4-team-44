@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +14,7 @@ import { OnInit } from '@angular/core';
 import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
 import { SimpleUserDTO } from '../app/model/simple-user-dto';
 import { AuthService } from '../app/auth/auth.service';
+import { ChatService, ChatMessageDTO } from '../services/chat.service';
 
 
 //TODO: premesti u model
@@ -39,7 +40,7 @@ interface ChatMessage {
   templateUrl: './user-chat.component.html',
   styleUrls: ['./user-chat.component.css']
 })
-export class UserChatComponent implements OnInit {
+export class UserChatComponent implements OnInit, OnDestroy {
   chatList: GroupResponseDTO[] = [];
 
   activeChat: GroupResponseDTO | null = null;
@@ -47,16 +48,21 @@ export class UserChatComponent implements OnInit {
   newMessage = '';
   isAdmin = false;
   currentUserId: number | null = null;
+  currentUserName: string | null = null;
   selectedUsers: SimpleUserDTO[] = [];
   allUsers: SimpleUserDTO[] = [];
+  wsConnected = false;
+
 
   constructor(private dialog: MatDialog,
               private groupService: GroupService,
-              private authService: AuthService
+              private authService: AuthService,
+              private chatService: ChatService
   ) { }
 
   ngOnInit(): void {
     this.currentUserId = this.authService.getLoggedInUserId();
+    this.currentUserName = this.authService.getLoggedInUsername();
     this.loadGroups();
     this.loadUsers();
   }
@@ -96,30 +102,51 @@ export class UserChatComponent implements OnInit {
 
 
   loadMessages(chatId: number) {
-    // MOCK DATA
-    this.messages = [
-      { senderId: 1, senderName: 'You', content: 'Hello everyone!', timestamp: new Date() },
-      { senderId: 2, senderName: 'Ana', content: 'Hi! How are you?', timestamp: new Date() },
-      { senderId: 1, senderName: 'You', content: 'I\'m good, thanks!', timestamp: new Date() },
-    ];
+    this.messages = [];
+
+    // UMESTO getLast10
+    this.chatService.getAllMessages(chatId).subscribe({
+      next: (msgs) => {
+        this.messages = msgs.map(dto => this.mapDtoToChatMessage(dto));
+      },
+      error: (err) => console.error('Error loading messages:', err)
+    });
+
+    if (this.wsConnected) {
+      this.chatService.disconnect();
+      this.wsConnected = false;
+    }
+
+    this.chatService.connect(chatId);
+    this.wsConnected = true;
+
+    this.chatService.getMessages().subscribe((msg) => {
+      this.messages.push(this.mapDtoToChatMessage(msg));
+    });
   }
+
+
 
   sendMessage() {
-    if (this.newMessage.trim()) {
-      if (this.currentUserId === null) {
-        console.error('User not logged in!');
-        return;
-      }
+    if (!this.newMessage.trim() || !this.activeChat) return;
 
-      this.messages.push({
-        senderId: this.currentUserId,
-        senderName: 'You',
-        content: this.newMessage,
-        timestamp: new Date()
-      });
-      this.newMessage = '';
+    if (this.currentUserId === null || !this.currentUserName) {
+      console.error('User not logged in!');
+      return;
     }
+
+    const chatMessage: ChatMessageDTO = {
+      content: this.newMessage,
+      senderId: this.currentUserId,
+      senderName: this.currentUserName,
+      groupId: this.activeChat.id
+    };
+
+    this.chatService.sendMessage(chatMessage);
+    this.newMessage = '';
   }
+
+
 
 
   openAdminPanel() {
@@ -177,5 +204,18 @@ export class UserChatComponent implements OnInit {
     });
   }
 
-  
+  private mapDtoToChatMessage(dto: ChatMessageDTO): ChatMessage {
+    return {
+      senderId: dto.senderId,
+      senderName: dto.senderName,
+      content: dto.content,
+      timestamp: dto.timestamp ? new Date(dto.timestamp) : new Date()
+    };
+  }
+
+
+  ngOnDestroy(): void {
+    this.chatService.disconnect();
+  }
+
 }
