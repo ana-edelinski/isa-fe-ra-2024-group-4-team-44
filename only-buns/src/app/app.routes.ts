@@ -8,13 +8,14 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
 import { PostDetailsComponent } from './post-details/post-details.component';
-import { UserInfoComponent } from './user-info/user-info/user-info.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 import { PostEditComponent } from './post-details/post-edit/post-edit.component';
 import { RegisteredUsersComponent } from './admin/registered-users/registered-users.component';
 import { TrendsComponent } from './trends/trends.component';
 import { PostsOnMapComponent } from './posts-on-map/posts-on-map.component';
 import { ChatsComponent } from './chats/chats.component';
 import { AnalyticsComponent } from './admin/analytics/analytics.component';
+import { UserChatComponent } from '../app/user-chat/user-chat.component';
 
 export const routes: Routes = [
     {
@@ -31,12 +32,13 @@ export const routes: Routes = [
             { path: 'maps', component: PostsOnMapComponent },
             { path: 'chats', component: ChatsComponent },
             { path: 'analytics', component: AnalyticsComponent },
+            { path: 'user-chat', component: UserChatComponent },
+            { path: 'profile', component: ProfileComponent }
 
         ]
     },
     { path: 'register', component: RegistrationComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'profile', component: ProfileComponent },
     { path: 'create-post', component: CreatePostComponent},
     { path: 'post-list', component: PostListComponent},
     { path: 'my-posts', component: MyPostsComponent },
@@ -44,8 +46,8 @@ export const routes: Routes = [
     { path: 'user', component: UserInfoComponent },
     { path: 'post/:id/edit', component: PostEditComponent },
     { path: 'registered-users', component: RegisteredUsersComponent },
-   // { path: 'chats', component: ChatsComponent },
     { path: 'analytics', component: AnalyticsComponent },
+    { path: 'user-chat', component: UserChatComponent },
 ];
 
 @NgModule({

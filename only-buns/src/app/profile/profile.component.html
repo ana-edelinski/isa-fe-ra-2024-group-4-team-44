@@ -1,107 +1,103 @@
-<div class="profile-container">
-  <!-- Sekcija za korisničko ime, followers i following -->
-  <!-- <app-user-info [user]="user"></app-user-info>-->
+<div class="user-card">
+  <!-- HEADER sa COVER i SETTINGS dugmetom -->
+  <div class="user-card-header">
+    <img src="assets/background.jpg" alt="Background" class="background" />
 
-  <div class="profile-header">
-    <!-- <h3>{{ user.username }}</h3>
-
-    <div class="followers-following-container">
-      <p class="clickable" (click)="toggleFollowers()">Followers: {{ followersList.length }}</p>
-      <p class="clickable" (click)="toggleFollowing()">Following: {{ followingList.length }}</p>
-    </div>
-
-    </div> -->
-    <div class="user-card-header">
-      <img src="assets/background.jpg" alt="Background" class="background" />
-    </div>
-    <div class="user-info">
-      <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="{{ user.name }}" class="avatar" />
-      <div class="name-container">
-        <h2 class="user-name">{{ user.name }} {{ user.surname }}</h2>
-        <span class="username">{{ '@' + user.username }}</span>
-      </div>      
-      <p class="email">📧 {{ user.email }}</p>
-  
-      <div *ngIf="user.street || user.city || user.postalCode" class="address">
-        <p>
-          🏠 {{user.street }}, {{ user.city }}{{ user.postalCode ? ', ' + user.postalCode : '' }}
-        </p>
-      </div>
-
-      <div class="follow-info">
-        <p>
-          <span  (click)="toggleFollowing()"class="clickable-text">
-            Following: <strong>{{ followingList.length  }}</strong>
-          </span>
-        </p>
-        <p>
-          <span (click)="toggleFollowers()" class="clickable-text">
-            Followers: <strong>{{ followersList.length }}</strong>
-          </span>
-        </p>
-      </div>
-    </div>
-
-
-</div>
-
-    <hr class="divider">
-  </div>
-
-  <!-- Deo za dugmadi sa leve strane -->
-  <div class="sidebar">
-    <!-- Dugme za "View Details" sa ikonom -->
-    <button mat-raised-button class="follow-button" (click)="toggleDetails()">
-      <mat-icon>visibility</mat-icon>
-      View Details
-    </button>
-
-    <!-- Dugme za "My Posts" sa ikonom -->
-    <button mat-raised-button class="follow-button" (click)="myPosts()">
-      <mat-icon>article</mat-icon>
-      My Posts
+    <!-- SETTINGS BUTTON gore desno na coveru -->
+    <button mat-icon-button class="settings-button" (click)="toggleSettings()">
+      <mat-icon>{{ showSettings ? 'close' : 'settings' }}</mat-icon>
     </button>
   </div>
 
-  <!-- Desni deo za detalje i objave -->
+  <!-- USER INFO -->
+  <div class="user-info">
+    <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="{{ user.name }}" class="avatar" />
+    <div class="name-container">
+      <h2 class="user-name">{{ user.name }} {{ user.surname }}</h2>
+      <span class="username">{{ '@' + user.username }}</span>
+    </div>
+    <p class="email">📧 {{ user.email }}</p>
 
-  <div class="profile-content">
-    <div class="form-container">
-    <!-- Kartica sa informacijama o korisniku i promenom lozinke -->
-    <mat-card class="profile-card" *ngIf="showDetails">
+    <div *ngIf="user.street || user.city || user.postalCode" class="address">
+      <p>🏠 {{ user.street }}, {{ user.city }}{{ user.postalCode ? ', ' + user.postalCode : '' }}</p>
+    </div>
+
+    <!-- FOLLOW/UNFOLLOW -->
+    <div *ngIf="authService.isAuthenticated()" class="follow-info">
+      <p>
+        <span (click)="showModal('following')" class="clickable-text">
+          Following: <strong>{{ followingCount }}</strong>
+        </span>
+      </p>
+      <p>
+        <span (click)="showModal('followers')" class="clickable-text">
+          Followers: <strong>{{ followersCount }}</strong>
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- MODAL za FOLLOWERS / FOLLOWING -->
+  <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ modalTitle }}</h2>
+        <button class="close-button" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="modalUsers.length === 0">
+          <p *ngIf="modalTitle === 'Following'">No following</p>
+          <p *ngIf="modalTitle === 'Followers'">No followers</p>
+        </div>
+        <div *ngFor="let user of modalUsers" class="user-row">
+          <img [src]="user.avatar || 'assets/default-avatar.jpg'" alt="Avatar" class="user-avatar">
+          <div class="user-info">
+                <p class="username" (click)="navigateToProfile(user.id)">{{ user.username }}</p>
+            <p class="name">{{ user.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AKO JE SETTINGS U MODU, prikazi forme -->
+  <div *ngIf="showSettings" class="form-container">
+    <!-- User Profile Form -->
+    <mat-card class="profile-card">
       <h3>User Profile</h3>
       <div class="profile-info">
         <mat-form-field appearance="fill">
           <mat-label>First Name</mat-label>
-          <input matInput [(ngModel)]="user.name" name="name" required />
+          <input matInput [(ngModel)]="user.name" required />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Last Name</mat-label>
-          <input matInput [(ngModel)]="user.surname" name="surname" required />
+          <input matInput [(ngModel)]="user.surname" required />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="user.email" name="email" disabled />
+          <input matInput [(ngModel)]="user.email" disabled />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Street</mat-label>
-          <input matInput [(ngModel)]="user.street" name="street" />
+          <input matInput [(ngModel)]="user.street" />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>City</mat-label>
-          <input matInput [(ngModel)]="user.city" name="city" />
+          <input matInput [(ngModel)]="user.city" />
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Postal Code</mat-label>
-          <input matInput [(ngModel)]="user.postalCode" name="postalCode" />
+          <input matInput [(ngModel)]="user.postalCode" />
         </mat-form-field>
-        <button mat-raised-button class="follow-button" type="submit" (click)="updateProfile()">Update Profile</button>
-        
+        <button mat-raised-button class="follow-button" (click)="updateProfile()">Update Profile</button>
       </div>
     </mat-card>
 
-    <!-- Kartica za promenu lozinke -->
-    <mat-card class="password-card" *ngIf="showDetails">
+    <!-- Change Password Form -->
+    <mat-card class="password-card">
       <h3>Change Password</h3>
       <form (ngSubmit)="changePassword()">
         <mat-form-field appearance="fill">
@@ -116,36 +112,14 @@
           <mat-label>Confirm New Password</mat-label>
           <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required />
         </mat-form-field>
-        <button mat-raised-button type="submit" class="follow-button" (click)="changePassword()">Change Password</button>
+        <button mat-raised-button type="submit" class="follow-button">Change Password</button>
       </form>
     </mat-card>
-    </div>
+  </div>
 
-    <ng-container *ngIf="currentView === 'my-posts' && myPostsClick" >
-      <app-my-posts></app-my-posts>
-    </ng-container>
-
-    <div class="followers-following">
-      <div>
-        <ul *ngIf="showFollowers">
-          <p>Followers</p>
-          <li *ngFor="let follower of followersList">
-            {{ follower.name }} {{ follower.surname }}
-          </li>
-        </ul>
-      </div>
-      
-      <div>
-        <ul *ngIf="showFollowing">
-          <p>Following</p>
-          <li *ngFor="let followee of followingList">
-            {{ followee.name }} {{ followee.surname }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    
-
-  
+  <!-- INACE PRIKAZI MOJE POSTOVE -->
+  <div *ngIf="!showSettings">
+    <app-my-posts></app-my-posts>
+  </div>
 
 </div>

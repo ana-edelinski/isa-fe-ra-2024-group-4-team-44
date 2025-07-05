@@ -1,0 +1,142 @@
+.dialog-content {
+  padding: 16px 24px;
+  background-color: #fdfdfd;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.dialog-header button {
+  color: #28705e;
+  transition: background-color 0.2s;
+  border-radius: 50%;
+}
+
+.dialog-header button:hover {
+  background-color: rgba(40, 112, 94, 0.08);
+}
+
+
+.dialog-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #28705e;
+  margin: 0;
+}
+
+
+
+.full-width {
+  width: 100%;
+}
+
+.users-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.users-section h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #28705e;
+  font-weight: 600;
+}
+
+.user-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+
+.user-list button {
+  background-color: #ffffff;
+  border: 1px solid #28705e;
+  color: #28705e;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+  min-width: auto;
+  white-space: nowrap;
+}
+
+
+.user-list button.selected {
+  background-color: #28705e;
+  color: #f1dbde;
+}
+
+
+.user-list button[color="primary"] {
+  background-color: #28705e;
+  color: #f1dbde;
+  border-color: #28705e;
+}
+
+.more-users-button {
+  min-width: 40px;
+  padding: 4px 8px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 16px;
+  border: 1px solid #28705e;
+  color: #28705e;
+  background-color: #ffffff;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.more-users-button:hover {
+  background-color: #28705e;
+  color: #f1dbde;
+}
+
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  padding-top: 12px;
+}
+
+
+.dialog-actions button {
+  background-color: #28705e;
+  color: #f1dbde;
+  font-size: 13px;
+  padding: 6px 20px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  min-height: 36px;
+  min-width: 100px;
+  max-width: 200px;
+  width: auto;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  border: none;
+  align-self: center;
+}
+
+
+.dialog-actions button:hover {
+  background-color: #215a4c;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.dialog-actions button:disabled {
+  background-color: #b0b0b0;
+  color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+

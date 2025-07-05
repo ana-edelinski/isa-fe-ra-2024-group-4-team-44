@@ -9,10 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MyPostsComponent } from '../my-posts/my-posts.component';
-import { UserInfoComponent } from '../user-info/user-info/user-info.component';
+import { UserInfoComponent } from '../user-info/user-info.component';
+import { PostService } from '../post.service';
+import { Post } from '../model/post.model';
 
 @Component({
   selector: 'app-profile',
@@ -35,91 +37,170 @@ export class ProfileComponent implements OnInit,  OnDestroy{
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
   loggedInUserId: number  | null = null;
-  
-    followers: number = 150;  
-    following: number = 120;
-    showDetails: boolean = false;
-    myPostsClick: boolean = false;
-    currentView: string = 'posts';
 
-    followersList: User[] = [];
-    followingList: User[] = [];
-    
-    showFollowers: boolean = false;
-    showFollowing: boolean = false;
+  showDetails: boolean = false;
+  myPostsClick: boolean = false;
+  currentView: string = 'posts';
+  isFollowing: boolean = false;
+  isMyProfile: boolean = false;
+  followingCount: number = 0; 
+  followersCount: number = 0; 
+  isModalOpen = false;
+  modalTitle = '';
+  modalUsers: User[] = [];
+  posts: Post[] = [];
 
+  showSettings: boolean = false;
 
-
-  constructor(private authService: AuthService, private userService: UserService, private router: Router) {}
+  constructor(public authService: AuthService,
+              private userService: UserService, 
+              private router: Router, 
+              private route: ActivatedRoute,
+              private postService: PostService) {}
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()) {
-      this.getUserProfile();
-      this.getFollowersAndFollowing();
-    } else {
-      this.router.navigate(['/login']);
+  if (this.authService.isAuthenticated()) {
+    const loggedInUserId = this.authService.getLoggedInUserId();
+    if (loggedInUserId) {
+      this.fetchUserProfile(loggedInUserId);
+      this.fetchUserPosts(loggedInUserId);
+      this.fetchFollowers(loggedInUserId);
+      this.fetchFollowing(loggedInUserId);
+      this.isMyProfile = true;
+    }
+  } else {
+    this.router.navigate(['/login']);
+  }
+}
+
+
+  checkIfMyProfile(userId: number): void {
+    const loggedInUserId = this.authService.getLoggedInUserId();
+    this.isMyProfile = loggedInUserId === userId;
+  }
+  
+  fetchUserProfile(userId: number): void {
+    this.authService.getProfileByUserId(userId).subscribe((data) => {
+      this.user = {
+        ...data,
+        avatar: data.avatar || 'assets/default-avatar.jpg',
+        street: data.street || 'Street not provided',
+        city: data.city || 'City not provided',
+        postalCode: data.postalCode || ''
+      };
+    });
+  }
+
+  fetchUserPosts(userId: number): void {
+      this.postService.getPostsBySpecificUser(userId).subscribe(
+        (data: Post[]) => {
+          this.posts = data;
+          this.posts.forEach(post => {
+            post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+          });
+          console.log('Fetched posts:', this.posts);
+        },
+        (error) => {
+          console.error('Error fetching posts:', error);
+        }
+      );
+    }  
+  
+    likeUnlikePost(postId: number): void {
+      if (!this.authService.isAuthenticated()) {
+        console.warn('User is not logged in. Liking/unliking is disabled.');
+        this.router.navigate(['/login']);
+        return;
+      }
+    
+      const loggedInUserId = this.authService.getLoggedInUserId();
+      if (loggedInUserId) {
+        this.postService.likeUnlikePost(postId, loggedInUserId).subscribe(
+          () => {
+            console.log('Post liked/unliked successfully');
+            this.fetchUserPosts(this.user.id as number);
+          },
+          (error) => {
+            console.error('Error liking/unliking post:', error);
+          }
+        );
+      }
+    }
+
+    viewDetails(postId: number): void {
+    this.router.navigate(['post-details', postId]);
+  }
+
+  fetchFollowers(userId: number): void {
+    this.authService.getFollowers(userId).subscribe(
+      (followers) => {
+        this.followersCount = followers.length; 
+      },
+      (error) => {
+        console.error('Error fetching followers:', error);
+      }
+    );
+  }
+  
+  fetchFollowing(userId: number): void {
+    this.authService.getFollowing(userId).subscribe(
+      (following) => {
+        this.followingCount = following.length; 
+      },
+      (error) => {
+        console.error('Error fetching following:', error);
+      }
+    );
+  }
+
+  showModal(type: 'followers' | 'following'): void {
+    this.isModalOpen = true;
+    if (type === 'followers') {
+      this.modalTitle = 'Followers';
+      this.authService.getFollowers(this.user.id as number).subscribe(
+        (followers) => {
+          this.modalUsers = followers;
+        },
+        (error) => {
+          console.error('Error fetching followers:', error);
+        }
+      );
+    } else if (type === 'following') {
+      this.modalTitle = 'Following';
+      this.authService.getFollowing(this.user.id as number).subscribe(
+        (following) => {
+          this.modalUsers = following;
+        },
+        (error) => {
+          console.error('Error fetching following:', error);
+        }
+      );
     }
   }
+
+  navigateToProfile(userId: number | undefined): void {
+    console.log('Navigating to profile with ID:', userId);
+    if (userId !== undefined) {
+      this.closeModal(); 
+      this.router.navigate(['/user'], { queryParams: { userId: userId } });
+    } else {
+      console.error('User ID is undefined.');
+    }
+  }
+  
+  
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
+
+    toggleSettings() {
+      this.showSettings = !this.showSettings;
+    }
   
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
-  }
-
-
-
-toggleFollowers(): void {
-  this.showFollowers = !this.showFollowers;
-  this.showFollowing = false;
-  this.showDetails = false;
-  this.myPostsClick = false;
-}
-
-toggleFollowing(): void {
-  this.showFollowing = !this.showFollowing;
-  this.showFollowers = false;
-  this.showDetails = false;
-  this.myPostsClick = false;
-}
-
-  getFollowersAndFollowing(): void {
-    const userId = this.authService.getLoggedInUserId();
-    if (userId) {
-      this.authService.getFollowers(userId).subscribe(
-        (followers) => {
-          this.followersList = followers;
-          console.log('Followers:', followers);
-        },
-        (error) => console.error('Error fetching followers', error)
-      );
-  
-      this.authService.getFollowing(userId).subscribe(
-        (following) => {
-          this.followingList = following;
-          console.log('Following:', following);
-        },
-        (error) => console.error('Error fetching following', error)
-      );
-    } else {
-      console.error('User ID is not available');
-    }
-  }
-  getUserProfile(): void {
-    this.userSubscription = this.authService.getUserProfile().subscribe(
-      (data) => {
-        if (data) {
-          this.user = data;
-          console.log('User profile fetched successfully', data);
-        } else {
-          console.error('No user profile data available');
-        }
-      },
-      (error) => {
-        console.error('Error fetching user profile', error);
-        this.router.navigate(['/login']);
-      }
-    );
   }
   
   updateProfile(): void {
@@ -154,19 +235,4 @@ toggleFollowing(): void {
     }
   }
   
-  toggleDetails() {
-    this.showDetails = !this.showDetails;
-    this.myPostsClick = false;
-    this.showFollowers =false;
-    this.showFollowing = false;
-
-  }
-
-  myPosts() {
-    this.myPostsClick =!this.myPostsClick;
-    this.currentView = 'my-posts'; 
-    this.showDetails = false;
-    this.showFollowers =false;
-    this.showFollowing = false;
-  }
 }

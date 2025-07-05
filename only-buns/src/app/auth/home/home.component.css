@@ -42,6 +42,11 @@ button mat-icon {
   margin-left: 8px;
 }
 
+.bunnies-button {
+  width: 170px; 
+}
+
+
 /* Stil za main-container */
 .main-container {
   display: flex;

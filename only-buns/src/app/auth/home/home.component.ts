@@ -199,5 +199,9 @@ export class HomeComponent {
   analytics() {
     this.router.navigate(['analytics'], { relativeTo: this.router.routerState.root });
   }
+
+  userChats() {
+    this.router.navigate(['/user-chat']);
+  }
   
 }
