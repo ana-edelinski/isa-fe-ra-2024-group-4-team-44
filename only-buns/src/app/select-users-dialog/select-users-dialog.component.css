@@ -1,0 +1,74 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #ddd;
+}
+
+.dialog-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #28705e;
+  margin: 0;
+}
+
+.dialog-content {
+  padding: 16px 24px;
+}
+
+.users-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.users-list button {
+  background-color: #ffffff;
+  border: 1px solid #28705e;
+  color: #28705e;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.users-list button.selected {
+  background-color: #28705e;
+  color: #f1dbde;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.dialog-actions button {
+  background-color: #28705e;
+  color: #f1dbde;
+  font-size: 13px;
+  padding: 4px 16px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  min-width: 80px;
+  max-width: 150px;
+  width: auto;
+  transition: background-color 0.2s;
+  align-self: center;
+}
+
+
+.dialog-actions button:hover {
+  background-color: #215a4c;
+}
+
+.users-list button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  border: 1px solid #aaaaaa;
+}
+

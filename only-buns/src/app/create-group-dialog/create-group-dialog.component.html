@@ -1,0 +1,45 @@
+<div class="dialog-header">
+  <h2 class="dialog-title">Create New Group</h2>
+  <button mat-icon-button (click)="cancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+
+<div class="dialog-content">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Group Name</mat-label>
+    <input matInput [(ngModel)]="groupName" />
+  </mat-form-field>
+
+  <div class="users-section">
+    <h4>Select Users</h4>
+    <div class="user-list">
+    <button
+        *ngFor="let user of visibleUsers"
+        mat-button
+        [class.selected]="selectedUsers.includes(user)"
+        (click)="toggleUser(user)">
+        {{ user.username }}
+    </button>
+
+    <button
+        *ngIf="hasMoreUsers"
+        mat-stroked-button
+        class="more-users-button"
+        (click)="openMoreUsersDialog()">
+        See all
+    </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="dialog-actions">
+  <button mat-raised-button color="primary"
+          (click)="createGroup()"
+          [disabled]="!groupName || selectedUsers.length === 0">
+    Create
+  </button>
+</div>
+

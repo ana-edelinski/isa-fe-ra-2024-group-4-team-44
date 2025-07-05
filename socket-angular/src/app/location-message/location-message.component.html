@@ -1,0 +1,29 @@
+
+<div class="form-container">
+      <h3 class="page-header text-center">Location Message</h3>
+    <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+      <label for="id">ID</label>
+      <input id="id" formControlName="id" type="number" placeholder="Enter ID" />
+  
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" type="text" placeholder="Enter location name" />
+  
+      <label for="street">Street</label>
+      <input id="street" formControlName="street" type="text" placeholder="Enter street" />
+  
+      <label for="city">City</label>
+      <input id="city" formControlName="city" type="text" placeholder="Enter city" />
+  
+      <label for="postalCode">Postal Code</label>
+      <input id="postalCode" formControlName="postalCode" type="text" placeholder="Enter postal code" />
+  
+      <label for="latitude">Latitude</label>
+      <input id="latitude" formControlName="latitude" type="number" placeholder="Enter latitude" />
+  
+      <label for="longitude">Longitude</label>
+      <input id="longitude" formControlName="longitude" type="number" placeholder="Enter longitude" />
+  
+      <button type="submit" [disabled]="locationForm.invalid">Send</button>
+    </form>
+  </div>
+  
