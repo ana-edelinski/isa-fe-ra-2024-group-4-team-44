@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Observable, Subject } from 'rxjs';
 // import * as Stomp from 'stompjs';
 // import * as SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
-import { AuthService } from '../app/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 export interface ChatMessageDTO {
   content: string;

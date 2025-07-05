@@ -15,7 +15,7 @@ import { TrendsComponent } from './trends/trends.component';
 import { PostsOnMapComponent } from './posts-on-map/posts-on-map.component';
 import { ChatsComponent } from './chats/chats.component';
 import { AnalyticsComponent } from './admin/analytics/analytics.component';
-import { UserChatComponent } from '../user-chat/user-chat.component';
+import { UserChatComponent } from '../app/user-chat/user-chat.component';
 
 export const routes: Routes = [
     {

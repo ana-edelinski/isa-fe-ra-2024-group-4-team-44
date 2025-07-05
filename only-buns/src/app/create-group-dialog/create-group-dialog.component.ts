@@ -8,8 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
-import { SimpleUserDTO } from '../app/model/simple-user-dto';
-import { AuthService } from '../app/auth/auth.service';
+import { SimpleUserDTO } from '../model/simple-user-dto';
+import { AuthService } from '../auth/auth.service';
 import { GroupService } from '../services/group.service';
 
 @Component({

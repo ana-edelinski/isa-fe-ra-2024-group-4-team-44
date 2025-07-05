@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GroupRequestDTO } from '../app/model/group-request.model';
-import { GroupResponseDTO } from '../app/model/group-response.model';
-import { AuthService } from '../app/auth/auth.service';
+import { GroupRequestDTO } from '../model/group-request.model';
+import { GroupResponseDTO } from '../model/group-response.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'

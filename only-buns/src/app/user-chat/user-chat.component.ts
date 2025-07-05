@@ -9,10 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
 import { GroupService } from '../services/group.service';
-import { GroupResponseDTO } from '../app/model/group-response.model';
+import { GroupResponseDTO } from '../model/group-response.model';
 import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
-import { SimpleUserDTO } from '../app/model/simple-user-dto';
-import { AuthService } from '../app/auth/auth.service';
+import { SimpleUserDTO } from '../model/simple-user-dto';
+import { AuthService } from '../auth/auth.service';
 import { ChatService, ChatMessageDTO } from '../services/chat.service';
 import { Subscription } from 'rxjs';
 
