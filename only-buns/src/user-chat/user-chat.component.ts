@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,14 +10,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
 import { GroupService } from '../services/group.service';
 import { GroupResponseDTO } from '../app/model/group-response.model';
-import { OnInit } from '@angular/core';
 import { SelectUsersDialogComponent } from '../select-users-dialog/select-users-dialog.component';
 import { SimpleUserDTO } from '../app/model/simple-user-dto';
 import { AuthService } from '../app/auth/auth.service';
 import { ChatService, ChatMessageDTO } from '../services/chat.service';
+import { Subscription } from 'rxjs';
 
-
-//TODO: premesti u model
 interface ChatMessage { 
   senderId: number;
   senderName: string;
@@ -53,11 +51,13 @@ export class UserChatComponent implements OnInit, OnDestroy {
   allUsers: SimpleUserDTO[] = [];
   wsConnected = false;
 
+  private messageSubscription: Subscription | null = null;
 
-  constructor(private dialog: MatDialog,
-              private groupService: GroupService,
-              private authService: AuthService,
-              private chatService: ChatService
+  constructor(
+    private dialog: MatDialog,
+    private groupService: GroupService,
+    private authService: AuthService,
+    private chatService: ChatService
   ) { }
 
   ngOnInit(): void {
@@ -72,9 +72,7 @@ export class UserChatComponent implements OnInit, OnDestroy {
       next: (groups) => {
         this.chatList = groups;
       },
-      error: (err) => {
-        console.error('Error loading groups:', err);
-      }
+      error: (err) => console.error('Error loading groups:', err)
     });
   }
 
@@ -86,6 +84,7 @@ export class UserChatComponent implements OnInit, OnDestroy {
   }
 
   maxVisibleUsers = 3;
+
   toggleUser(user: SimpleUserDTO) {
     if (this.selectedUsers.some(u => u.id === user.id)) {
       this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
@@ -100,11 +99,10 @@ export class UserChatComponent implements OnInit, OnDestroy {
     this.loadMessages(chat.id);
   }
 
-
   loadMessages(chatId: number) {
     this.messages = [];
 
-    // UMESTO getLast10
+    // 1. REST poziv za celu istoriju
     this.chatService.getAllMessages(chatId).subscribe({
       next: (msgs) => {
         this.messages = msgs.map(dto => this.mapDtoToChatMessage(dto));
@@ -112,20 +110,26 @@ export class UserChatComponent implements OnInit, OnDestroy {
       error: (err) => console.error('Error loading messages:', err)
     });
 
+    // 2. Diskonektuj WebSocket ako je već bio povezan
     if (this.wsConnected) {
       this.chatService.disconnect();
       this.wsConnected = false;
     }
 
+    // 3. Otvori WebSocket konekciju
     this.chatService.connect(chatId);
     this.wsConnected = true;
 
-    this.chatService.getMessages().subscribe((msg) => {
+    // 4. Odjavi prethodnu subscription (da se ne duplira)
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
+
+    // 5. Slušaj nove poruke sa WS
+    this.messageSubscription = this.chatService.getMessages().subscribe((msg) => {
       this.messages.push(this.mapDtoToChatMessage(msg));
     });
   }
-
-
 
   sendMessage() {
     if (!this.newMessage.trim() || !this.activeChat) return;
@@ -146,9 +150,6 @@ export class UserChatComponent implements OnInit, OnDestroy {
     this.newMessage = '';
   }
 
-
-
-
   openAdminPanel() {
     const active = this.activeChat;
     if (!active) {
@@ -157,37 +158,33 @@ export class UserChatComponent implements OnInit, OnDestroy {
     }
 
     this.dialog.open(SelectUsersDialogComponent, {
-    width: '400px',
-    data: {
-      users: this.allUsers,
-      preselected: this.allUsers.filter(u => active.memberIds.includes(u.id)),
-      currentUserId: this.currentUserId
-    }
-  }).afterClosed().subscribe((selected: SimpleUserDTO[] | undefined) => {
-    if (!selected) {
-      console.log('User cancelled dialog');
-      return;
+      width: '400px',
+      data: {
+        users: this.allUsers,
+        preselected: this.allUsers.filter(u => active.memberIds.includes(u.id)),
+        currentUserId: this.currentUserId
+      }
+    }).afterClosed().subscribe((selected: SimpleUserDTO[] | undefined) => {
+      if (!selected) {
+        console.log('User cancelled dialog');
+        return;
+      }
+
+      const newMemberIds = selected.map(u => u.id);
+
+      if (this.currentUserId !== null && !newMemberIds.includes(this.currentUserId)) {
+        newMemberIds.push(this.currentUserId);
+      }
+
+      this.groupService.updateGroupMembers(active.id, newMemberIds).subscribe({
+        next: () => {
+          console.log('Group members updated!');
+          active.memberIds = newMemberIds;
+        },
+        error: (err) => console.error('Error updating group members:', err)
+      });
+    });
   }
-
-  const newMemberIds = selected.map(u => u.id);
-
-  if (this.currentUserId !== null && !newMemberIds.includes(this.currentUserId)) {
-      newMemberIds.push(this.currentUserId);
-    }
-
-  this.groupService.updateGroupMembers(active.id, newMemberIds).subscribe({
-    next: () => {
-      console.log('Group members updated!');
-      active.memberIds = newMemberIds;
-    },
-    error: (err) => console.error('Error updating group members:', err)
-  });
-});
-
-}
-
-
-
 
   openCreateGroup() {
     const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
@@ -199,7 +196,7 @@ export class UserChatComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('New Group Created (from dialog):', result);
-        this.chatList.push(result);  // dialog je već kreirao i vratio GroupResponseDTO
+        this.chatList.push(result);
       }
     });
   }
@@ -213,9 +210,10 @@ export class UserChatComponent implements OnInit, OnDestroy {
     };
   }
 
-
   ngOnDestroy(): void {
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
     this.chatService.disconnect();
   }
-
 }
