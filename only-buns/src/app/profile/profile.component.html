@@ -92,6 +92,14 @@
           <mat-label>Postal Code</mat-label>
           <input matInput [(ngModel)]="user.postalCode" />
         </mat-form-field>
+                <mat-form-field appearance="fill">
+        <mat-label>Longitude</mat-label>
+          <input matInput [(ngModel)]="user.longitude" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Latitude</mat-label>
+          <input matInput [(ngModel)]="user.latitude" />
+        </mat-form-field>
         <button mat-raised-button class="follow-button" (click)="updateProfile()">Update Profile</button>
       </div>
     </mat-card>
