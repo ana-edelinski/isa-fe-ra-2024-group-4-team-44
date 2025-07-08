@@ -15,6 +15,7 @@ import { SimpleUserDTO } from '../model/simple-user-dto';
 import { AuthService } from '../auth/auth.service';
 import { ChatService, ChatMessageDTO } from '../services/chat.service';
 import { Subscription } from 'rxjs';
+import { ElementRef, ViewChild } from '@angular/core';
 
 interface ChatMessage { 
   senderId: number;
@@ -39,8 +40,10 @@ interface ChatMessage {
   styleUrls: ['./user-chat.component.css']
 })
 export class UserChatComponent implements OnInit, OnDestroy {
-  chatList: GroupResponseDTO[] = [];
 
+  @ViewChild('messagesContainer') messagesContainer!: ElementRef<HTMLDivElement>;
+
+  chatList: GroupResponseDTO[] = [];
   activeChat: GroupResponseDTO | null = null;
   messages: ChatMessage[] = [];
   newMessage = '';
@@ -102,34 +105,39 @@ export class UserChatComponent implements OnInit, OnDestroy {
   loadMessages(chatId: number) {
     this.messages = [];
 
-    // 1. REST poziv za celu istoriju
-    this.chatService.getAllMessages(chatId).subscribe({
+    if (!this.currentUserId) {
+      console.error('User ID not found!');
+      return;
+    }
+
+    // 1. REST poziv za istoriju za ovog korisnika
+    this.chatService.getHistoryForUser(chatId, this.currentUserId).subscribe({
       next: (msgs) => {
         this.messages = msgs.map(dto => this.mapDtoToChatMessage(dto));
+        this.scrollToBottom();
       },
       error: (err) => console.error('Error loading messages:', err)
     });
 
-    // 2. Diskonektuj WebSocket ako je već bio povezan
+    // 2. WebSocket
     if (this.wsConnected) {
       this.chatService.disconnect();
       this.wsConnected = false;
     }
 
-    // 3. Otvori WebSocket konekciju
     this.chatService.connect(chatId);
     this.wsConnected = true;
 
-    // 4. Odjavi prethodnu subscription (da se ne duplira)
     if (this.messageSubscription) {
       this.messageSubscription.unsubscribe();
     }
 
-    // 5. Slušaj nove poruke sa WS
     this.messageSubscription = this.chatService.getMessages().subscribe((msg) => {
       this.messages.push(this.mapDtoToChatMessage(msg));
+      this.scrollToBottom(); 
     });
   }
+
 
   sendMessage() {
     if (!this.newMessage.trim() || !this.activeChat) return;
@@ -209,6 +217,15 @@ export class UserChatComponent implements OnInit, OnDestroy {
       timestamp: dto.timestamp ? new Date(dto.timestamp) : new Date()
     };
   }
+
+  private scrollToBottom(): void {
+    try {
+      this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Scroll error:', err);
+    }
+  }
+
 
   ngOnDestroy(): void {
     if (this.messageSubscription) {

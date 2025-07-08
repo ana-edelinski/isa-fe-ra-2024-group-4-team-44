@@ -33,4 +33,14 @@ export class GroupService {
     return this.http.get<GroupResponseDTO[]>(`${this.apiUrl}/my`, { headers });
   }
 
+  addMembers(groupId: number, newMemberIds: number[]): Observable<void> {
+    const headers = this.authService.getHeaders();
+    return this.http.post<void>(
+      `${this.apiUrl}/${groupId}/add-members`,
+      newMemberIds,
+      { headers }
+    );
+  }
+
+
 }

@@ -1,8 +1,17 @@
-.map-frame {
+/*.map-frame {
     border: 2px solid black;
   }
   
   #map {
     height: 600px;
-  }
-  
+  }*/
+  .map-frame {
+  border: 2px solid black;
+  height: 600px;      /* Dodaj visinu roditelju */
+  width: 100%;        /* Ili fiksna širina ako želiš */
+}
+
+#map {
+  height: 100%;       /* Visina 100% da zauzme roditelja */
+  width: 100%;        /* Isto i širina */
+}

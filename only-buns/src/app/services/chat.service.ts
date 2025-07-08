@@ -65,5 +65,12 @@ export class ChatService {
     );
   }
 
+  getHistoryForUser(groupId: number, userId: number): Observable<ChatMessageDTO[]> {
+    return this.http.get<ChatMessageDTO[]>(
+      `${environment.url}api/groupchat/${groupId}/history/${userId}`,
+      { headers: this.authService.getHeaders() }
+    );
+  }
+
 
 }

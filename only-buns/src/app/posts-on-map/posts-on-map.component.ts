@@ -62,7 +62,7 @@ export class PostsOnMapComponent implements AfterViewInit {
         this.L.Marker.prototype.options.icon = DefaultIcon;
 
         this.loadUser();
-        this.loadPosts();
+        //this.loadPosts();
         this.loadLocationMessages();
       });
     }
@@ -79,6 +79,7 @@ export class PostsOnMapComponent implements AfterViewInit {
           if (this.user.latitude && this.user.longitude) {
             this.map.setView([this.user.latitude, this.user.longitude], 13);
           }
+          this.loadPosts();
         } else {
           console.error('No user profile data available');
         }
@@ -96,6 +97,11 @@ export class PostsOnMapComponent implements AfterViewInit {
         console.log('Fetched all posts:', this.posts);
 
         this.posts.forEach(post => {
+            if (this.user && post.creatorId === this.user.id) {
+              return;
+            }
+          console.log('Post coords:', post.locationLatitude, post.locationLongitude);
+          console.log('Post object:', post)
           if (post.locationLatitude && post.locationLongitude) {
             const marker = this.L.marker([post.locationLatitude, post.locationLongitude]).addTo(this.map);
             marker.bindPopup(`<b>${post.creatorUsername}</b><br>${post.description}`);

@@ -55,7 +55,6 @@ export class CreateGroupDialogComponent {
           return;
         }
 
-        // Da li već postoji među selektovanima?
         const alreadySelected = this.selectedUsers.some(u => u.id === loggedInId);
 
         if (!alreadySelected) {
@@ -78,7 +77,7 @@ export class CreateGroupDialogComponent {
 toggleUser(user: SimpleUserDTO) {
     const loggedInId = this.authService.getLoggedInUserId();
     if (user.id === loggedInId) {
-      return; // ne dozvoli da sebe izbaci iz selekcije
+      return; 
     }
 
     if (this.selectedUsers.some(u => u.id === user.id)) {
