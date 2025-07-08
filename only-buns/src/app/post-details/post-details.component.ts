@@ -80,13 +80,20 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
               }
             },
             error: (err) => {
-              console.log("Error adding comment:", err);
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'An error occurred. Please try again.',
-                confirmButtonColor: '#28705e'
-              });
+              console.error('Error adding comment:', err);
+              if (err.status === 429) {
+                Swal.fire(
+                  'Limit Exceeded',
+                  'You have exceeded the comment limit of 60 per hour. Please try again later.',
+                  'warning'
+                );
+              } else {
+                Swal.fire(
+                  'Oops...',
+                  'An error occurred. Please try again.',
+                  'error'
+                );
+              }
             }
           });
       

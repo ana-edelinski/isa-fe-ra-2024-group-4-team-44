@@ -18,7 +18,7 @@
           <mat-icon>favorite</mat-icon> 
           <span>{{ post.likeCount }}</span>
         </div>
-        <div class="post-comments" (click)="isAddingComment = !isAddingComment">
+        <div class="post-comments" (click)="post.showCommentBox = !post.showCommentBox">
           <mat-icon>add_comment</mat-icon> {{ post.comments.length }} 
         </div>
         <button mat-button (click)="viewDetails(post.id)">View Details</button>
@@ -38,15 +38,15 @@
           <p class="comment-text">{{ comment.text }}</p>
         </div>
       </div>
-      <div class="comment-input-wrapper" *ngIf="isAddingComment && isLoggedIn">
+      <div class="comment-input-wrapper" *ngIf="post.showCommentBox && isLoggedIn">
         <textarea
-          [(ngModel)]="newCommentText"
+          [(ngModel)]="post.newCommentText"
           placeholder="Write your comment..."
           rows="2"
           class="comment-textarea"
         ></textarea>
 
-        <button class="comment-submit-button" (click)="commentOnPost(post)" [disabled]="!newCommentText.trim()">
+        <button class="comment-submit-button" (click)="commentOnPost(post)" [disabled]="!post.newCommentText?.trim()">
           +
         </button>
       </div>

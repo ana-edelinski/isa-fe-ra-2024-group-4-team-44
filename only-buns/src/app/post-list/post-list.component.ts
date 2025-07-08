@@ -54,6 +54,8 @@ export class PostListComponent implements OnInit {
           this.posts.forEach(post => {
             post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
             post.comments.sort((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime());
+            post.newCommentText = '';
+            post.showCommentBox = false;
           });
           console.log('Fetched posts from following:', this.posts);
         },
@@ -105,7 +107,7 @@ export class PostListComponent implements OnInit {
     }
     const newComment: Comment = {
         id: 100,
-        text: this.newCommentText,
+        text: post.newCommentText || "",
         creationTime: new Date(),
         userId: 100,
         username: "",
@@ -122,19 +124,26 @@ export class PostListComponent implements OnInit {
                 confirmButtonColor: '#28705e'
               });
               post.comments.unshift(result);
-              this.isAddingComment = false;
+              post.showCommentBox = false;
             } else {
               alert('An error has occurred. Please try again.');
             }
           },
           error: (err) => {
             console.log("Error adding comment:", err);
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'An error occurred. Please try again.',
-              confirmButtonColor: '#28705e'
-            });
+            if (err.status === 429) {
+              Swal.fire(
+                'Limit Exceeded',
+                'You have exceeded the comment limit of 60 per hour. Please try again later.',
+                'warning'
+              );
+            } else {
+              Swal.fire(
+                'Oops...',
+                'An error occurred. Please try again.',
+                'error'
+              );
+            }
           }
         });
     
