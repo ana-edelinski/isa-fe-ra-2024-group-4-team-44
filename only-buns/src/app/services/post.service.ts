@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
-import { Post } from './model/post.model';
-import { AuthService } from './auth/auth.service';
+import { Post } from '../model/post.model';
+import { AuthService } from '../auth/auth.service';
 import { response } from 'express';
 
 @Injectable({

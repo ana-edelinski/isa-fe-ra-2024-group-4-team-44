@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { User } from '../profile/user.model';
 import { Post } from '../model/post.model';
 import { AuthService } from '../auth/auth.service';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { MapsService } from './maps.service';
 
 

@@ -3,7 +3,7 @@ import { User } from '../profile/user.model';
 import { Post } from '../model/post.model';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';

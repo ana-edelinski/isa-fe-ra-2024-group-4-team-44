@@ -62,9 +62,6 @@ export class LoginComponent {
           console.log(this.user.id);
           let date = new Date();
           console.log(date);
-          this.userService.changeLastActivity(this.user.id, date).subscribe({
-            
-          })
           this.router.navigate(['/']);
         },
         error: (err) => {

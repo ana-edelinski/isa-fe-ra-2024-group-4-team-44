@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TrendsService } from './trends.service';
 import { CommonModule } from '@angular/common';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { Post } from '../model/post.model';

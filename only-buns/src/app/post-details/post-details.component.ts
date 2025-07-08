@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { Post } from '../model/post.model';
 import { User } from '../profile/user.model';
 import { MatIcon } from '@angular/material/icon';
@@ -9,19 +9,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { PostEditComponent } from './post-edit/post-edit.component';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { CommentService } from '../services/comment.service';
+import { Comment } from '../model/post.model';
 
 @Component({
   selector: 'app-post-details',
   standalone: true,
-  imports: [CommonModule, MatIcon],
+  imports: [CommonModule, MatIcon, FormsModule],
   templateUrl: './post-details.component.html',
   styleUrl: './post-details.component.css'
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
   post: Post | null = null;
   likesCount: number = 0;
+  newCommentText: string = '';
 
-  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService, private dialog: MatDialog) {}
+  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router, private authService: AuthService, private dialog: MatDialog, private commentService:CommentService) {}
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
 
@@ -42,11 +47,52 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
           this.post = data;
           this.post.imagePath = `${this.post.imagePath}?timestamp=${new Date().getTime()}`;
           this.likesCount = data.likeCount;
+          this.post.comments.sort((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime());
         },
         (error) => console.error('Error fetching post details:', error)
       );
     }
   }
+
+
+  commentOnPost(post: Post): void {
+      const newComment: Comment = {
+          id: 100,
+          text: this.newCommentText,
+          creationTime: new Date(),
+          userId: 100,
+          username: "",
+          postId: post.id         
+          };
+      this.commentService.createComment(newComment).subscribe({
+            next: (result: Comment) => {
+              if (result) {
+                this.newCommentText = "";
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Success!',
+                  text: 'Comment posted successfully!',
+                  confirmButtonColor: '#28705e'
+                });
+                post.comments.unshift(result);
+              } else {
+                alert('An error has occurred. Please try again.');
+              }
+            },
+            error: (err) => {
+              console.log("Error adding comment:", err);
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred. Please try again.',
+                confirmButtonColor: '#28705e'
+              });
+            }
+          });
+      
+      
+  
+    }
 
   ngOnDestroy(): void {
     if (this.userSubscription) {

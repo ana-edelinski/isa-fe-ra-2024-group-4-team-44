@@ -19,7 +19,7 @@ export interface Post {
 export interface Comment {
     id: number;
     text: string;
-    creationTime: string;
+    creationTime: Date;
     userId: number;
     username: string;
     postId: number;

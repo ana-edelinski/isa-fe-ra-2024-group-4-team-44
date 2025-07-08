@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { Post } from '../model/post.model';
 import { User } from '../profile/user.model';
 import { AuthService } from '../auth/auth.service';

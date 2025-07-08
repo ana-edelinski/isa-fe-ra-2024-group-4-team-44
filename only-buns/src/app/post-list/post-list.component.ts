@@ -1,28 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { Router } from '@angular/router'; 
 import { AuthService } from '../auth/auth.service';
 import { Post } from '../model/post.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-
+import { CommentService } from '../services/comment.service';
+import { Comment } from '../model/post.model';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule,  MatCardModule],
+  imports: [CommonModule, MatIconModule,  MatCardModule, FormsModule],
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.css'
 })
 export class PostListComponent implements OnInit {
 
   isLoggedIn: boolean = false;
+  isAddingComment: boolean = false;
+  newCommentText: string = '';
+  
 
-  constructor(private postService: PostService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {} 
+  constructor(private postService: PostService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private commentService: CommentService) {} 
   
   posts: Post[] = [];
   likesCount: number = 0;
@@ -48,6 +53,7 @@ export class PostListComponent implements OnInit {
           this.posts = data;
           this.posts.forEach(post => {
             post.imagePath = `http://localhost:8080${post.imagePath}?timestamp=${new Date().getTime()}`;
+            post.comments.sort((a, b) => new Date(b.creationTime).getTime() - new Date(a.creationTime).getTime());
           });
           console.log('Fetched posts from following:', this.posts);
         },
@@ -92,11 +98,48 @@ export class PostListComponent implements OnInit {
     }
   }
 
-  commentOnPost(): void {
+  commentOnPost(post: Post): void {
     if (this.isLoggedIn) {
     } else {
       this.showLoginNotification();
     }
+    const newComment: Comment = {
+        id: 100,
+        text: this.newCommentText,
+        creationTime: new Date(),
+        userId: 100,
+        username: "",
+        postId: post.id         
+        };
+    this.commentService.createComment(newComment).subscribe({
+          next: (result: Comment) => {
+            if (result) {
+              this.newCommentText = "";
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Comment posted successfully!',
+                confirmButtonColor: '#28705e'
+              });
+              post.comments.unshift(result);
+              this.isAddingComment = false;
+            } else {
+              alert('An error has occurred. Please try again.');
+            }
+          },
+          error: (err) => {
+            console.log("Error adding comment:", err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'An error occurred. Please try again.',
+              confirmButtonColor: '#28705e'
+            });
+          }
+        });
+    
+    
+
   }
 
   showLoginNotification(): void {

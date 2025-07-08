@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 import { Router } from '@angular/router';
 import { Post } from '../model/post.model';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../profile/user.model';
 import { Subscription } from 'rxjs';
