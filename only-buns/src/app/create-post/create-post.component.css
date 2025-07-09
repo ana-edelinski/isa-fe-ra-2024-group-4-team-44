@@ -1,60 +1,70 @@
-.center-container {
-    display: flex;
-    justify-content: center; /* Centriranje horizontalno */
-    align-items: flex-start; /* Pozicionira na vrh stranice */
-    height: 40vh; /* Podesite visinu na 100% visine ekrana */
-    width: 100%;
-    margin: 0;
-  }
-  
-  .post-card {
-    width: 80%; /* Postavite širinu kartice na 60% prozora */
-    padding: 20px;
-    box-sizing: border-box;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #fff;
-  }
-  
-  .post-creation-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .post-text {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-  
-  .address-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .address-input {
-    width: 100%;
-  }
-  
-  .upload-label {
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .image-upload input[type="file"] {
-    margin-top: 8px;
-  }
-  
-  .post-button {
-    width: 40%;
-    margin-top: 20px;
-    margin-left: 150px;
-  }
+.post-card {
+  width: 90%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: #fff;
+}
 
-  .close-button {
-    width: 40%;
-    margin-top: 20px;
-    margin-left: 10px;
-  }
-  
+.post-text textarea {
+  resize: none;
+}
+
+h2 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.form-map-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  height: 100%;
+}
+
+.form-section,
+.map-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.leaflet-map {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.post-creation-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.post-text {
+  width: 100%;
+  flex: 1;
+}
+
+.image-upload {
+  margin-top: 10px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.post-button,
+.close-button {
+  width: 45%;
+  background-color: #28705e;
+  color: white;
+}

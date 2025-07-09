@@ -21,4 +21,16 @@ export class MapsService {
     return this.http.get<LocationMessage[]>(`${this.baseUrl}/locations`, {headers});
   }
 
+  reverseGeocode(lat: number, lng: number): Observable<any> {
+    const url = 'https://nominatim.openstreetmap.org/reverse';
+    const params = {
+      format: 'json',
+      lat: lat.toString(),
+      lon: lng.toString(),
+      addressdetails: '1'
+    };
+
+    return this.http.get<any>(url, { params });
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component , OnDestroy, OnInit} from '@angular/core';
+import { Component , OnDestroy, OnInit, AfterViewInit} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +16,9 @@ import { AuthService } from '../auth/auth.service';
 import { User } from '../profile/user.model';
 import { Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { MapsService } from '../posts-on-map/maps.service';
 
 
 @Component({
@@ -32,9 +35,12 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './create-post.component.html',
   styleUrl: './create-post.component.css'
 })
-export class CreatePostComponent implements OnInit, OnDestroy {
+export class CreatePostComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private postService: PostService, private authService: AuthService, private router: Router, public dialogRef: MatDialogRef<CreatePostComponent>) {}
+  map!: L.Map;
+  marker!: L.Marker;
+
+  constructor(private postService: PostService, private authService: AuthService, private router: Router, public dialogRef: MatDialogRef<CreatePostComponent>, @Inject(PLATFORM_ID) private platformId: Object, private mapService: MapsService) {}
 
   user: User = new User();
   private userSubscription: Subscription = Subscription.EMPTY;
@@ -69,6 +75,81 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.initMap();
+    }
+  }
+
+  private async initMap(): Promise<void> {
+    const L = await import('leaflet');
+
+    // Postavi globalni default marker ikonu (isti kao kod drugarice)
+    const DefaultIcon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    L.Marker.prototype.options.icon = DefaultIcon;
+
+    // Inicijalizuj mapu
+    this.map = L.map('map').setView([45.2671, 19.8335], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    this.map.on('click', this.onMapClick.bind(this, L));
+  }
+
+
+  private onMapClick(L: any, e: any): void {
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+
+    // Postavi marker
+    if (this.marker) {
+      this.marker.setLatLng(e.latlng);
+    } else {
+      this.marker = L.marker(e.latlng).addTo(this.map);
+    }
+
+    // Sačuvaj lat/lng u formu
+    this.postForm.get('address.locationLatitude')?.setValue(lat.toString());
+    this.postForm.get('address.locationLongitude')?.setValue(lng.toString());
+
+    // Pozovi geocoding servis
+    this.mapService.reverseGeocode(lat, lng).subscribe({
+    next: (result) => {
+      const address = result.address;
+
+      this.postForm.get('address.city')?.setValue(
+        address.city || address.town || address.village || ''
+      );
+
+      const street = address.road ? address.road : '';
+      const houseNumber = address.house_number ? address.house_number : '';
+      const fullStreet = houseNumber ? `${street} ${houseNumber}` : street;
+
+      this.postForm.get('address.street')?.setValue(fullStreet);
+
+      this.postForm.get('address.postalCode')?.setValue(
+        address.postcode || ''
+      );
+    },
+    error: (err) => {
+      console.error('Error while geocoding:', err);
+    }
+  });
+
+  }
+
+
 
   ngOnDestroy(): void {
     if (this.userSubscription) {
