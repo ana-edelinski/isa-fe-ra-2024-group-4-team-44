@@ -21,7 +21,8 @@
         <div class="post-comments" (click)="post.showCommentBox = !post.showCommentBox">
           <mat-icon>add_comment</mat-icon> {{ post.comments.length }} 
         </div>
-        <button mat-button (click)="viewDetails(post.id)">View Details</button>
+        <button mat-button (click)="viewDetails(post.id)" *ngIf="roleId !==2">View Details</button>
+        <button mat-button (click)="markPostForAdvertising(post.id)" *ngIf="roleId ===2">Advertise post</button>
       </div>
       
       <div class="comments" *ngIf="post.comments && post.comments.length > 0 && isLoggedIn">
@@ -38,7 +39,7 @@
           <p class="comment-text">{{ comment.text }}</p>
         </div>
       </div>
-      <div class="comment-input-wrapper" *ngIf="post.showCommentBox && isLoggedIn">
+      <div class="comment-input-wrapper" *ngIf="post.showCommentBox && isLoggedIn && roleId ===1">
         <textarea
           [(ngModel)]="post.newCommentText"
           placeholder="Write your comment..."

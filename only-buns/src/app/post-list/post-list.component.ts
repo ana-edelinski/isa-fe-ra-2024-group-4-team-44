@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CommentService } from '../services/comment.service';
 import { Comment } from '../model/post.model';
+import { UserService } from '../profile/profile.service';
+import { User } from '../profile/user.model';
 
 @Component({
   selector: 'app-post-list',
@@ -27,27 +29,55 @@ export class PostListComponent implements OnInit {
   newCommentText: string = '';
   
 
-  constructor(private postService: PostService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private commentService: CommentService) {} 
+  constructor(private postService: PostService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private commentService: CommentService,private userService: UserService) {} 
   
   posts: Post[] = [];
   likesCount: number = 0;
+  roleId: number = -1;
   
   ngOnInit(): void {
     this.authService.userObservable.subscribe(user => {
       this.isLoggedIn = this.authService.isAuthenticated();
       console.log('Is logged in:', this.isLoggedIn);
       console.log('Logged in user:', user);
-  
-      if (this.isLoggedIn && user) {
-        this.getPosts(user.id); 
+     if (user?.id) {        
+        this.setRoleId(user.id, user);
       } else {
-        this.getPosts(); 
+        this.roleId = -1;   // RESETUJ roleId na logout!
+        this.getPosts();    // Neulogovani korisnici vide sve
+        console.log("Scenario 4 - not logged in");
       }
     });
   }  
+
+  async setRoleId(userId: number, user: User): Promise<void> {
+    try {
+      this.roleId = await this.userService.getRole(userId);  
+      console.log("Role ID set to: ", this.roleId);
+
+      if (this.roleId === 2) {
+        // ADMIN vidi sve postove
+        this.getPosts();  
+        console.log("Scenario 1 - admin");
+      } else if (this.roleId === 1) {
+        // OBIČAN korisnik vidi postove onih koje prati
+        this.getPosts(user.id);
+        console.log("Scenario 2 - user");
+      } else {
+        // fallback ako nešto nije ok
+        this.getPosts();
+        console.log("Scenario 3 - fallback");
+      }
+
+    } catch (error) {
+      this.roleId = -1;
+      console.error("Error while setting role ID:", error);
+      this.getPosts();
+    }
+  }
   
   getPosts(userId?: number): void {
-    if (this.isLoggedIn && userId) {
+    if (userId) {
       this.postService.getPostsFromFollowing(userId).subscribe(
         (data: Post[]) => {
           this.posts = data;
@@ -80,6 +110,10 @@ export class PostListComponent implements OnInit {
   }
 
   likePost(postId: number): void {
+    if(this.roleId === 2) {
+      this.showAdminNotification();
+      return;
+    }
     if (this.isLoggedIn) {
       const userId = this.authService.getLoggedInUserId();
     if (userId) {
@@ -104,6 +138,10 @@ export class PostListComponent implements OnInit {
     if (this.isLoggedIn) {
     } else {
       this.showLoginNotification();
+    }
+    if(this.roleId === 2) {
+      this.showAdminNotification();
+      return;
     }
     const newComment: Comment = {
         id: 100,
@@ -145,10 +183,40 @@ export class PostListComponent implements OnInit {
               );
             }
           }
-        });
-    
-    
+        });     
 
+  }
+
+  markPostForAdvertising(postId: number): void {
+    this.postService.markAsAdvertised(postId).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Marked for Advertising',
+          text: 'This post is now marked for advertising.',
+          confirmButtonText: 'OK'
+        });
+      },
+      error: (error) => {
+        console.error('Error marking post for advertising:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to mark the post for advertising. Please try again.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  }
+
+
+  showAdminNotification(): void {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Action not allowed',
+      text: 'Admins are not allowed to interact with posts.',
+      confirmButtonText: 'OK'
+    });
   }
 
   showLoginNotification(): void {

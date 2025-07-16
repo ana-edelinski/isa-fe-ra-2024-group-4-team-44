@@ -148,6 +148,13 @@ export class PostService {
       })
     );
   }
+
+  markAsAdvertised(postId: number): Observable<void> {
+    const token = localStorage.getItem('token');  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    return this.http.put<void>(`${this.apiUrl}/advertise/${postId}`, null, { headers });
+  }
   
   
 }
