@@ -14,6 +14,7 @@ export interface Post {
     comments: Comment[];
     likes: [];
     likeCount: number;
+    advertised: boolean,
 
     newCommentText?: string;
     showCommentBox?: boolean;

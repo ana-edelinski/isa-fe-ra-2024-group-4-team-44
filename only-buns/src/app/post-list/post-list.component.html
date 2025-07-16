@@ -22,7 +22,7 @@
           <mat-icon>add_comment</mat-icon> {{ post.comments.length }} 
         </div>
         <button mat-button (click)="viewDetails(post.id)" *ngIf="roleId !==2">View Details</button>
-        <button mat-button (click)="markPostForAdvertising(post.id)" *ngIf="roleId ===2">Advertise post</button>
+        <button mat-button (click)="markPostForAdvertising(post.id)" *ngIf="roleId ===2 && !post.advertised">Advertise post</button>
       </div>
       
       <div class="comments" *ngIf="post.comments && post.comments.length > 0 && isLoggedIn">

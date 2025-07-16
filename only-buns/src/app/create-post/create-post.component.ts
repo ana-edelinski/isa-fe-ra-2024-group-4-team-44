@@ -223,6 +223,7 @@ export class CreatePostComponent implements OnInit, OnDestroy, AfterViewInit {
           comments: [],
           likes: [],
           likeCount: 0,
+          advertised: false
         };
         console.log("New Post to create:", newPost); 
         this.postService.createPost(newPost).subscribe({

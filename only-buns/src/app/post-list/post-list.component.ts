@@ -196,6 +196,10 @@ export class PostListComponent implements OnInit {
           text: 'This post is now marked for advertising.',
           confirmButtonText: 'OK'
         });
+        const post = this.posts.find(p => p.id === postId);
+        if (post) {
+          post.advertised = true;
+        }
       },
       error: (error) => {
         console.error('Error marking post for advertising:', error);
