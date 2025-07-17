@@ -24,6 +24,13 @@
             <button mat-raised-button color="primary" type="submit" class="post-button">Post</button>
           </div>
         </div>
+        <div formGroupName="address" style="display: none">
+          <input formControlName="city">
+          <input formControlName="street">
+          <input formControlName="postalCode">
+          <input formControlName="locationLatitude">
+          <input formControlName="locationLongitude">
+        </div>
 
         
         <div class="map-section">
@@ -33,3 +40,4 @@
     </form>
   </mat-card>
 </div>
+

@@ -65,7 +65,17 @@ export class CreatePostComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.resetImagePath();
-    this.postForm.reset()
+    this.postForm.setValue({
+      description: '',
+      image: '',
+      address: {
+        city: '',
+        street: '',
+        postalCode: '',
+        locationLatitude: '',
+        locationLongitude: ''
+      }
+    });
     this.userSubscription = this.authService.getUser().subscribe(user => {
       console.log("User from AuthService:", user);
       if (user && user.id) {
@@ -109,6 +119,7 @@ export class CreatePostComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   private onMapClick(L: any, e: any): void {
+    console.log("CLICKED MAP", e); 
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
 
@@ -127,6 +138,7 @@ export class CreatePostComponent implements OnInit, OnDestroy, AfterViewInit {
     this.mapService.reverseGeocode(lat, lng).subscribe({
     next: (result) => {
       const address = result.address;
+      console.log("Geocoding result:", result);
 
       this.postForm.get('address.city')?.setValue(
         address.city || address.town || address.village || ''
@@ -201,6 +213,10 @@ export class CreatePostComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   onPostSubmit() {
+    console.log("Jesi ili nisi :", this.postForm.valid)
+
+
+
     if (this.postForm.valid) {
       console.log(this.imagePath)
       console.log("Form data:", this.postForm.value);  // Logovanje vrednosti forme

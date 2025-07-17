@@ -121,9 +121,11 @@ export class HomeComponent {
 
 
   isPostsTabActive(): boolean {
-    const allowedRoutes = ['/posts', '/my-posts', '/trends', '/maps'];
+    const allowedRoutes = ['/posts', '/my-posts', '/trends'];
     return allowedRoutes.some(route => this.router.url.includes(route));
-  }  
+  } 
+  
+  
 
   createPost() {
     this.router.navigate(['/create-post'], { state: { user: this.user } });
