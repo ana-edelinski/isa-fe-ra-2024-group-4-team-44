@@ -36,6 +36,7 @@ export class PostListComponent implements OnInit {
   roleId: number = -1;
   
   ngOnInit(): void {
+    this.posts = [];
     this.authService.userObservable.subscribe(user => {
       this.isLoggedIn = this.authService.isAuthenticated();
       console.log('Is logged in:', this.isLoggedIn);
