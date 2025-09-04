@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../profile/profile.service';
 import { User } from '../../profile/user.model';
-import { Subscription } from 'rxjs';
 import { TrendsComponent } from '../../trends/trends.component';
 import { PostListComponent } from '../../post-list/post-list.component';
 import { MyPostsComponent } from '../../my-posts/my-posts.component';
@@ -20,24 +19,27 @@ import { ChatsComponent } from '../../chats/chats.component';
 import { MapsService } from '../../posts-on-map/maps.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePostComponent } from '../../create-post/create-post.component';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Observable, of, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, catchError, map } from 'rxjs/operators';
+import { UserInfoDTO } from '../../model/user.model';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule,  MatIconModule,  MatSidenavModule,
-    MatListModule,
-    MatButtonModule,
-    MatIconModule,
-    PostListComponent,
-    MyPostsComponent,
-    TrendsComponent,
-    ProfileComponent,
-    PostsOnMapComponent,
-    ChatsComponent
-    
-  ]
+imports: [
+  RouterModule, CommonModule, FormsModule, ReactiveFormsModule,
+  MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,
+  MatFormFieldModule, MatInputModule, MatAutocompleteModule,
+  PostListComponent, MyPostsComponent, TrendsComponent, ProfileComponent,
+  PostsOnMapComponent, ChatsComponent
+]
+
 })
 export class HomeComponent {
   title: string = 'OnlyBuns!';
@@ -49,6 +51,15 @@ export class HomeComponent {
   private userSubscription: Subscription = Subscription.EMPTY;
   private messagesSubscription: Subscription = Subscription.EMPTY;
   @ViewChild(PostListComponent) postListComp!: PostListComponent;
+
+  searchCtrl = new FormControl<string>('');
+  results$!: Observable<UserInfoDTO[]>;
+  displayUser = (u?: UserInfoDTO) => (u ? `@${(u as any).username || ''}` : '');
+  goToProfile(u: UserInfoDTO) {
+    if (!u) return;
+    this.searchCtrl.setValue('');
+    this.router.navigate(['/user'], { queryParams: { userId: (u as any).id } }); // prilagodi ruti ako treba
+  }
 
   isBrowse =false;
   constructor(private authService: AuthService, 
@@ -72,8 +83,26 @@ export class HomeComponent {
       } else {
         this.router.navigate(['']);
       }
-      
     });
+
+    // AUTOCOMPLETE: koristi postojeći admin endpoint, samo sa malim page size
+  this.results$ = this.searchCtrl.valueChanges.pipe(
+    map(v => (typeof v === 'string' ? v : '')),
+    debounceTime(250),
+    distinctUntilChanged(),
+    filter(q => q.trim().length >= 2),
+    switchMap(q => {
+      // heuristika: "ime prezime" → podeli; inače traži po name
+      const [name, surname] = q.trim().split(/\s+/, 2);
+      const criteria: any = surname ? { name, surname } : { name: q.trim() };
+      return this.userService
+        .searchUsers(criteria, 0, 8, 'username', 'asc')
+        .pipe(
+          map((resp: any) => resp?.content ?? []),
+          catchError(() => of([]))
+        );
+    })
+  );
 
   }
 

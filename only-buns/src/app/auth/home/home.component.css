@@ -143,3 +143,46 @@ mat-nav-list a:hover {
   padding: 0 5px;
   font-size: 12px;
 }
+
+/* Search bar */
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  padding: 6px 12px;
+  min-width: 260px;
+  max-width: 420px;
+  flex: 1;                /* da zauzme prostor između title i buttons */
+  margin: 0 16px;
+}
+
+.searchbar mat-icon {
+  color: #28705e;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+}
+
+.searchbar:focus-within {
+  border-color: #28705e;
+  box-shadow: 0 0 0 2px rgba(40, 112, 94, 0.1);
+}
+
+/* Responsivnost za header sa search barom */
+@media (max-width: 768px) {
+  .searchbar {
+    width: 100%;
+    margin: 8px 0;
+  }
+}
+
+

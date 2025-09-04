@@ -1,6 +1,37 @@
 <div class="content">
   <div class="header">
     <p class="title" [routerLink]="['/']" style="cursor: pointer;">OnlyBuns</p>
+
+    <div class="searchbar" *ngIf="isLoggedIn">
+      <mat-icon>search</mat-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search users…"
+        [formControl]="searchCtrl"
+        [matAutocomplete]="auto"
+        aria-label="Search users" />
+    </div>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="goToProfile($event.option.value)"
+      [displayWith]="displayUser"
+    >
+      <mat-option *ngFor="let u of (results$ | async) ?? []" [value]="u">
+        <span>{{ '@' + (u?.username || '') }}</span>
+        <span class="muted" *ngIf="u?.name || u?.surname">
+          — {{ u?.name || '' }} {{ u?.surname || '' }}
+        </span>
+      </mat-option>
+
+      <mat-option
+        *ngIf="((results$ | async)?.length ?? 0) === 0 && (searchCtrl.value?.length || 0) >= 2"
+        disabled>
+        No users found
+      </mat-option>
+    </mat-autocomplete>
+
+
     <div class="buttons">
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['login']">Login</button>
       <button *ngIf="!isLoggedIn" mat-button [routerLink]="['register']">Sign Up</button>
